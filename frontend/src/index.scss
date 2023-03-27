@@ -1,0 +1,283 @@
+/* VARIABLES */
+
+$font1: 'Golos Text', sans-serif;
+$green: #0ba837;
+$grey: #f4f4f4;
+$darkGrey: #8D8D8D;
+
+/* MIXINS */
+
+@mixin theme($theme: centreAbs) {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.visible {
+    visibility: visible;
+  }
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+/* Global classes */
+
+.screen {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* Landing styles */
+
+#landingContainer {
+
+    background-image: url("./resources/img/landingBg.png");
+    background-size: cover;
+
+    aside {
+        position: absolute;
+        right: 0;
+        width: 60%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        #mapContainer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+    }
+
+   
+
+}
+
+#landingCard {
+    position: absolute;
+    left: 0;
+    height: 100%;
+    width: 40%;
+    color: black;
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    overflow: hidden;
+    background-color: white;
+
+    img {
+        position: absolute;
+        width: 50%;
+        left: 25%;
+        top: 5%;
+    }
+
+    h2 {
+        font-size: 2.5vh;
+        margin-top: 25%;
+        margin-bottom: 10%;
+        text-align: center;
+    }
+
+    form {
+        position: absolute;
+        width: 60%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        p span{ 
+            float: right;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        p span:hover {
+            color: #0AA837;
+        }
+
+       label {
+        font-size: 2vh;
+        margin-top: 5%;
+       }
+
+        input[type=email], input[type=password], input[type=text], select  {
+            width: 100%;
+            font-size: 2vh;
+            padding: 12px 20px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            border-radius: 5px;
+        }
+
+        input[type=text]:focus{
+           border: 1px solid $green;
+        }
+
+        .submitActive {
+            background-color: $green;
+            color: white;
+        }
+
+        input[type=submit] {
+            width: 100%;
+            font-size: 2vh;
+            padding: 2.5%;
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            border: none;
+            border-radius: 5px;
+            margin-top: 5%;
+            cursor: pointer;
+        }
+       
+    }
+}
+
+#mapPrompt {
+    text-align: center;
+}
+
+/* Main styles */
+
+#navContainer {
+
+    position: absolute;
+    height: 100%;
+    width: 20%;
+    background-color: #f4f4f4;
+
+    #navTop {
+        position: relative;
+        width: 100%;
+        height: 20%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        img {
+         width: 60%;
+        }
+    }
+
+    nav {
+        position:relative;
+        height: 50%;
+        width: 100%;
+    }
+
+    ul {
+        font-family: 'M PLUS Rounded 1c', sans-serif;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        list-style-type: none;
+        color: $darkGrey;
+
+        li p {
+            font-size: 2.5vh;
+            margin: 2.5%;
+            margin-left: 10%;
+        }
+
+        li:hover {
+            cursor: pointer;
+            background-color: $green;
+            color: white;
+        }
+
+        li i {
+            margin: 5%;
+        }
+
+    }
+
+}
+
+.navActive {
+    color: $green;
+    box-shadow: inset 5px 0px 0px 0px $green;
+}
+
+.settingsActive {color: $green;}
+
+#utilityContainer {
+    font-family: $font1;
+    position: absolute;
+    width: 80%;
+    height: 100%;
+    left: 20%;
+}
+
+#fixedUtility {
+    position: fixed;
+    width: 75%;
+    height: 10%;
+    background-color: $grey;
+    border-radius: 0 0 25px 25px;
+    right: 2.5%;
+    color: $darkGrey;
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    border-bottom: 2px solid $green;
+
+    ul {
+        margin: 0 5% 0 5%;
+        padding: 0;
+        display: flex;
+        flex-direction: row;
+        list-style-type: none;
+        justify-content:space-between;
+        align-items: center;
+    }
+
+    ul li {
+        font-size: 2.5vh;
+        font-weight: normal;
+    }
+
+    ul li i {
+        font-size: 4vh;
+    }
+
+    ul li i:hover {
+        cursor: pointer;
+        color: $green;
+    }
+
+    ul h1 {
+        color: $green;
+        margin: 0;
+    }
+   
+}
+
+#scrollUtility {
+    position: absolute;
+    width: 90%;
+    height: 100%;
+    left: 5%;
+    top: 20%;
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+}
+
+.Col2Card {
+
+    position: absolute;
+    width: 30%;
+    height: 30%;
+    background-color: $grey;
+    border-radius: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: $darkGrey;
+    
+}
