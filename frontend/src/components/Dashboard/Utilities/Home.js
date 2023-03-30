@@ -6,13 +6,26 @@ class Home extends React.Component {
         this.populateWeather(this.props.weatherData);
     }
 
-
+    displayTime(){
+        var x = new Date();
+        var zero;
+        var ampm = x.getHours >= 12 ? 'pm' : 'am';
+        if(x.getMinutes() < 10) {zero = "0";}else{zero=""}
+        var date = ' ' + x.getHours( )+ ":" + zero +  x.getMinutes() + ' ' + ampm;
+        return date;
+    }
+  
     populateWeather(data){
         console.log(data);
+        var iconcode = data.weather[0].icon;
+        var iconurl = "http://openweathermap.org/img/w/" + iconcode + ".png";
+
         document.getElementById("wigetWeather").innerHTML = (data.main.temp).toFixed(0) + "°C";
         document.getElementById("wigetClouds").innerHTML = data.weather[0].description;
         document.getElementById("wigetWind").innerHTML += " " + this.convertToKM(data.wind.speed) + " km/h";
         document.getElementById("wigetLocation").innerHTML += " " + data.name;
+        document.getElementById("widgetHumidity").innerHTML += " " + data.main.humidity + "%";
+        document.getElementById("wigetIcon").setAttribute("src", iconurl);
     }
 
     convertToKM(speed){
@@ -21,16 +34,21 @@ class Home extends React.Component {
 
     render() {
         return (
-            <div className="Col2Card">
+            <div onClick={() => this.props.displayScreen("weather")} id="weatherWidget" className="Col2Card">
                 <div className="weatherWigetTop">
-                    <p id="wigetLocation"><i className="fa-solid fa-location-pin"></i></p>
+                    <p id="wigetLocation"><i id="widgetPin"  className="fa-solid fa-location-pin"></i></p>
+                    <p><i className="fa-regular fa-clock"></i>{this.displayTime()}</p>
                 </div>
-
+                <img id="wigetIcon" src="" alt="Weather icon"></img>
                 <h1 id="wigetWeather"></h1>
                 <p id="wigetClouds"></p>
 
                 <div className="weatherWigetBottom">
                     <p id="wigetWind"><i className="fa-solid fa-wind"></i></p>
+                    <p id="widgetHumidity"><i className="fa-solid fa-droplet"></i></p>
+
+
+               
                 </div>
             </div>
         )

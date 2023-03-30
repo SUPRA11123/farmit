@@ -1,13 +1,16 @@
 /* VARIABLES */
 
-$font1: 'Golos Text', sans-serif;
+$font1: 'Inter', sans-serif;
 $green: #0ba837;
 $grey: #f4f4f4;
 $darkGrey: #8D8D8D;
+$red: #C44940;
+$blue: #4079c4;
 
 /* MIXINS */
 
 @mixin theme($theme: centreAbs) {
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -39,8 +42,7 @@ body {
 
 #landingContainer {
 
-    background-image: url("./resources/img/landingBg.png");
-    background-size: cover;
+    background-color: $green;
 
     aside {
         position: absolute;
@@ -70,7 +72,7 @@ body {
     height: 100%;
     width: 40%;
     color: black;
-    font-family: 'M PLUS Rounded 1c', sans-serif;
+    font-family: $font1;
     overflow: hidden;
     background-color: white;
 
@@ -85,7 +87,7 @@ body {
         font-size: 2.5vh;
         margin-top: 25%;
         margin-bottom: 10%;
-        text-align: center;
+        text-align: left;
     }
 
     form {
@@ -132,7 +134,7 @@ body {
             width: 100%;
             font-size: 2vh;
             padding: 2.5%;
-            font-family: 'M PLUS Rounded 1c', sans-serif;
+            font-family: $font1;
             border: none;
             border-radius: 5px;
             margin-top: 5%;
@@ -150,6 +152,17 @@ body {
 
 #navContainer {
 
+    #logout {
+       position: fixed;
+       bottom: 0;
+       width: 20%;
+    }
+
+    #logout:hover {
+        background-color: $red;
+        color: white;
+    }
+
     position: absolute;
     height: 100%;
     width: 20%;
@@ -162,9 +175,7 @@ body {
         display: flex;
         align-items: center;
         justify-content: center;
-        img {
-         width: 60%;
-        }
+        img {width: 60%;}
     }
 
     nav {
@@ -174,12 +185,13 @@ body {
     }
 
     ul {
-        font-family: 'M PLUS Rounded 1c', sans-serif;
+        font-family: $font1;
         padding: 0;
         display: flex;
         flex-direction: column;
         list-style-type: none;
         color: $darkGrey;
+        font-weight: bold;
 
         li p {
             font-size: 2.5vh;
@@ -191,7 +203,10 @@ body {
             cursor: pointer;
             background-color: $green;
             color: white;
+            transition: 0.25s;
         }
+
+        
 
         li i {
             margin: 5%;
@@ -200,6 +215,8 @@ body {
     }
 
 }
+
+
 
 .navActive {
     color: $green;
@@ -224,7 +241,7 @@ body {
     border-radius: 0 0 25px 25px;
     right: 2.5%;
     color: $darkGrey;
-    font-family: 'M PLUS Rounded 1c', sans-serif;
+    font-family: $font1;
     border-bottom: 2px solid $green;
 
     ul {
@@ -262,12 +279,26 @@ body {
     position: absolute;
     width: 90%;
     height: 100%;
-    left: 5%;
+    left: 2.5%;
     top: 20%;
     font-family: 'M PLUS Rounded 1c', sans-serif;
 }
 
+#weatherWidget:hover {
+    box-shadow: inset 0px -5px 0px 0px $green;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
 .Col2Card {
+
+    #widgetPin {
+        color: $red;
+    }
+
+    #widgetHumidity i {
+        color: $blue;
+    }
 
     position: absolute;
     width: 30%;
@@ -279,5 +310,23 @@ body {
     align-items: center;
     justify-content: center;
     color: $darkGrey;
+
+    h1 {
+        font-size: 4vh;
+        margin: 0;
+    }
+
+    .weatherWigetTop, .weatherWigetBottom {
+        position: absolute;
+        width: 100%;
+        height: 10%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+      
+    }
+
+    .weatherWigetBottom {bottom: 10%;}
+    .weatherWigetTop {top: 0}
     
 }

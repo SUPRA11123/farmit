@@ -10,8 +10,8 @@ import axios from 'axios';
 
 class Dashboard extends React.Component {
 
-    WEATHER_API_KEY = "aa63df15430f30c399f6228866963714";
     UNIT = "metric";
+    WEATHER_API_KEY = "aa63df15430f30c399f6228866963714"
 
     utilityComponents = {
 
@@ -27,85 +27,86 @@ class Dashboard extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { currentDashboardScreen: "dashboard" };
+        this.state = { currentDashboardScreen: "dashboard"};
         this.changeUtility = this.changeUtility.bind(this);
         this.displaySettings = this.displaySettings.bind(this);
+        this.displayDashboardScreen = this.displayDashboardScreen.bind(this);
         this.getFarmDetails = this.getFarmDetails.bind(this);
       
     }
+
+    async componentDidMount() {
+       
+        const token = localStorage.getItem("token");
+        // decode the token 
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace('-', '+').replace('_', '/');
+        const decodedToken = JSON.parse(window.atob(base64));
+
+
+        const farmDetails = await this.getFarmDetails(decodedToken.id);
+
+
+        // print the farm details
+        console.log(farmDetails);
+
+        // get the weather data
+        const url = `https://api.openweathermap.org/data/2.5/weather?lat=${farmDetails.latitude}&lon=${farmDetails.longitude}&units=${this.UNIT}&appid=${this.WEATHER_API_KEY}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        this.weatherData = data;
+        this.setState({weatherData: data})
+
+        console.log(data)
+
+    
+
+
+}
+
+getFarmDetails(id) {
+    return axios
+    .get("http://localhost:8000/getfarmbyowner/" + id + "/")
+    .then((res) => {
+        console.log(res);
+        return res.data;
+    }
+    )
+    .catch((err) => {
+        console.log(err);
+    }
+    );
+}
+
 
     changeUtility(util){
         this.setState({currentDashboardScreen: util});
     }
 
-    displayTime(){
-        var x = new Date();
-        var zero;
-        if(x.getMinutes < 10) {zero = "0";}else{zero=""}
-        var date = x.getHours( )+ ":" + zero +  x.getMinutes();
-        return date;
-    }
-
     displaySettings(){
         document.getElementById('fixedUtility').classList.add("expandFixed");
-        
     }
 
-    async componentDidMount() {
-       
-            const token = localStorage.getItem("token");
-            // decode the token 
-            const base64Url = token.split('.')[1];
-            const base64 = base64Url.replace('-', '+').replace('_', '/');
-            const decodedToken = JSON.parse(window.atob(base64));
-
-
-            const farmDetails = await this.getFarmDetails(decodedToken.id);
-
-
-            // print the farm details
-            console.log(farmDetails);
-
-            // get the weather data
-            const url = `https://api.openweathermap.org/data/2.5/weather?lat=${farmDetails.latitude}&lon=${farmDetails.longitude}&units=${this.UNIT}&appid=${this.WEATHER_API_KEY}`;
-            const response = await fetch(url);
-            const data = await response.json();
-
-            this.weatherData = data;
-            this.setState({weatherData: data})
-
-            console.log(data)
-
-        
-
-
+    displayDashboardScreen(screen){
+        this.setState({currentDashboardScreen: screen});
     }
 
-    getFarmDetails(id) {
-        return axios
-        .get("http://localhost:8000/getfarmbyowner/" + id + "/")
-        .then((res) => {
-            console.log(res);
-            return res.data;
-        }
-        )
-        .catch((err) => {
-            console.log(err);
-        }
-        );
+    handleLogout(){
+        localStorage.removeItem("token");
+        window.location.href = "/";    
     }
-
-
 
  
     render() {
+
 
         const { currentDashboardScreen, weatherData } = this.state;
 
         const CurrentUtility = this.utilityComponents[currentDashboardScreen];
 
         if (!weatherData) {
-           return null;
+            return null;
         }
 
         return(
@@ -122,7 +123,11 @@ class Dashboard extends React.Component {
                             <li onClick={() => this.setState({currentDashboardScreen: "resources"})} className={this.state.currentDashboardScreen === "resources" ? "navActive": ""}><p><i className="fa-solid fa-boxes-stacked"></i>Resources</p></li>
                             <li onClick={() => this.setState({currentDashboardScreen: "maps"})} className={this.state.currentDashboardScreen === "maps" ? "navActive": ""}><p><i className="fa-regular fa-map"></i>Maps</p></li>
                             <li onClick={() => this.setState({currentDashboardScreen: "predictions"})} className={this.state.currentDashboardScreen === "predictions" ? "navActive": ""}><p><i className="fa-solid fa-bullhorn"></i>Predictions</p></li>
+                            <li onClick={() => this.setState({currentDashboardScreen: "settings"})} className={this.state.currentDashboardScreen === "settings" ? "navActive": ""}><p><i className="fa-solid fa-gear"></i>Settings</p></li>
+                            <li id='logout' onClick={this.handleLogout}><p><i className="fa-solid fa-arrow-right-from-bracket"></i>Logout</p></li>
                         </ul>
+
+
                     </nav>
                 </aside>
 
@@ -131,16 +136,15 @@ class Dashboard extends React.Component {
                 <section id='fixedUtility'>
 
                     <ul>
-                        <li><h2><i className="fa-regular fa-clock"></i>{this.displayTime()}</h2></li>
-                        <li><button>Add new farm</button></li>
-                        <li><i onClick={() => this.setState({currentDashboardScreen: "settings"})} className={this.state.currentDashboardScreen === "settings" ? "settingsActive fa-solid fa-gear": "fa-solid fa-gear"}></i></li>
+                       
+                       
                     </ul>
 
                 </section>
 
                 <section id='scrollUtility'>
 
-                    <CurrentUtility weatherData={this.state.weatherData}/>
+                    <CurrentUtility displayScreen={this.displayDashboardScreen} weatherData={this.state.weatherData}/>
 
                 </section>
 

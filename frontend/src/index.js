@@ -16,15 +16,16 @@ class Main extends React.Component {
       componentDidMount() {
         this.checkToken();
       }
-     
+      
       checkToken() {
         const token = localStorage.getItem("token");
         if (token) {
           this.setState({ currentPage: "dashboardScreen" });
-        } else {
+        }else{
           this.setState({ currentPage: "landingScreen" });
         }
-      }    
+      }
+
     
       setStateOfParent(page) {
         this.setState({ currentPage: page });
