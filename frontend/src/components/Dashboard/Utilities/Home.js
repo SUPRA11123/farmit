@@ -15,6 +15,10 @@ class Home extends React.Component {
     }
   
     populateWeather(data){
+        var iconcode = data.weather[0].icon;
+        var iconurl = "http://openweathermap.org/img/w/" + iconcode + ".png";
+        document.getElementById("widgetWeatherIcon").src = iconurl;
+
         console.log(data);
         document.getElementById("wigetWeather").innerHTML = (data.main.temp).toFixed(0) + "°C";
         document.getElementById("wigetClouds").innerHTML = data.weather[0].description;
@@ -34,6 +38,7 @@ class Home extends React.Component {
                     <p id="wigetLocation"><i id="widgetPin"  className="fa-solid fa-location-pin"></i></p>
                     <p><i className="fa-regular fa-clock"></i>{this.displayTime()}</p>
                 </div>
+                <img id="widgetWeatherIcon" src="" alt="Weather icon"/>
                 <h1 id="wigetWeather"></h1>
                 <p id="wigetClouds"></p>
 
