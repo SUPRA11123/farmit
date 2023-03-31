@@ -58,6 +58,15 @@ class Dashboard extends React.Component {
         this.weatherData = data;
         this.setState({weatherData: data})
 
+        // get the weather forecast
+
+        const url2 = `https://api.openweathermap.org/data/2.5/forecast?lat=${farmDetails.latitude}&lon=${farmDetails.longitude}&units=${this.UNIT}&appid=${this.WEATHER_API_KEY}`;
+        const response2 = await fetch(url2);
+        const data2 = await response2.json();
+
+        this.weatherForecast = data2;
+        this.setState({weatherForecast: data2})
+
         console.log(data)
 
     
@@ -101,11 +110,11 @@ getFarmDetails(id) {
     render() {
 
 
-        const { currentDashboardScreen, weatherData } = this.state;
+        const { currentDashboardScreen, weatherData, weatherForecast } = this.state;
 
         const CurrentUtility = this.utilityComponents[currentDashboardScreen];
 
-        if (!weatherData) {
+        if (!weatherData || !weatherForecast) {
             return null;
         }
 
@@ -145,7 +154,7 @@ getFarmDetails(id) {
 
                 <section id='scrollUtility'>
 
-                    <CurrentUtility displayScreen={this.displayDashboardScreen} weatherData={this.state.weatherData}/>
+                    <CurrentUtility displayScreen={this.displayDashboardScreen} weatherData={this.state.weatherData} weatherForecast={this.state.weatherForecast}/>
 
                 </section>
 
