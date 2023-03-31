@@ -106,6 +106,19 @@ getFarmDetails(id) {
         window.location.href = "/";    
     }
 
+    getWelcomeMessage() {
+        var today = new Date()
+        var curHr = today.getHours()
+
+        if (curHr < 12) {
+        return "Good morning";
+        } else if (curHr < 18) {
+        return "Good afternoon";
+        } else {
+        return "Good evening";
+        }
+    }
+
  
     render() {
 
@@ -145,10 +158,8 @@ getFarmDetails(id) {
 
                 <section id='fixedUtility'>
 
-                    <ul>
-                       
-                       
-                    </ul>
+                    <h2>{this.getWelcomeMessage()}, Ewan</h2>
+                    <p>your current dashboard for today</p>
 
                 </section>
 
