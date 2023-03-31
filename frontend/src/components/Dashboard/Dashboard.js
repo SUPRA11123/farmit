@@ -43,6 +43,12 @@ class Dashboard extends React.Component {
         const base64 = base64Url.replace('-', '+').replace('_', '/');
         const decodedToken = JSON.parse(window.atob(base64));
 
+        // get the current user
+
+        const user = await this.getUser(decodedToken.id);
+        this.setState({user: user.name})
+
+
 
         const farmDetails = await this.getFarmDetails(decodedToken.id);
 
@@ -119,6 +125,18 @@ getFarmDetails(id) {
         }
     }
 
+    getUser(id) {
+        return axios
+        .get("http://localhost:8000/getuserbyid/" + id + "/")
+        .then((res) => {
+            return res.data;
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+
+    }
+
  
     render() {
 
@@ -127,7 +145,7 @@ getFarmDetails(id) {
 
         const CurrentUtility = this.utilityComponents[currentDashboardScreen];
 
-        if (!weatherData || !weatherForecast) {
+        if (!weatherData || !weatherForecast || !weatherForecast) {
             return null;
         }
 
@@ -158,7 +176,7 @@ getFarmDetails(id) {
 
                 <section id='fixedUtility'>
 
-                    <h2>{this.getWelcomeMessage()}, Ewan</h2>
+                    <h2>{this.getWelcomeMessage()}, {this.state.user}</h2>
                     <p>your current dashboard for today</p>
 
                 </section>
