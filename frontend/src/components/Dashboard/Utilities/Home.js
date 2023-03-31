@@ -9,23 +9,18 @@ class Home extends React.Component {
     displayTime(){
         var x = new Date();
         var zero;
-        var ampm = x.getHours >= 12 ? 'pm' : 'am';
         if(x.getMinutes() < 10) {zero = "0";}else{zero=""}
-        var date = ' ' + x.getHours( )+ ":" + zero +  x.getMinutes() + ' ' + ampm;
+        var date = ' ' + x.getHours( )+ ":" + zero +  x.getMinutes();
         return date;
     }
   
     populateWeather(data){
         console.log(data);
-        var iconcode = data.weather[0].icon;
-        var iconurl = "http://openweathermap.org/img/w/" + iconcode + ".png";
-
         document.getElementById("wigetWeather").innerHTML = (data.main.temp).toFixed(0) + "°C";
         document.getElementById("wigetClouds").innerHTML = data.weather[0].description;
         document.getElementById("wigetWind").innerHTML += " " + this.convertToKM(data.wind.speed) + " km/h";
         document.getElementById("wigetLocation").innerHTML += " " + data.name;
         document.getElementById("widgetHumidity").innerHTML += " " + data.main.humidity + "%";
-        document.getElementById("wigetIcon").setAttribute("src", iconurl);
     }
 
     convertToKM(speed){
@@ -39,7 +34,6 @@ class Home extends React.Component {
                     <p id="wigetLocation"><i id="widgetPin"  className="fa-solid fa-location-pin"></i></p>
                     <p><i className="fa-regular fa-clock"></i>{this.displayTime()}</p>
                 </div>
-                <img id="wigetIcon" src="" alt="Weather icon"></img>
                 <h1 id="wigetWeather"></h1>
                 <p id="wigetClouds"></p>
 

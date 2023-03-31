@@ -154,7 +154,7 @@ class Landing extends React.Component {
           this.handleToDashboard();
         })
         .catch((error) => {
-          console.log(error);
+          console.log(error.response.data);
           alert(error.response.data.message);
         });
 
@@ -255,7 +255,7 @@ class Landing extends React.Component {
 
                 <form id="userLogin" onSubmit={this.handleLogin}> 
 
-                    <h2>Login to agrosense</h2>
+                    <h2>Login to Agrosensor</h2>
 
                     <label htmlFor="loginEmail">Email</label><br/>
                     <input onChange={this.checkAccountComplete} required type="email" id="loginEmail" name="loginEmail"/><br/>

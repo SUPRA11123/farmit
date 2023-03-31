@@ -114,6 +114,7 @@ getFarmDetails(id) {
 
                 <aside id='navContainer'>
                     <div id='navTop'>
+                    <img src={require('../../resources/img/logo.png')} alt="Agrosensor logo"/>
                     </div>
                     <nav>
                         <ul>

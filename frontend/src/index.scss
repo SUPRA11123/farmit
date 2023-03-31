@@ -191,7 +191,6 @@ body {
         flex-direction: column;
         list-style-type: none;
         color: $darkGrey;
-        font-weight: bold;
 
         li p {
             font-size: 2.5vh;
@@ -234,45 +233,12 @@ body {
 }
 
 #fixedUtility {
-    position: fixed;
-    width: 75%;
-    height: 10%;
-    background-color: $grey;
-    border-radius: 0 0 25px 25px;
-    right: 2.5%;
+    position: absolute;
+    width: 95%;
+    left: 2.5%;
+    height: 20%;
     color: $darkGrey;
     font-family: $font1;
-    border-bottom: 2px solid $green;
-
-    ul {
-        margin: 0 5% 0 5%;
-        padding: 0;
-        display: flex;
-        flex-direction: row;
-        list-style-type: none;
-        justify-content:space-between;
-        align-items: center;
-    }
-
-    ul li {
-        font-size: 2.5vh;
-        font-weight: normal;
-    }
-
-    ul li i {
-        font-size: 4vh;
-    }
-
-    ul li i:hover {
-        cursor: pointer;
-        color: $green;
-    }
-
-    ul h1 {
-        color: $green;
-        margin: 0;
-    }
-   
 }
 
 #scrollUtility {
@@ -281,11 +247,12 @@ body {
     height: 100%;
     left: 2.5%;
     top: 20%;
-    font-family: 'M PLUS Rounded 1c', sans-serif;
+    font-family: $font1;
 }
 
+
 #weatherWidget:hover {
-    box-shadow: inset 0px -5px 0px 0px $green;
+    background-color: #D0DDFF;
     cursor: pointer;
     transition: 0.25s;
 }
@@ -300,6 +267,10 @@ body {
         color: $blue;
     }
 
+    #wigetClouds {
+        text-transform: capitalize;
+    }
+
     position: absolute;
     width: 30%;
     height: 30%;
@@ -312,8 +283,10 @@ body {
     color: $darkGrey;
 
     h1 {
-        font-size: 4vh;
+        color: black;
+        font-size: 5vh;
         margin: 0;
+        font-weight: normal;
     }
 
     .weatherWigetTop, .weatherWigetBottom {
