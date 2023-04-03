@@ -19,7 +19,6 @@ class Home extends React.Component {
         var iconurl = "http://openweathermap.org/img/w/" + iconcode + ".png";
         document.getElementById("widgetWeatherIcon").src = iconurl;
 
-        console.log(data);
         document.getElementById("wigetWeather").innerHTML = (data.main.temp).toFixed(0) + "°C";
         document.getElementById("wigetClouds").innerHTML = data.weather[0].description;
         document.getElementById("wigetWind").innerHTML += " " + this.convertToKM(data.wind.speed) + " km/h";
@@ -39,7 +38,7 @@ class Home extends React.Component {
                     <p><i className="fa-regular fa-clock"></i>{this.displayTime()}</p>
                 </div>
                 <img id="widgetWeatherIcon" src="" alt="Weather icon"/>
-                <h1 id="wigetWeather"></h1>
+                <h1 id="wigetWeather">error</h1>
                 <p id="wigetClouds"></p>
 
                 <div className="weatherWigetBottom">

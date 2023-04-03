@@ -113,8 +113,8 @@ getFarmDetails(id) {
     }
 
     getWelcomeMessage() {
-        var today = new Date()
-        var curHr = today.getHours()
+        var today = new Date();
+        var curHr = today.getHours();
 
         if (curHr < 12) {
         return "Good morning";
@@ -176,7 +176,7 @@ getFarmDetails(id) {
 
                 <section id='fixedUtility'>
 
-                    <h2>{this.getWelcomeMessage()}, {this.state.user}</h2>
+                    <h2>{this.getWelcomeMessage()} {this.state.user}</h2>
                     <p>your current dashboard for today</p>
 
                 </section>

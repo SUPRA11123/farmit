@@ -43,8 +43,7 @@ class Landing extends React.Component {
         var password = document.getElementById("createPwd").value;
 
         // get name and email from form
-        axios.
-        post('http://localhost:8000/signup/', {
+        axios.post('http://localhost:8000/signup/', {
             name: name,
             email: email,
             password: password

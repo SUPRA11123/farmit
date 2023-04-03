@@ -28,6 +28,7 @@ body {
     margin: 0;
     padding: 0;
     overflow: hidden;
+    font-family: $font1;
 }
 
 /* Global classes */
@@ -256,7 +257,7 @@ body {
 
 #scrollUtility {
     position: absolute;
-    width: 90%;
+    width: 95%;
     height: 100%;
     left: 2.5%;
     top: 20%;
@@ -315,4 +316,67 @@ body {
     .weatherWigetBottom {bottom: 10%;}
     .weatherWigetTop {top: 0}
     
+}
+
+.lineChartContainer {
+    font-family: $font1;
+}
+
+.weatherCityContainer {
+    position: relative;
+    height: 25%;
+    width: 60%;
+    margin-bottom: 2.5%;
+    background-color: $green;
+    border-radius: 15px;
+    color: white;
+
+    h2 {
+        position: absolute;
+        top: 0;
+        left: 0;
+        margin: 5%;
+        font-size: 4vw;
+    }
+
+    ul {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 5%;
+        list-style: none;
+    }
+}
+
+.weatheDataContainer  {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+
+    div {
+        width: 20%;
+        margin: 0 5px 0 5px;
+        border-radius: 5px;
+        border: 2px solid $grey;
+
+        h2 {
+            color: $darkGrey;
+            font-weight: normal;
+            font-size: 1vw;
+            margin-left: 5%;
+        }
+        
+        p {
+            color: $green;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.5vw;
+            margin: 2.5% 0 2.5% 0;
+        }
+
+       
+    }
+    #sunsetSunrise {
+        width: 40%;
+    }
 }
