@@ -6,6 +6,7 @@ $grey: #f4f4f4;
 $darkGrey: #8D8D8D;
 $red: #C44940;
 $blue: #4079c4;
+$lightBlue: #D0DDFF;
 
 /* MIXINS */
 
@@ -181,7 +182,7 @@ body {
         display: flex;
         align-items: center;
         justify-content: center;
-        img {width: 60%;}
+        img {width: 80%;}
     }
 
     nav {
@@ -266,7 +267,7 @@ body {
 
 
 #weatherWidget:hover {
-    background-color: #D0DDFF;
+    background-color: $lightBlue;
     cursor: pointer;
     transition: 0.25s;
 }
@@ -320,30 +321,35 @@ body {
 
 .lineChartContainer {
     font-family: $font1;
+    h2 {
+        font-size: 1.5vw;
+        color: $darkGrey;
+    }
 }
 
 .weatherCityContainer {
     position: relative;
-    height: 25%;
+    height: 15%;
     width: 60%;
-    margin-bottom: 2.5%;
+    margin-bottom: 2%;
     background-color: $green;
-    border-radius: 15px;
+    border-radius: 5px;
     color: white;
+    font-size: 2vh;
 
     h2 {
         position: absolute;
         top: 0;
         left: 0;
-        margin: 5%;
-        font-size: 4vw;
+        margin: 4%;
+        font-size: 6vh;
     }
 
     ul {
         position: absolute;
         top: 0;
         right: 0;
-        margin: 5%;
+        margin: 4%;
         list-style: none;
     }
 }
@@ -379,4 +385,34 @@ body {
     #sunsetSunrise {
         width: 40%;
     }
+}
+
+.daySelector {
+    position: relative;
+    width: 100%;
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+
+    li button {
+        font-family: $font1;
+        background-color: $grey;
+        border: 1px solid $darkGrey;
+        font-size: 1.5vw;
+        border-radius: 15px;
+        padding: 10px;
+        color: $darkGrey;
+    }
+
+    li button:hover {
+        cursor: pointer;
+        background-color: $lightBlue;
+    }
+
+    .daySelectorActive {
+        color: $green;
+    }
+    
 }
