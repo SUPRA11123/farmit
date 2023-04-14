@@ -117,11 +117,11 @@ getFarmDetails(id) {
         var curHr = today.getHours();
 
         if (curHr < 12) {
-        return "Good morning";
+        return "Good morning,";
         } else if (curHr < 18) {
-        return "Good afternoon";
+        return "Good afternoon,";
         } else {
-        return "Good evening";
+        return "Good evening,";
         }
     }
 
