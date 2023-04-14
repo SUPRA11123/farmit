@@ -106,15 +106,19 @@ class Weather extends React.Component {
     }
 
     getSunriseSunset() {
+        
+        var sunriseZero; var sunsetZero;
         var sunriseEpoch = this.props.weatherData.sys.sunrise;
         var sunrise = new Date(0); 
         sunrise.setUTCSeconds(sunriseEpoch);
+        if(sunrise.getMinutes() < 10) {sunriseZero = "0";}else{sunriseZero=""}
 
         var sunsetEpoch = this.props.weatherData.sys.sunset;
         var sunset = new Date(0); 
         sunset.setUTCSeconds(sunsetEpoch);
+        if(sunset.getMinutes() < 10) {sunsetZero = "0";}else{sunsetZero=""}
 
-        return <><p><i className="fa-solid fa-circle-up"></i> {sunrise.getHours()}:{sunrise.getMinutes()}  <i className="fa-solid fa-circle-down"></i> {sunset.getHours()}:{sunset.getMinutes()}</p></>;
+        return <><p><i className="fa-solid fa-circle-up"></i> {sunrise.getHours()}:{sunriseZero}{sunrise.getMinutes()}  <i className="fa-solid fa-circle-down"></i> {sunset.getHours()}:{sunsetZero}{sunset.getMinutes()}</p></>;
     }
 
     displayTime(){

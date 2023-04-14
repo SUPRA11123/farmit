@@ -31,7 +31,7 @@ class Home extends React.Component {
     }
 
     render() {
-        return (
+        return (<>
             <div onClick={() => this.props.displayScreen("weather")} id="weatherWidget" className="Col2Card">
                 <div className="weatherWigetTop">
                     <p id="wigetLocation"><i id="widgetPin"  className="fa-solid fa-location-pin"></i></p>
@@ -49,6 +49,12 @@ class Home extends React.Component {
                
                 </div>
             </div>
+
+            <div id='alertWidget' className="col4Card">
+
+            </div>
+
+            </>
         )
     }
 }
