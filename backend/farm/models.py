@@ -8,3 +8,6 @@ class Farm(models.Model):
     latitude = models.FloatField()
     longitude = models.FloatField()
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='farms')
+
+    def __str__(self):
+        return self.name
