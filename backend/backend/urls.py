@@ -17,6 +17,7 @@ from django.urls import path
 from django.contrib import admin
 from user import views
 from farm import views as farm_views
+from field import views as field_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,4 +27,6 @@ urlpatterns = [
     path('getuserbyid/<int:id>/', views.getUserById),
     path('createfarm/', farm_views.create_farm),
     path('getfarmbyowner/<int:id>/', farm_views.getFarmByOwner),
+    path('getfieldsbyid/<int:id>/', field_views.getFieldsById),
+    path('createfield/', field_views.create_field),
 ]

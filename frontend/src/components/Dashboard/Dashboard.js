@@ -52,6 +52,12 @@ class Dashboard extends React.Component {
 
         const farmDetails = await this.getFarmDetails(decodedToken.id);
 
+         // print the farm details
+         console.log(farmDetails);
+         this.farmDetails = farmDetails;
+ 
+         this.setState({farmDetails: farmDetails});
+
 
         // print the farm details
         console.log(farmDetails);
@@ -141,11 +147,11 @@ getFarmDetails(id) {
     render() {
 
 
-        const { currentDashboardScreen, weatherData, weatherForecast } = this.state;
+        const { currentDashboardScreen, weatherData, weatherForecast, farmDetails } = this.state;
 
         const CurrentUtility = this.utilityComponents[currentDashboardScreen];
 
-        if (!weatherData || !weatherForecast || !weatherForecast) {
+        if (!weatherData || !weatherForecast || !farmDetails) {
             return null;
         }
 
@@ -183,7 +189,7 @@ getFarmDetails(id) {
 
                 <section id='scrollUtility'>
 
-                    <CurrentUtility displayScreen={this.displayDashboardScreen} weatherData={this.state.weatherData} weatherForecast={this.state.weatherForecast}/>
+                    <CurrentUtility displayScreen={this.displayDashboardScreen} weatherData={this.state.weatherData} weatherForecast={this.state.weatherForecast} farmDetails={this.state.farmDetails}/>
 
                 </section>
 

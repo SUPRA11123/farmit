@@ -9,6 +9,8 @@ from .models import Field
 # get all fields
 @api_view(['GET'])
 def getFieldsById(request, id):
+    print("boas mano")
+
     if Field.objects.filter(farm=id).exists():
         fields = Field.objects.filter(farm=id)
         serializer = FieldSerializer(fields, many=True)

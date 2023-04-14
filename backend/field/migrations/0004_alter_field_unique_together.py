@@ -6,7 +6,6 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('farm', '0004_alter_farm_unique_together'),
         ('field', '0003_alter_field_name'),
     ]
 
