@@ -6,7 +6,7 @@ class Field(models.Model):
     name = models.CharField(max_length=50)
     crop_type = models.CharField(max_length=50)
     type = models.CharField(max_length=50)
-    coordinates = models.CharField(max_length=200)
+    coordinates = models.CharField(max_length=500)
     farm = models.ForeignKey(Farm, on_delete=models.CASCADE, related_name='fields')
 
     class Meta:
