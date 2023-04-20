@@ -186,7 +186,7 @@ class Weather extends React.Component {
             </div>
 
             <div className="weatheDataContainer">
-                <div>
+                <div style={{marginLeft: 0}}>
                     <h2>Pressure</h2>
                     <p>{this.props.weatherData.main.pressure} hpa</p>
                 </div>

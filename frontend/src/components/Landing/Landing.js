@@ -89,7 +89,7 @@ class Landing extends React.Component {
 
         document.getElementById("mapPrompt").classList.remove("hidden");
         
-        var farmCountry = document.getElementById("farmCountry");
+        var farmCountry = document.getElementById("country");
         var countryCoords = coordData.filter(function(coordData){return coordData.Country === farmCountry.value});
 
         this.setState({
@@ -241,7 +241,7 @@ class Landing extends React.Component {
                     <input required type="text" id="farmName" name="farmName"/><br/>
 
                     <label htmlFor="country">Country</label><br/>
-                    <CountrySelect changeMap={this.changeMap}></CountrySelect>
+                    <CountrySelect id='farmCountry' changeMap={this.changeMap}></CountrySelect>
 
                     <span id="mapPrompt" className='hidden'>Please click on the map to set a marker for your farm</span>
 

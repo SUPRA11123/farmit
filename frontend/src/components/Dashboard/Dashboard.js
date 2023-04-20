@@ -185,7 +185,7 @@ getFarmDetails(id) {
                     <h2>{this.getWelcomeMessage()} {this.state.user}</h2>
                     <p>your current dashboard for today</p>
 
-                    <i id='alertBell' class="fa-regular fa-bell"></i>
+                    <i id='alertBell' className="fa-regular fa-bell"></i>
 
                     <div id='userIcon'>
                         E
@@ -204,6 +204,8 @@ getFarmDetails(id) {
                 </main>
 
             </div>
+
+
         )
     }
 

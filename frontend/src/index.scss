@@ -359,14 +359,15 @@ body {
     font-family: $font1;
     h2 {
         font-size: 1.5vw;
-        color: $darkGrey;
+        color: black;
     }
 }
 
 .weatherCityContainer {
     position: relative;
     height: 10%;
-    width: 60%;
+    width: 40%;
+    left: 0%;
     margin-bottom: 2%;
     background-color: $green;
     border-radius: 5px;
@@ -450,11 +451,78 @@ body {
     
 }
 
+.fieldsTableConatiner {
+    position: absolute;
+    width: 100%;
+    top: 40%;
+    height: 50%;
+
+    #addNewField {
+        border: 1px solid $darkGrey;
+        background-color: white;
+        border-radius: 5px;
+        font-size: 2vh;
+        position: absolute;
+        margin: 0;
+        width: 10%;
+        height: 10%;
+        top: 0%;
+    }
+
+    #addNewField:hover {
+        cursor: pointer;
+        background-color: $green;
+        color: white;
+    }
+}
+
+.fieldsTable {
+    font-family: $font1;
+    width: 100%;
+    height: 50%;
+    border-radius: 25px;
+    background-color: #F4F4F4;
+    border-collapse: collapse;
+    position: absolute;
+    top: 12.5%;
+
+    th h2 {
+        position: relative;
+        text-align: left;
+        border-radius: 25px;
+        margin: 5%;
+        font-size: 2vh;
+        font-weight: normal;
+    }
+
+    thead tr {
+        border-radius: 25px;
+    }
+
+    tbody tr:nth-child(odd) {
+        background-color: white;
+    }
+
+    tbody tr span {
+        margin: 5%;
+        font-size: 2vh;
+    }
+
+      tbody tr:hover {
+        cursor: pointer;
+        background-color: $lightBlue;
+      }
+    
+}
+
 #map{
+   
+    position: absolute;
     height: 60%;
  }
 
  #add{
+    display: none;
     position: absolute;
     top: 5%;
     left: 50%;
@@ -462,6 +530,7 @@ body {
  }
 
  #div{
+   
     position: absolute;
     top: 5%;
     left: 50%;
