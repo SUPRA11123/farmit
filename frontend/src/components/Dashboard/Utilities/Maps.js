@@ -18,6 +18,8 @@ class Maps extends React.Component {
             mapTypeId: "satellite",
             center: { lat: this.props.farmDetails.latitude, lng: this.props.farmDetails.longitude },
             zoom: 15,
+            streetViewControl: false,
+            mapTypeControl: false,
         });
 
 
@@ -425,45 +427,103 @@ class Maps extends React.Component {
 
     createField(event) {
         event.preventDefault();
-        
         document.getElementById("createField").classList.add("hidden");
-        
     }
 
     /*cancel() {
         document.getElementById("createField").classList.add("hidden");
     }*/
 
-    showData() {
-        console.log("show data");
+    showFieldForm() {
+
+        var createFieldBTN = document.getElementById("addNewField");
+        var createFieldForm = document.getElementById("createField");
+
+        if(createFieldForm.classList.contains("hidden")) {
+           createFieldBTN.innerHTML = "<i class='fa-solid fa-xmark'></i> Cancel";
+        } else {
+            createFieldBTN.innerHTML = "<i class='fa-solid fa-plus'></i> Add Field";
+        }
+
+        document.getElementById("fieldTable").classList.toggle("hidden");
+        createFieldForm.classList.toggle("hidden");
+        document.getElementById("addFieldsHeader").classList.toggle("hidden");
+
     }
-
-
-
 
 
     render() {
 
-
         return (
-            <><><h1>Maps</h1>
+            <>
 
-            <div id ="add"></div>
-
-                <form id="createField" className="hidden" onSubmit={this.createField}>
-                    <input required type="text" name="name" id="fieldName" placeholder="Field Name" />
-                    <input required type="text" name="crop_type" id="cropType" placeholder="Crop Type" />
-                    <input id="loginInBtn" type="submit" value="Create Field" />
-                    <input id="cancelBtn" type="button" value="Cancel" onClick={this.cancel}/>
-                </form>
 
                 <div id="map">
+                </div>
 
+                <div className="fieldsTableConatiner">
 
-                </div></>
+                <h2 className="hidden" id="addFieldsHeader">Use the rectangle/polygon tool to draw field on map</h2>
+                <button onClick={this.showFieldForm} id="addNewField"> <i class="fa-solid fa-plus"></i> Add Field</button>
 
+                <form id="createField" className="hidden" onSubmit={this.createField}>
+                    <label for="name">Field Name</label><br/>
+                    <input required type="text" name="name" id="fieldName" placeholder="enter name" /><br/>                
+                    <label for="name">Crop</label><br/>
+                    <input required type="text" name="crop_type" id="cropType" placeholder="select type" /><br/>
+                    <label for="name">Moisture Thresholds</label><br/>
+                    <label for="wetnessRange">Wet</label><br/>
+                    <input type="range" id="wetnessRange" name="wetnessRange" min="0" max="100"></input><br/>
+                    <label for="drynessRange">Dry</label><br/>
+                    <input type="range" id="drynessRange" name="drynessRange" min="0" max="100"></input><br/>
+                    <input id="loginInBtn" type="submit" value="Create Field" />
+                </form>
 
+                <div id="add"></div>
 
+                <table id='fieldTable' className="fieldsTable">
+                <thead>
+                <tr>
+                <th><h2>Fields</h2></th>
+                <th><h2>Condition</h2></th>
+                <th><h2>Crop</h2></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                <td></td>
+                <td><p></p></td>
+                <td><p></p></td>
+                </tr>
+                <tr>
+                <td><p></p></td>
+                <td><p></p></td>
+                <td><p></p></td>
+                </tr>
+                <tr>
+                <td><p></p></td>
+                <td><p></p></td>
+                <td><p></p></td>
+                </tr>
+                <tr>
+                <td><p></p></td>
+                <td><p></p></td>
+                <td><p></p></td>
+                </tr>
+                <tr>
+                <td><p></p></td>
+                <td><p></p></td>
+                <td><p></p></td>
+                </tr>
+                <tr>
+                <td><p></p></td>
+                <td><p></p></td>
+                <td><p></p></td>
+                </tr>
+                </tbody>
+                </table>
+
+                </div>
             </>
 
 

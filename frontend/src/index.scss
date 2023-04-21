@@ -452,10 +452,24 @@ body {
 }
 
 .fieldsTableConatiner {
+
     position: absolute;
     width: 100%;
     top: 40%;
-    height: 50%;
+    height: 35%;
+    
+
+    #createField {
+        width: 100%;
+        background-color: $grey;
+        border-radius: 25px;
+
+        label {
+            font-size: 2vh;
+            text-align: left;
+        }
+
+    }
 
     #addNewField {
         border: 1px solid $darkGrey;
@@ -464,9 +478,9 @@ body {
         font-size: 2vh;
         position: absolute;
         margin: 0;
-        width: 10%;
-        height: 10%;
-        top: 0%;
+        width: 15%;
+        height: 15%;
+        top: 5%;
     }
 
     #addNewField:hover {
@@ -474,22 +488,31 @@ body {
         background-color: $green;
         color: white;
     }
+
+    #addFieldsHeader {
+        position: absolute;
+        height: 15%;
+        font-size: 2vh;
+        top: 5%;
+        color: $darkGrey;
+        width: 100%;
+        text-align: center;
+    }
 }
 
 .fieldsTable {
+    border: 1px solid #D9D9D9;
     font-family: $font1;
     width: 100%;
     height: 50%;
-    border-radius: 25px;
     background-color: #F4F4F4;
     border-collapse: collapse;
     position: absolute;
-    top: 12.5%;
+    top: 25%;
 
     th h2 {
         position: relative;
         text-align: left;
-        border-radius: 25px;
         margin: 5%;
         font-size: 2vh;
         font-weight: normal;
@@ -515,18 +538,35 @@ body {
     
 }
 
+#createField {
+    position: absolute;
+    width: 100%;
+    height: 70%;
+    top: 25%;
+}
+
 #map{
    
-    position: absolute;
-    height: 60%;
+    position: relative;
+    height: 40%;
  }
 
  #add{
-    display: none;
+    background-color: rgba(10, 168, 55, 0.7);
     position: absolute;
-    top: 5%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    height: 40%;
+    border-radius: 0 25px 0 0;
+    top: -40%;
+
+    p {
+        color: white;
+        margin: 5%;
+    }
+
+    button {
+        margin: 0 5% 5% 5%;
+    }
+
  }
 
  #div{
