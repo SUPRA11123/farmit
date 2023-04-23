@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.scss';
 import Dashboard from './components/Dashboard/Dashboard';
 import Landing from './components/Landing/Landing'
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 class Main extends React.Component {
 
@@ -49,4 +50,4 @@ class App extends React.Component {
   }
   
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<App />);
+root.render(<GoogleOAuthProvider clientId="441783996872-2k3db11ddup1p74mr6l4573eu994fu4v.apps.googleusercontent.com" ><App /></GoogleOAuthProvider>);
