@@ -1,4 +1,4 @@
-import React from 'react';
+import React , { Component } from 'react';
 import Home from './Utilities/Home';
 import Weather from './Utilities/Weather';
 import Monitor from './Utilities/Monitor';
@@ -32,6 +32,7 @@ class Dashboard extends React.Component {
         this.displaySettings = this.displaySettings.bind(this);
         this.displayDashboardScreen = this.displayDashboardScreen.bind(this);
         this.getFarmDetails = this.getFarmDetails.bind(this);
+        this.myDivRef = React.createRef();
       
     }
 
@@ -143,6 +144,13 @@ getFarmDetails(id) {
 
     }
 
+    scrollToMap = () => {
+
+        document.body.scrollTop = document.body.scrollHeight;
+        document.documentElement.scrollTop = document.documentElement.scrollHeight;
+       
+      };
+
  
     render() {
 
@@ -178,7 +186,7 @@ getFarmDetails(id) {
                     </nav>
                 </aside>
 
-                <main id='utilityContainer'>
+                <main ref={this.divRef} id='utilityContainer'>
 
                 <section id='fixedUtility'>
 
@@ -188,14 +196,14 @@ getFarmDetails(id) {
                     <i id='alertBell' className="fa-regular fa-bell"></i>
 
                     <div id='userIcon'>
-                        E
+                        {(this.state.user).charAt(0).toUpperCase()}
                     </div>
 
                 </section>
 
                 <section id='scrollUtility'>
 
-                    <CurrentUtility displayScreen={this.displayDashboardScreen} weatherData={this.state.weatherData} weatherForecast={this.state.weatherForecast} farmDetails={this.state.farmDetails}/>
+                    <CurrentUtility scrollToMap={this.scrollToMap} displayScreen={this.displayDashboardScreen} weatherData={this.state.weatherData} weatherForecast={this.state.weatherForecast} farmDetails={this.state.farmDetails}/>
 
                 </section>
 
