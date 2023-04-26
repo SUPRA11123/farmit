@@ -1,4 +1,4 @@
-import React , { Component } from 'react';
+import React from 'react';
 import Home from './Utilities/Home';
 import Weather from './Utilities/Weather';
 import Monitor from './Utilities/Monitor';
@@ -111,8 +111,17 @@ getFarmDetails(id) {
     }
 
     displayDashboardScreen(screen){
+
+        console.log("works");
         this.setState({currentDashboardScreen: screen});
+
+        if (screen === this.utilityComponents.maps) {
+            document.getElementById("fixedUtility").classList.add("hidden");
+        } else {
+            document.getElementById("fixedUtility").classList.remove("hidden");
+        }
     }
+
 
     handleLogout(){
         localStorage.removeItem("token");
@@ -141,16 +150,19 @@ getFarmDetails(id) {
         .catch((err) => {
             console.log(err);
         });
+    }
+
+    expandMobileNav() {
+
+        document.getElementById("navList").classList.toggle('hidden');
 
     }
 
-    scrollToMap = () => {
-
-        document.body.scrollTop = document.body.scrollHeight;
-        document.documentElement.scrollTop = document.documentElement.scrollHeight;
-       
-      };
-
+    handleMobileClick() {
+        if (window.innerWidth < 600) {
+            document.getElementById("navList").classList.add('hidden');
+         }
+    }
  
     render() {
 
@@ -160,7 +172,7 @@ getFarmDetails(id) {
         const CurrentUtility = this.utilityComponents[currentDashboardScreen];
 
         if (!weatherData || !weatherForecast || !farmDetails) {
-            return null;
+            return "Loading...";
         }
 
         return(
@@ -168,17 +180,18 @@ getFarmDetails(id) {
 
                 <aside id='navContainer'>
                     <div id='navTop'>
+                    <i onClick={this.expandMobileNav} id='mobileNavBtn' className="fa-solid fa-bars"></i>
                     <img src={require('../../resources/img/logo.png')} alt="Agrosensor logo"/>
                     </div>
-                    <nav>
-                        <ul>
-                            <li onClick={() => this.setState({currentDashboardScreen: "dashboard"})} className={this.state.currentDashboardScreen === "dashboard" ? "navActive": ""}><p><i className="fa-solid fa-table-cells-large"></i>Dashboard</p></li>
-                            <li onClick={() => this.setState({currentDashboardScreen: "weather"})} className={this.state.currentDashboardScreen === "weather" ? "navActive": ""}><p><i className="fa-solid fa-cloud-sun"></i>Weather</p></li>
-                            <li onClick={() => this.setState({currentDashboardScreen: "monitor"})} className={this.state.currentDashboardScreen === "monitor" ? "navActive": ""}><p><i className="fa-solid fa-desktop"></i>Monitor</p></li>
-                            <li onClick={() => this.setState({currentDashboardScreen: "resources"})} className={this.state.currentDashboardScreen === "resources" ? "navActive": ""}><p><i className="fa-solid fa-boxes-stacked"></i>Resources</p></li>
-                            <li onClick={() => this.setState({currentDashboardScreen: "maps"})} className={this.state.currentDashboardScreen === "maps" ? "navActive": ""}><p><i className="fa-regular fa-map"></i>Maps</p></li>
-                            <li onClick={() => this.setState({currentDashboardScreen: "predictions"})} className={this.state.currentDashboardScreen === "predictions" ? "navActive": ""}><p><i className="fa-solid fa-bullhorn"></i>Predictions</p></li>
-                            <li onClick={() => this.setState({currentDashboardScreen: "settings"})} className={this.state.currentDashboardScreen === "settings" ? "navActive": ""}><p><i className="fa-solid fa-gear"></i>Settings</p></li>
+                    <nav id='navList'>
+                        <ul >
+                            <li onClick={() => this.setState({currentDashboardScreen: "dashboard"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "dashboard" ? "navActive": ""}><p><i className="fa-solid fa-table-cells-large"></i>Dashboard</p></li>
+                            <li onClick={() => this.setState({currentDashboardScreen: "weather"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "weather" ? "navActive": ""}><p><i className="fa-solid fa-cloud-sun"></i>Weather</p></li>
+                            <li onClick={() => this.setState({currentDashboardScreen: "monitor"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "monitor" ? "navActive": ""}><p><i className="fa-solid fa-desktop"></i>Monitor</p></li>
+                            <li onClick={() => this.setState({currentDashboardScreen: "resources"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "resources" ? "navActive": ""}><p><i className="fa-solid fa-boxes-stacked"></i>Resources</p></li>
+                            <li onClick={() => this.setState({currentDashboardScreen: "maps"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "maps" ? "navActive": ""}><p><i className="fa-regular fa-map"></i>Maps</p></li>
+                            <li onClick={() => this.setState({currentDashboardScreen: "predictions"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "predictions" ? "navActive": ""}><p><i className="fa-solid fa-bullhorn"></i>Predictions</p></li>
+                            <li onClick={() => this.setState({currentDashboardScreen: "settings"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "settings" ? "navActive": ""}><p><i className="fa-solid fa-gear"></i>Settings</p></li>
                             <li id='logout' onClick={this.handleLogout}><p><i className="fa-solid fa-arrow-right-from-bracket"></i>Logout</p></li>
                         </ul>
 

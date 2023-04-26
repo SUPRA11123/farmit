@@ -1,15 +1,8 @@
 import React from "react";
 import axios from "axios";
-import {useRef} from 'react';
 
 
 class Maps extends React.Component {
-
-    constructor(props) {
-        super(props);
-        this.myRef = React.createRef();
-      }
-
 
     async componentDidMount() {
 
@@ -32,13 +25,24 @@ class Maps extends React.Component {
         const marker = new window.google.maps.Marker({
             position: { lat: this.props.farmDetails.latitude, lng: this.props.farmDetails.longitude },
             map: map,
-            //change the color of the label
+            label: {
+                fontFamily: 'Fontawesome',
+                text: '\uf015',
+                color: 'white',
+
+            },
+           
         });
 
         var table = document.getElementById("fieldTable").getElementsByTagName('tbody')[0];
+        var centreMap = document.getElementById("centreToMap");
+
+        centreMap.addEventListener("click", () => {
+         map.setCenter(marker.getPosition());
+         map.setZoom(15);
+        });
 
         if (fields.length > 0) {
-
 
             var i = 0;
 
@@ -57,7 +61,6 @@ class Maps extends React.Component {
 
 
                 if (field.type === "rectangle") {
-
 
                     const coordinates = field.coordinates.split(";");
 
@@ -84,8 +87,6 @@ class Maps extends React.Component {
                     const lat = (parseFloat(coordinates[0]) + parseFloat(coordinates[2])) / 2;
                     const lng = (parseFloat(coordinates[1]) + parseFloat(coordinates[3])) / 2;
 
-
-
                     const marker = new window.google.maps.Marker({
                         position: { lat: lat, lng: lng },
                         map: map,
@@ -108,21 +109,16 @@ class Maps extends React.Component {
                     // separate the coordinates by ;
                     const coordinates = field.coordinates.split(";");
 
-
-
                     // split each coordinate by ,
                     const coordinatesArray = coordinates.map((coordinate) => {
                         return coordinate.split(",");
                     });
-
 
                     // add each coordinate to the path
                     const path = [];
                     coordinatesArray.forEach((coordinate) => {
                         path.push({ lat: parseFloat(coordinate[0]), lng: parseFloat(coordinate[1]) });
                     });
-
-
 
                     // create polygon
                     const polygon = new window.google.maps.Polygon({
@@ -134,7 +130,6 @@ class Maps extends React.Component {
                         map,
                         path: path,
                     });
-
 
                     polygon.addListener("click", () => {
                         this.showData();
@@ -201,6 +196,7 @@ class Maps extends React.Component {
         });
 
         drawingManager.setDrawingMode(null);
+
             drawingManager.setOptions({
                 drawingControl: false,
             });
@@ -372,7 +368,12 @@ class Maps extends React.Component {
 
             acceptButton.addEventListener('click', () => {
 
-             
+                drawingManager.setOptions({
+                    drawingControl: false,
+                });
+
+                drawingManager.setDrawingMode(null);
+
                 rectangle.setEditable(false);
 
                 popup.remove();
@@ -387,7 +388,6 @@ class Maps extends React.Component {
                 });
 
                 formSubmitPromise.then(() => {
-
 
                     const bounds = rectangle.getBounds();
                     const coordinates = {
@@ -483,11 +483,12 @@ class Maps extends React.Component {
         drawingManager.setMap(map);
     }
 
+
     createField(event) {
         event.preventDefault();
         document.getElementById("createField").classList.add("hidden");
         document.getElementById("fieldTable").classList.remove("hidden");
-        document.getElementById("addNewField").innerHTML = "<i class='fa-solid fa-plus'></i> Add Field";
+        document.getElementById("addNewField").innerHTML = "<i className='fa-solid fa-plus'></i> Add Field";
         document.getElementById("addFieldsHeader").classList.add("hidden");
     }
 
@@ -503,9 +504,9 @@ class Maps extends React.Component {
         var createFieldForm = document.getElementById("createField");
 
         if (createFieldForm.classList.contains("hidden")) {
-            createFieldBTN.innerHTML = "<i class='fa-solid fa-xmark'></i> Cancel";
+            createFieldBTN.innerHTML = "<i className='fa-solid fa-xmark'></i> Cancel";
         } else {
-            createFieldBTN.innerHTML = "<i class='fa-solid fa-plus'></i> Add Field";
+            createFieldBTN.innerHTML = "<i className='fa-solid fa-plus'></i> Add Field";
         }
 
         document.getElementById("fieldTable").classList.toggle("hidden");
@@ -528,7 +529,7 @@ class Maps extends React.Component {
 
                     <h2 className="hidden" id="addFieldsHeader">Use the rectangle/polygon tool to draw the field onto map</h2>
                     <button onClick={this.showFieldForm} id="addNewField" className="fieldsTableBtn"> <i className="fa-solid fa-plus"></i> Add Field</button>
-                    <button onClick={this.props.scrollToMap} id="scrollToMap" className="fieldsTableBtn"><i className="fa-solid fa-chevron-down"></i></button>
+                    <button onClick={this.centreToMap} id="centreToMap" className="fieldsTableBtn"><i class="fa-solid fa-location-crosshairs"></i></button>
 
 
                     <form id="createField" className="hidden" onSubmit={this.createField}>
