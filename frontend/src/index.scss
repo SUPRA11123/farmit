@@ -623,6 +623,12 @@ body {
 
     //LANDING STYLES
 
+    #landingContainer {
+        aside {
+            display: none;
+        }
+    }
+
     #landingCard {
 
         width: 100%;
@@ -640,6 +646,8 @@ body {
         }
 
     }
+
+
 
 
     // MAIN STYLES
