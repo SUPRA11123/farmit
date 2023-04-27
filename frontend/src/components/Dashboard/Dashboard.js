@@ -170,7 +170,7 @@ getFarmDetails(id) {
         const CurrentUtility = this.utilityComponents[currentDashboardScreen];
 
         if (!weatherData || !weatherForecast || !farmDetails) {
-            return "Loading...";
+            return (<i id="loadingIcon" className="fas fa-circle-notch fa-spin"></i>);
         }
 
         return(

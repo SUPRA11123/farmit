@@ -157,6 +157,15 @@ body {
 
 /* Main styles */
 
+#loadingIcon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 5vh;
+    color: $green;
+}
+
 #navContainer {
 
     #logout {
@@ -363,7 +372,7 @@ body {
     font-family: $font1;
     h2 {
         font-size: 1.5vw;
-        color: black;
+        color: $darkGrey;
     }
 }
 
