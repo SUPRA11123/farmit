@@ -1,7 +1,6 @@
 import React from "react";
 import axios from "axios";
 
-
 const URL = process.env.REACT_APP_URL;
 
 
@@ -80,9 +79,12 @@ class Maps extends React.Component {
                             east: parseFloat(coordinates[1]),
                             west: parseFloat(coordinates[3]),
                         },
-                        isComplete: false,
                     });
 
+
+                    rectangle.addListener("click", () => {
+                        this.showData();
+                    });
 
                     const lat = (parseFloat(coordinates[0]) + parseFloat(coordinates[2])) / 2;
                     const lng = (parseFloat(coordinates[1]) + parseFloat(coordinates[3])) / 2;
@@ -129,7 +131,6 @@ class Maps extends React.Component {
                         fillOpacity: 0.35,
                         map,
                         path: path,
-                        isComplete: false,
                     });
 
                     polygon.addListener("click", () => {
@@ -172,6 +173,7 @@ class Maps extends React.Component {
             },
             polygonOptions: {
                 editable: true,
+                draggable: true,
                 clickable: true,
                 strokeColor: "#0ba837",
                 strokeOpacity: 0.8,
@@ -182,6 +184,7 @@ class Maps extends React.Component {
 
             rectangleOptions: {
                 editable: true,
+                draggable: true,
                 clickable: true,
                 strokeColor: "#0ba837",
                 strokeOpacity: 0.8,
@@ -204,12 +207,10 @@ class Maps extends React.Component {
         addFieldButton.addEventListener("click", () => {
             if (drawingManager.drawingControl === false) {
             // If drawing mode is off, turn it on for polygons and rectangles
+            
             drawingManager.setOptions({
                 drawingControl: true,
             });
-
-            // delete the rectangle being drawn
-            drawingManager.setDrawingMode(null);
             } else {
             // If drawing mode is on, turn it off
             drawingManager.setDrawingMode(null);
@@ -218,32 +219,13 @@ class Maps extends React.Component {
         });
 
 
+        
+        
+        
+
+
         window.google.maps.event.addListener(drawingManager, 'polygoncomplete', (polygon) => {
 
-            document.getElementById("addNewField").addEventListener("click", () => {
-
-                popup.remove();
-
-                if (!polygon.isComplete){
-                    polygon.setMap(null);
-                }
-
-                if (document.getElementById("fieldTable").classList.contains("hidden")) {
-                    drawingManager.setOptions({
-                        drawingControl: false,
-                    });
-                }
-
-            });
-
-            drawingManager.setOptions({
-                drawingControl: false,
-            });
-
-            drawingManager.setDrawingMode(null);
-            
-            //hide a label
-            document.getElementById("addFieldsHeader").classList.add("hidden");
 
             const popup = document.createElement('div');
             popup.classList.add('popup');
@@ -260,31 +242,18 @@ class Maps extends React.Component {
 
             acceptButton.addEventListener('click', () => {
 
-                let cancelFormSubmitPromise = false;
-
                 polygon.setEditable(false);
 
                 popup.remove();
                 document.getElementById("createField").classList.remove("hidden");
 
-
-
-                const formSubmitPromise = new Promise((resolve, reject) => {
+                // await for the user to submit the form
+                const formSubmitPromise = new Promise((resolve) => {
                     document.getElementById("createField").addEventListener("submit", (event) => {
                         event.preventDefault();
-                        if (!cancelFormSubmitPromise) {
-                            resolve(); // resolve the promise when the form is submitted
-                        } else {
-                            reject();
-                        }
-                        });
+                        resolve(); // resolve the promise when the form is submitted
+                    });
                 });
-
-                document.getElementById("addNewField").addEventListener("click", () => {
-                    cancelFormSubmitPromise = true;
-                });
-
-                
 
                 formSubmitPromise.then(() => {
 
@@ -335,8 +304,6 @@ class Maps extends React.Component {
                         cell2.innerHTML = "<span>conditions</span>";
                         cell3.innerHTML = "<span>" + cropType + "</span>";
 
-                        polygon.isComplete = true;
-
                     }).catch((err) => {
                         console.log(err);
                         polygon.setMap(null);
@@ -360,7 +327,11 @@ class Maps extends React.Component {
             });
 
             polygon.addListener("click", () => {
-                this.showData();
+                polygon.setMap(null);
+                // allow drawing again
+                drawingManager.setOptions({
+                    drawingControl: true,
+                });
             });
 
             cancelButton.addEventListener('click', () => {
@@ -382,33 +353,7 @@ class Maps extends React.Component {
         });
         // add event listener to drawing manager rectangle
         window.google.maps.event.addListener(drawingManager, 'rectanglecomplete', (rectangle) => {
-            
-            document.getElementById("addNewField").addEventListener("click", () => {
 
-                popup.remove();
-
-                if (!rectangle.isComplete){
-                    rectangle.setMap(null);
-                }
-
-                if (document.getElementById("fieldTable").classList.contains("hidden")) {
-                    drawingManager.setOptions({
-                        drawingControl: false,
-                    });
-                }
-
-            });
-
-            
-            drawingManager.setOptions({
-                drawingControl: false,
-            });
-
-            drawingManager.setDrawingMode(null);
-            
-            //hide a label
-            document.getElementById("addFieldsHeader").classList.add("hidden");
-            
 
             const popup = document.createElement('div');
             popup.classList.add('popup');
@@ -425,8 +370,6 @@ class Maps extends React.Component {
 
             acceptButton.addEventListener('click', () => {
 
-                let cancelFormSubmitPromise = false;
-
                 drawingManager.setOptions({
                     drawingControl: false,
                 });
@@ -438,20 +381,12 @@ class Maps extends React.Component {
                 popup.remove();
                 document.getElementById("createField").classList.remove("hidden");
 
-            
-                const formSubmitPromise = new Promise((resolve, reject) => {
+                // await for the user to submit the form
+                const formSubmitPromise = new Promise((resolve) => {
                     document.getElementById("createField").addEventListener("submit", (event) => {
                         event.preventDefault();
-                        if (!cancelFormSubmitPromise) {
-                            resolve(); // resolve the promise when the form is submitted
-                        } else {
-                            reject();
-                        }
-                        });
-                });
-
-                document.getElementById("addNewField").addEventListener("click", () => {
-                    cancelFormSubmitPromise = true;
+                        resolve(); // resolve the promise when the form is submitted
+                    });
                 });
 
                 formSubmitPromise.then(() => {
@@ -503,7 +438,6 @@ class Maps extends React.Component {
                         console.log(res);
                         var table = document.getElementById("fieldTable").getElementsByTagName('tbody')[0];
 
-
                         var row = table.insertRow(0);
 
                         var cell1 = row.insertCell(0);
@@ -514,8 +448,6 @@ class Maps extends React.Component {
                         cell1.innerHTML = "<span>" + fieldName + "</span>";
                         cell2.innerHTML = "<span>conditions</span>";
                         cell3.innerHTML = "<span>" + cropType + "</span>";
-
-                        rectangle.isComplete = true;
 
                     }).catch((err) => {
                         console.log(err);
@@ -534,7 +466,6 @@ class Maps extends React.Component {
             });
 
             cancelButton.addEventListener('click', () => {
-                document.getElementById("addFieldsHeader").classList.remove("hidden");
                 rectangle.setMap(null);
                 drawingManager.setOptions({
                     drawingControl: true,
@@ -549,7 +480,6 @@ class Maps extends React.Component {
             // show the popup on the div, but outside the map
             document.getElementById("add").appendChild(popup);
 
-           
         });
 
         drawingManager.setMap(map);
@@ -560,7 +490,7 @@ class Maps extends React.Component {
         event.preventDefault();
         document.getElementById("createField").classList.add("hidden");
         document.getElementById("fieldTable").classList.remove("hidden");
-        document.getElementById("addNewField").innerHTML = "<i class='fa-solid fa-plus'></i> Add Field";
+        document.getElementById("addNewField").innerHTML = "<i className='fa-solid fa-plus'></i> Add Field";
         document.getElementById("addFieldsHeader").classList.add("hidden");
     }
 
@@ -572,25 +502,19 @@ class Maps extends React.Component {
 
     showFieldForm() {
 
-        var createFieldBTN = document.getElementById("addNewField");       
+        var createFieldBTN = document.getElementById("addNewField");
+        var createFieldForm = document.getElementById("createField");
 
-        document.getElementById("fieldTable").classList.toggle("hidden");
-
-        // check if table is hidden
-        if (document.getElementById("fieldTable").classList.contains("hidden")) {
-            createFieldBTN.innerHTML = "<i class='fa-solid fa-xmark'></i> Cancel";
-            document.getElementById("addFieldsHeader").classList.remove("hidden");
-
+        if (createFieldForm.classList.contains("hidden")) {
+            createFieldBTN.innerHTML = "<i className='fa-solid fa-xmark'></i> Cancel";
         } else {
-            createFieldBTN.innerHTML = "<i class='fa-solid fa-plus'></i> Add Field";
-            document.getElementById("addFieldsHeader").classList.add("hidden");
-            document.getElementById("createField").classList.add("hidden");
+            createFieldBTN.innerHTML = "<i className='fa-solid fa-plus'></i> Add Field";
         }
 
-    }
+        document.getElementById("fieldTable").classList.toggle("hidden");
+        createFieldForm.classList.toggle("hidden");
+        document.getElementById("addFieldsHeader").classList.toggle("hidden");
 
-    showData(){
-        console.log("show data");
     }
 
 
