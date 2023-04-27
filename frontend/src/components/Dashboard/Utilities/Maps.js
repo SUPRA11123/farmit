@@ -1,6 +1,8 @@
 import React from "react";
 import axios from "axios";
 
+const URL = process.env.REACT_APP_URL;
+
 
 class Maps extends React.Component {
 
@@ -144,7 +146,7 @@ class Maps extends React.Component {
 
     getFields(id) {
         return axios
-            .get("http://localhost:8000/getfieldsbyid/" + id + "/")
+            .get(URL + "getfieldsbyid/" + id + "/")
             .then((res) => {
                 console.log(res);
                 return res.data;
@@ -280,7 +282,7 @@ class Maps extends React.Component {
                     const cropType = document.getElementById("cropType").value;
 
                     // call the backend to add the coordinates
-                    axios.post('http://localhost:8000/createfield/', {
+                    axios.post(URL + 'createfield/', {
                         name: fieldName,
                         crop_type: cropType,
                         type: "polygon",
@@ -426,7 +428,7 @@ class Maps extends React.Component {
 
 
                     // call the backend to add the coordinates
-                    axios.post('http://localhost:8000/createfield/', {
+                    axios.post(URL + 'createfield/', {
                         name: fieldName,
                         crop_type: cropType,
                         type: "rectangle",

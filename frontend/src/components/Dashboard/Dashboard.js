@@ -8,6 +8,8 @@ import Predictions from './Utilities/Predictions';
 import Settings from './Utilities/Settings';
 import axios from 'axios';
 
+const URL = process.env.REACT_APP_URL;
+
 class Dashboard extends React.Component {
 
     UNIT = "metric";
@@ -89,7 +91,7 @@ class Dashboard extends React.Component {
 
 getFarmDetails(id) {
     return axios
-    .get("http://localhost:8000/getfarmbyowner/" + id + "/")
+    .get(URL + "getfarmbyowner/" + id + "/")
     .then((res) => {
         console.log(res);
         return res.data;
@@ -143,7 +145,7 @@ getFarmDetails(id) {
 
     getUser(id) {
         return axios
-        .get("http://localhost:8000/getuserbyid/" + id + "/")
+        .get(URL + "getuserbyid/" + id + "/")
         .then((res) => {
             return res.data;
         })
