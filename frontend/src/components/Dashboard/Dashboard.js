@@ -26,8 +26,9 @@ class Dashboard extends React.Component {
     }
 
     constructor(props) {
+
         super(props);
-        this.state = { currentDashboardScreen: "dashboard"};
+        this.state = { currentDashboardScreen: "dashboard", isMobile: false};
         this.changeUtility = this.changeUtility.bind(this);
         this.displaySettings = this.displaySettings.bind(this);
         this.displayDashboardScreen = this.displayDashboardScreen.bind(this);
@@ -37,6 +38,9 @@ class Dashboard extends React.Component {
     }
 
     async componentDidMount() {
+
+        const isMobile = window.innerWidth < 600;
+        this.setState({ isMobile });
        
         const token = localStorage.getItem("token");
         // decode the token 
@@ -59,7 +63,6 @@ class Dashboard extends React.Component {
  
          this.setState({farmDetails: farmDetails});
 
-
         // print the farm details
         console.log(farmDetails);
 
@@ -80,10 +83,7 @@ class Dashboard extends React.Component {
         this.weatherForecast = data2;
         this.setState({weatherForecast: data2})
 
-        console.log(data)
-
-    
-
+        console.log(data);
 
 }
 
@@ -153,9 +153,7 @@ getFarmDetails(id) {
     }
 
     expandMobileNav() {
-
         document.getElementById("navList").classList.toggle('hidden');
-
     }
 
     handleMobileClick() {
@@ -163,11 +161,11 @@ getFarmDetails(id) {
             document.getElementById("navList").classList.add('hidden');
          }
     }
- 
+
+
     render() {
 
-
-        const { currentDashboardScreen, weatherData, weatherForecast, farmDetails } = this.state;
+        const { currentDashboardScreen, weatherData, weatherForecast, farmDetails, isMobile } = this.state;
 
         const CurrentUtility = this.utilityComponents[currentDashboardScreen];
 
@@ -183,7 +181,7 @@ getFarmDetails(id) {
                     <i onClick={this.expandMobileNav} id='mobileNavBtn' className="fa-solid fa-bars"></i>
                     <img src={require('../../resources/img/logo.png')} alt="Agrosensor logo"/>
                     </div>
-                    <nav id='navList'>
+                    <nav id='navList' className={isMobile ? 'hidden' : ''}>
                         <ul >
                             <li onClick={() => this.setState({currentDashboardScreen: "dashboard"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "dashboard" ? "navActive": ""}><p><i className="fa-solid fa-table-cells-large"></i>Dashboard</p></li>
                             <li onClick={() => this.setState({currentDashboardScreen: "weather"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "weather" ? "navActive": ""}><p><i className="fa-solid fa-cloud-sun"></i>Weather</p></li>
@@ -194,8 +192,6 @@ getFarmDetails(id) {
                             <li onClick={() => this.setState({currentDashboardScreen: "settings"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "settings" ? "navActive": ""}><p><i className="fa-solid fa-gear"></i>Settings</p></li>
                             <li id='logout' onClick={this.handleLogout}><p><i className="fa-solid fa-arrow-right-from-bracket"></i>Logout</p></li>
                         </ul>
-
-
                     </nav>
                 </aside>
 
@@ -219,8 +215,6 @@ getFarmDetails(id) {
                     <CurrentUtility scrollToMap={this.scrollToMap} displayScreen={this.displayDashboardScreen} weatherData={this.state.weatherData} weatherForecast={this.state.weatherForecast} farmDetails={this.state.farmDetails}/>
 
                 </section>
-
-             
 
                 </main>
 

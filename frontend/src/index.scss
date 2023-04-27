@@ -89,7 +89,7 @@ body {
         font-size: 2.5vh;
         margin-top: 25%;
         margin-bottom: 10%;
-        text-align: left;
+        text-align: center;
     }
 
     form {
@@ -99,13 +99,13 @@ body {
         left: 50%;
         transform: translate(-50%, -50%);
 
-        p span{ 
-            float: right;
+        p { 
+            text-align: center;
             color: #0AA837;
             cursor: pointer;
         }
 
-        p span:hover {
+        p :hover {
             text-decoration: underline;
         }
 
@@ -373,9 +373,9 @@ body {
     width: 40%;
     left: 0%;
     margin-bottom: 2%;
-    background-color: $green;
+    background-color: $grey;
     border-radius: 5px;
-    color: white;
+    color: $green;
     font-size: 2vh;
     display: flex;
     align-items: center;
@@ -600,15 +600,40 @@ body {
  }
 
  #googleSignIn {
-    position: absolute;
-    top: 12%;
+    position: relative;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 // MOBILE STYLES
 
 @media only screen and (max-width: 600px) {
+
+    //LANDING STYLES
+
+    #landingCard {
+
+        width: 100%;
+
+        img {
+            top: 5%;
+        }
+
+        #googleSignIn {
+            transform: none;
+            position: relative;
+            left: 0;
+            top: 0;
+            width: 100%;
+        }
+
+    }
+
+
+    // MAIN STYLES
    
     #navContainer {
         top: 0;
@@ -635,14 +660,93 @@ body {
 
         nav ul li{
             z-index: 20;
-           
             background-color: white;
+        }
+
+        nav ul li p {
+           margin-left: 5%;
+        }
+
+        #logout {
+            width: 100%;
+            position: relative;
         }
     }
 
     #utilityContainer {
-      left: 0;
-      top: 10%;
-      width: 100%;
+        left: 0;
+        top: 10%;
+        width: 100%;
+        overflow: hidden;
+        background-color: white;
+    
+        #userIcon {
+            display: none;
+        }
+
     }
+
+    #fixedUtility {
+        background-color: white;
+        width: 95%;
+        left: 2.5%;
+        
+
+        h2 {
+            font-size: 3vh;
+            margin-left: 2.5%;
+        }
+
+        p {
+            margin-left: 2.5%;
+        }
+    }
+
+    #scrollUtility {
+        top: 22.5%;
+        width: 100%;
+        background-color: white;
+        left: 0;
+    }
+
+    //DASHBOARD STYLES
+
+    #weatherWidget {
+        width: 95%;
+        left: 2.5%;
+    }
+
+    #alertWidget {
+        top: 100%;
+    }
+
+    //WEATHER STYLES 
+
+    .weatherCityContainer {
+        width: 95%;
+        left: 2.5%;
+        background-color: $grey;
+        color: $green;
+    }
+
+    .weatheDataContainer { 
+        
+        position: absolute;
+        width: 95%;
+        left: 2.5%;
+
+        div h2, div p {
+            font-size: 3vw;
+        }
+    }
+
+    .lineChartContainer {
+        position: absolute;
+        top: 25%;
+    }
+
+    .daySelector {
+        top: 50%;
+    }
+
   }

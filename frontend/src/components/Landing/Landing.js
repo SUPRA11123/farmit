@@ -255,7 +255,7 @@ class Landing extends React.Component {
 
             <input id="accountNext" type="submit" value="Next" />
 
-            <p>Already have an account?<span onClick={this.toLogin}>Login</span></p>
+            <p><span onClick={this.toLogin}>Login to a account</span></p>
 
           </form>
 
@@ -278,6 +278,9 @@ class Landing extends React.Component {
           </form>
 
           <form id="userLogin" onSubmit={this.handleLogin}>
+            
+          <h2>Dashboard Login</h2>
+
             <div id="googleSignIn">
               <GoogleLogin
                 locale='en'
@@ -295,9 +298,7 @@ class Landing extends React.Component {
                 useOneTap
               />
             </div>
-            <h2>Dashboard Login</h2>
-
-
+  
             <p id='errorMessage'></p>
 
             <label htmlFor="loginEmail">Email</label><br />
@@ -308,7 +309,7 @@ class Landing extends React.Component {
 
             <input id="loginInBtn" type="submit" value="Login" />
 
-            <p>Need to create an account?<span onClick={this.toRegister}>Register</span></p>
+            <p><span onClick={this.toRegister}>Register your account</span></p>
 
           </form>
 
