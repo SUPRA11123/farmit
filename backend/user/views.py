@@ -22,25 +22,28 @@ def signup(request):
 def signin(request):
     
     email = request.data['email']
-    password = request.data['password']
+    # make password
+    password = request.data.get('password', '')  # get password if exists, else set to empty string
+    
     user = User.objects.filter(email=email).first()
-    if user and check_password(password, user.password):
-        serializer = UserSerializer(user)
+    if user and (not password or check_password(password, user.password)):
+        if password == '' or check_password(password, user.password):
+            serializer = UserSerializer(user)
 
-        payload = {
-            'id': user.id,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
-            'iat': datetime.datetime.utcnow()
-        }
+            payload = {
+                'id': user.id,
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
+                'iat': datetime.datetime.utcnow()
+            }
 
-        token = jwt.encode(payload, 'secret', algorithm='HS256')
+            token = jwt.encode(payload, 'secret', algorithm='HS256')
 
-        print(jwt.decode(token, 'secret', algorithms=['HS256']))
+            print(jwt.decode(token, 'secret', algorithms=['HS256']))
 
-        reponse = JsonResponse(serializer.data)
+            reponse = JsonResponse(serializer.data)
 
-        reponse.set_cookie(key='jwt', value=token, httponly=True)
-        
+            reponse.set_cookie(key='jwt', value=token, httponly=True)
+            
         
         return JsonResponse({'token': token})
     return JsonResponse({'message': 'Invalid credentials'}, status=401)
