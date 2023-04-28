@@ -607,7 +607,7 @@ class Maps extends React.Component {
 
                     <h2 className="hidden" id="addFieldsHeader">Use the rectangle/polygon tool to draw the field onto map</h2>
                     <button onClick={this.showFieldForm} id="addNewField" className="fieldsTableBtn"> <i className="fa-solid fa-plus"></i> Add Field</button>
-                    <button onClick={this.centreToMap} id="centreToMap" className="fieldsTableBtn"><i class="fa-solid fa-location-crosshairs"></i></button>
+                    <button onClick={this.centreToMap} id="centreToMap" className="fieldsTableBtn"><i className="fa-solid fa-location-crosshairs"></i></button>
 
 
                     <form id="createField" className="hidden" onSubmit={this.createField}>

@@ -520,6 +520,7 @@ body {
         width: 15%;
         height: 15%;
         top: 5%;
+        z-index: 1;
     }
 
     .fieldsTableBtn:hover {
@@ -532,8 +533,8 @@ body {
         position: absolute;
         height: 15%;
         font-size: 2vh;
-        top: 5%;
-        color: black;
+        z-index: 0;
+        color: $darkGrey;
         width: 100%;
         text-align: center;
     }
