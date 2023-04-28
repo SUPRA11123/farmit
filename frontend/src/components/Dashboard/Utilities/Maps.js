@@ -207,7 +207,6 @@ class Maps extends React.Component {
             drawingManager.setOptions({
                 drawingControl: true,
             });
-
             // delete the rectangle being drawn
             drawingManager.setDrawingMode(null);
             } else {
@@ -261,6 +260,12 @@ class Maps extends React.Component {
             acceptButton.addEventListener('click', () => {
 
                 let cancelFormSubmitPromise = false;
+
+                drawingManager.setOptions({
+                    drawingControl: false,
+                });
+
+                drawingManager.setDrawingMode(null);
 
                 polygon.setEditable(false);
 
@@ -350,12 +355,6 @@ class Maps extends React.Component {
 
                     document.getElementById("fieldName").value = "";
                     document.getElementById("cropType").value = "";
-
-
-                    // allow drawing again
-                    drawingManager.setOptions({
-                        drawingControl: true,
-                    });
                 });
             });
 
@@ -560,7 +559,7 @@ class Maps extends React.Component {
         event.preventDefault();
         document.getElementById("createField").classList.add("hidden");
         document.getElementById("fieldTable").classList.remove("hidden");
-        document.getElementById("addNewField").innerHTML = "<i className='fa-solid fa-plus'></i> Add Field";
+        document.getElementById("addNewField").innerHTML = "<i class='fa-solid fa-plus'></i> Add Field";
         document.getElementById("addFieldsHeader").classList.add("hidden");
     }
 

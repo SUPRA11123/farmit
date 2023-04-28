@@ -275,7 +275,7 @@ class Landing extends React.Component {
 
             <input id="farmNext" type="submit" value="Next" />
 
-            <p>Already have an account?<span onClick={this.toLogin}>Login</span></p>
+            <p><span onClick={this.toLogin}>Login to a account</span></p>
 
           </form>
 

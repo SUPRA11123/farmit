@@ -435,7 +435,8 @@ body {
 }
 
 .daySelector {
-    position: relative;
+    position: absolute;
+    top: 25%;
     width: 100%;
     list-style: none;
     display: flex;
@@ -535,7 +536,8 @@ body {
         font-size: 2vh;
         z-index: 0;
         color: $darkGrey;
-        width: 100%;
+        width: 50%;
+        left: 25%;
         text-align: center;
     }
 }
