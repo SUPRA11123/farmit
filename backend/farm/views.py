@@ -4,6 +4,9 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.shortcuts import render
 from rest_framework.decorators import api_view
+from django.db.models import Q
+
+from .models import User
 from .serializers import FarmSerializer
 from .models import Farm
 
@@ -23,9 +26,25 @@ def create_farm(request):
 
 # get farm by email of the owner
 @api_view(['GET'])
-def getFarmByOwner(request, id):
-    if Farm.objects.filter(owner=id).exists():
-        farm = Farm.objects.get(owner=id)
+def getFarmByOwnerOrFarmer(request, id):
+    try:
+        farm = Farm.objects.filter(Q(owner=id) | Q(farmers=id)).first()
         serializer = FarmSerializer(farm)
         return JsonResponse(serializer.data)
-    return JsonResponse({'message': 'Farm not found'}, status=200)
+    except Farm.DoesNotExist:
+        return JsonResponse({'message': 'Farm not found'}, status=200)
+
+@api_view(['PUT'])
+def addUser(request, id):
+    # with id of the user, add user to the field 'farmers' of the farm
+    if Farm.objects.filter(id=id).exists():
+        farm = Farm.objects.get(id=id)
+        user = request.data['email']
+        # get user by email
+        if not User.objects.filter(email=user).exists():
+            return JsonResponse({'message': 'User not found'}, status=400)
+        user = User.objects.get(email=user)
+        farm.farmers.add(user)
+        farm.save()
+        return JsonResponse({'message': 'User added to the farm successfully'}, status=200)
+     
