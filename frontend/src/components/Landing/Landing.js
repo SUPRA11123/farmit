@@ -6,8 +6,6 @@ import axios from 'axios';
 import { GoogleLogin } from '@react-oauth/google';
 import jwt_decode from 'jwt-decode';
 
-const URL = process.env.REACT_APP_URL;
-
 class Landing extends React.Component {
 
   lat;
@@ -47,7 +45,7 @@ class Landing extends React.Component {
     var password = document.getElementById("createPwd").value;
 
     // get name and email from form
-    axios.post(URL + 'signup/', {
+    axios.post('http://localhost:8000/signup/', {
       name: name,
       email: email,
       password: password
@@ -147,7 +145,7 @@ class Landing extends React.Component {
     const password = document.getElementById("loginPwd").value;
 
 
-    axios.post(URL + 'signin/', {
+    axios.post('http://localhost:8000/signin/', {
       email: email,
       password: password
     })
@@ -176,7 +174,7 @@ class Landing extends React.Component {
 
 
       axios
-        .post(URL + 'createfarm/', {
+        .post('http://localhost:8000/createfarm/', {
           name: farmName,
           country: country,
           latitude: this.state.marker.markerLat,
@@ -198,7 +196,7 @@ class Landing extends React.Component {
 
   getUser(email) {
     return axios
-      .get(URL + 'getuserbyemail/' + email + '/')
+      .get('http://localhost:8000/getuserbyemail/' + email + '/')
       .then(response => {
         return response.data.id;
       })
@@ -213,7 +211,7 @@ class Landing extends React.Component {
 
     if (user !== 0) {
 
-      axios.post(URL + 'signin/', {
+      axios.post('http://localhost:8000/signin/', {
         email: email,
     })
       .then((response) => {
@@ -275,7 +273,7 @@ class Landing extends React.Component {
 
             <input id="farmNext" type="submit" value="Next" />
 
-            <p>Already have an account?<span onClick={this.toLogin}>Login</span></p>
+            <p><span onClick={this.toLogin}>Login to a account</span></p>
 
           </form>
 
