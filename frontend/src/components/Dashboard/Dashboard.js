@@ -2,13 +2,14 @@ import React from 'react';
 import Home from './Utilities/Home';
 import Weather from './Utilities/Weather';
 import Monitor from './Utilities/Monitor';
-import Resources from './Utilities/Resources';
 import Maps from './Utilities/Maps';
 import Predictions from './Utilities/Predictions';
+import Team from './Utilities/Team';
 import Settings from './Utilities/Settings';
 import axios from 'axios';
 
 const URL = process.env.REACT_APP_URL;
+
 
 class Dashboard extends React.Component {
 
@@ -20,17 +21,16 @@ class Dashboard extends React.Component {
         dashboard: Home,
         weather: Weather,
         monitor: Monitor,
-        resources: Resources,
         maps: Maps,
         predictions: Predictions,
         settings: Settings,
+        team: Team,
 
     }
 
     constructor(props) {
-
         super(props);
-        this.state = { currentDashboardScreen: "dashboard", isMobile: false};
+        this.state = { currentDashboardScreen: "dashboard"};
         this.changeUtility = this.changeUtility.bind(this);
         this.displaySettings = this.displaySettings.bind(this);
         this.displayDashboardScreen = this.displayDashboardScreen.bind(this);
@@ -40,9 +40,6 @@ class Dashboard extends React.Component {
     }
 
     async componentDidMount() {
-
-        const isMobile = window.innerWidth < 600;
-        this.setState({ isMobile });
        
         const token = localStorage.getItem("token");
         // decode the token 
@@ -53,20 +50,17 @@ class Dashboard extends React.Component {
         // get the current user
 
         const user = await this.getUser(decodedToken.id);
-        this.setState({user: user.name})
+        this.setState({user: user})
 
 
 
         const farmDetails = await this.getFarmDetails(decodedToken.id);
 
          // print the farm details
-         console.log(farmDetails);
          this.farmDetails = farmDetails;
  
          this.setState({farmDetails: farmDetails});
 
-        // print the farm details
-        console.log(farmDetails);
 
         // get the weather data
         const url = `https://api.openweathermap.org/data/2.5/weather?lat=${farmDetails.latitude}&lon=${farmDetails.longitude}&units=${this.UNIT}&appid=${this.WEATHER_API_KEY}`;
@@ -85,13 +79,15 @@ class Dashboard extends React.Component {
         this.weatherForecast = data2;
         this.setState({weatherForecast: data2})
 
-        console.log(data);
+
+    
+
 
 }
 
 getFarmDetails(id) {
     return axios
-    .get(URL + "getfarmbyowner/" + id + "/")
+    .get(URL + "getfarmbyownerorfarmer/" + id + "/")
     .then((res) => {
         console.log(res);
         return res.data;
@@ -114,7 +110,6 @@ getFarmDetails(id) {
 
     displayDashboardScreen(screen){
 
-        console.log("works");
         this.setState({currentDashboardScreen: screen});
 
         if (screen === this.utilityComponents.maps) {
@@ -155,7 +150,9 @@ getFarmDetails(id) {
     }
 
     expandMobileNav() {
+
         document.getElementById("navList").classList.toggle('hidden');
+
     }
 
     handleMobileClick() {
@@ -163,15 +160,16 @@ getFarmDetails(id) {
             document.getElementById("navList").classList.add('hidden');
          }
     }
-
-
+ 
     render() {
 
-        const { currentDashboardScreen, weatherData, weatherForecast, farmDetails, isMobile } = this.state;
+
+        const { currentDashboardScreen, weatherData, weatherForecast, farmDetails, user } = this.state;
 
         const CurrentUtility = this.utilityComponents[currentDashboardScreen];
 
-        if (!weatherData || !weatherForecast || !farmDetails) {
+
+        if (!weatherData || !weatherForecast || !farmDetails || !user) {
             return (<i id="loadingIcon" className="fas fa-circle-notch fa-spin"></i>);
         }
 
@@ -183,17 +181,21 @@ getFarmDetails(id) {
                     <i onClick={this.expandMobileNav} id='mobileNavBtn' className="fa-solid fa-bars"></i>
                     <img src={require('../../resources/img/logo.png')} alt="Agrosensor logo"/>
                     </div>
-                    <nav id='navList' className={isMobile ? 'hidden' : ''}>
+                    <nav id='navList'>
                         <ul >
                             <li onClick={() => this.setState({currentDashboardScreen: "dashboard"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "dashboard" ? "navActive": ""}><p><i className="fa-solid fa-table-cells-large"></i>Dashboard</p></li>
                             <li onClick={() => this.setState({currentDashboardScreen: "weather"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "weather" ? "navActive": ""}><p><i className="fa-solid fa-cloud-sun"></i>Weather</p></li>
                             <li onClick={() => this.setState({currentDashboardScreen: "monitor"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "monitor" ? "navActive": ""}><p><i className="fa-solid fa-desktop"></i>Monitor</p></li>
-                            <li onClick={() => this.setState({currentDashboardScreen: "resources"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "resources" ? "navActive": ""}><p><i className="fa-solid fa-boxes-stacked"></i>Resources</p></li>
                             <li onClick={() => this.setState({currentDashboardScreen: "maps"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "maps" ? "navActive": ""}><p><i className="fa-regular fa-map"></i>Maps</p></li>
                             <li onClick={() => this.setState({currentDashboardScreen: "predictions"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "predictions" ? "navActive": ""}><p><i className="fa-solid fa-bullhorn"></i>Predictions</p></li>
+                            {this.state.user.role === 'owner' && (                           
+                            <li onClick={() => this.setState({currentDashboardScreen: "team"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "team" ? "navActive": ""}><p><i className="fa-solid fa-people-group"></i>Team</p></li>
+                            )}
                             <li onClick={() => this.setState({currentDashboardScreen: "settings"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "settings" ? "navActive": ""}><p><i className="fa-solid fa-gear"></i>Settings</p></li>
                             <li id='logout' onClick={this.handleLogout}><p><i className="fa-solid fa-arrow-right-from-bracket"></i>Logout</p></li>
                         </ul>
+
+
                     </nav>
                 </aside>
 
@@ -201,22 +203,24 @@ getFarmDetails(id) {
 
                 <section id='fixedUtility'>
 
-                    <h2>{this.getWelcomeMessage()} {this.state.user}</h2>
+                    <h2>{this.getWelcomeMessage()} {this.state.user.name}</h2>
                     <p>your current dashboard for today</p>
 
                     <i id='alertBell' className="fa-regular fa-bell"></i>
 
                     <div id='userIcon'>
-                        {(this.state.user).charAt(0).toUpperCase()}
+                        {(this.state.user.name).charAt(0).toUpperCase()}
                     </div>
 
                 </section>
 
                 <section id='scrollUtility'>
 
-                    <CurrentUtility scrollToMap={this.scrollToMap} displayScreen={this.displayDashboardScreen} weatherData={this.state.weatherData} weatherForecast={this.state.weatherForecast} farmDetails={this.state.farmDetails}/>
+                    <CurrentUtility scrollToMap={this.scrollToMap} displayScreen={this.displayDashboardScreen} weatherData={this.state.weatherData} weatherForecast={this.state.weatherForecast} farmDetails={this.state.farmDetails} user={this.state.user}/>
 
                 </section>
+
+             
 
                 </main>
 

@@ -48,7 +48,8 @@ class Landing extends React.Component {
     axios.post('http://localhost:8000/signup/', {
       name: name,
       email: email,
-      password: password
+      password: password,
+      role: "owner"
     }).then(response => {
       if (response.data.message === "User already exists") {
         console.log(response);
@@ -164,6 +165,7 @@ class Landing extends React.Component {
     event.preventDefault();
 
     const email = document.getElementById("createEmail").value;
+    const password = document.getElementById("createPwd").value;
 
     const id = await this.getUser(email);
 
@@ -171,7 +173,6 @@ class Landing extends React.Component {
 
       var farmName = document.getElementById("farmName").value;
       var country = document.getElementById("country").value;
-
 
       axios
         .post('http://localhost:8000/createfarm/', {
@@ -183,7 +184,19 @@ class Landing extends React.Component {
         })
         .then(response => {
           console.log(response);
-          this.handleToDashboard();
+
+          axios.post(URL + 'signin/', {
+            email: email,
+            password: password
+          })
+            .then((response) => {
+              console.log({ token: response.data.token });
+              localStorage.setItem('token', response.data.token);
+              this.handleToDashboard();
+            })
+            .catch((error) => {
+              document.getElementById("errorMessage").innerHTML = error.response.data.message + ", please try again";
+            });
         })
         .catch(error => {
           console.log(error);
@@ -213,17 +226,17 @@ class Landing extends React.Component {
 
       axios.post('http://localhost:8000/signin/', {
         email: email,
-    })
-      .then((response) => {
-        console.log({ token: response.data.token });
-        localStorage.setItem('token', response.data.token);
-        this.handleToDashboard();
       })
-      .catch((error) => {
-        document.getElementById("errorMessage").innerHTML = error.response.data.message + ", please try again";
-      });
+        .then((response) => {
+          console.log({ token: response.data.token });
+          localStorage.setItem('token', response.data.token);
+          this.handleToDashboard();
+        })
+        .catch((error) => {
+          document.getElementById("errorMessage").innerHTML = error.response.data.message + ", please try again";
+        });
 
-      
+
     } else {
       alert("User does not exist");
     }
@@ -278,8 +291,8 @@ class Landing extends React.Component {
           </form>
 
           <form id="userLogin" onSubmit={this.handleLogin}>
-            
-          <h2>Dashboard Login</h2>
+
+            <h2>Dashboard Login</h2>
 
             <div id="googleSignIn">
               <GoogleLogin
@@ -287,9 +300,7 @@ class Landing extends React.Component {
                 uxMode="popup"
                 uxLanguage="es"
                 onSuccess={credentialResponse => {
-                  console.log(credentialResponse.credential);
                   var decoded = jwt_decode(credentialResponse.credential);
-                  console.log(decoded);
                   this.signInWithGoogle(decoded.email);
                 }}
                 onError={() => {
@@ -298,7 +309,7 @@ class Landing extends React.Component {
                 useOneTap
               />
             </div>
-  
+
             <p id='errorMessage'></p>
 
             <label htmlFor="loginEmail">Email</label><br />

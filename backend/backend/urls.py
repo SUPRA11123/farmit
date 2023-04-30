@@ -26,7 +26,8 @@ urlpatterns = [
     path('getuserbyemail/<str:email>/', views.get_user),
     path('getuserbyid/<int:id>/', views.getUserById),
     path('createfarm/', farm_views.create_farm),
-    path('getfarmbyowner/<int:id>/', farm_views.getFarmByOwner),
+    path('getfarmbyownerorfarmer/<int:id>/', farm_views.getFarmByOwnerOrFarmer),
     path('getfieldsbyid/<int:id>/', field_views.getFieldsById),
     path('createfield/', field_views.create_field),
+    path('adduser/<int:id>/', farm_views.addUser),
 ]
