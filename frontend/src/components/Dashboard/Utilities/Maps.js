@@ -10,8 +10,15 @@ class Maps extends React.Component {
     async componentDidMount() {
 
         // check if any field already exists
+        var fields;
+        const role = this.props.user.role;
 
-        const fields = await this.getFields(this.props.farmDetails.id);
+        if (role === "field manager") {
+            fields = await this.getFieldsByManager(this.props.user.id);
+        }else{
+            fields = await this.getFields(this.props.farmDetails.id);
+        }
+       
 
         const map = new window.google.maps.Map(document.getElementById("map"), {
 
@@ -139,6 +146,20 @@ class Maps extends React.Component {
             });
         }
         this.initDrawing(map);
+    }
+
+    getFieldsByManager(id) {
+        return axios
+            .get(URL + "getfieldsbymanager/" + id + "/")
+            .then((res) => {
+                console.log(res);
+                return res.data;
+            }
+            )
+            .catch((err) => {
+                console.log(err);
+            }
+            );
     }
 
     getFields(id) {
@@ -603,7 +624,7 @@ class Maps extends React.Component {
                 <div className="fieldsTableConatiner">
 
                     <h2 className="hidden" id="addFieldsHeader">Use the rectangle/polygon tool to draw the field onto map</h2>
-                    {this.props.user.role === 'farmer' ? null :
+                    {this.props.user.role === 'farmer' || this.props.user.role === 'field manager' ? null :
                         <button onClick={this.showFieldForm} id="addNewField" className="fieldsTableBtn"> <i className="fa-solid fa-plus"></i> Add Field</button>
                     }
                     <button onClick={this.centreToMap} id="centreToMap" className="fieldsTableBtn"><i className="fa-solid fa-location-crosshairs"></i></button>

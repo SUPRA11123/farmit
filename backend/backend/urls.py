@@ -29,5 +29,8 @@ urlpatterns = [
     path('getfarmbyownerorfarmer/<int:id>/', farm_views.getFarmByOwnerOrFarmer),
     path('getfieldsbyid/<int:id>/', field_views.getFieldsById),
     path('createfield/', field_views.create_field),
-    path('adduser/<int:id>/', farm_views.addUser),
+    path('addfarmer/<int:id>/', farm_views.addFarmer),
+    path('addfieldmanager/<int:id>/', field_views.add_field_manager),
+    path('getfarmbyfieldmanager/<int:id>/', farm_views.getFarmByFieldManager),
+    path('getfieldsbymanager/<int:id>/', field_views.getFieldsByManager),
 ]

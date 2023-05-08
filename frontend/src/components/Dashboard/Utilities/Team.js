@@ -10,10 +10,13 @@ class Team extends React.Component {
             name: "",
             email: "",
             password: "",
+            role: "",
             confirmPassword: "",
+            fields: [],
             passwordMatchError: false
         };
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleRoleChange = this.handleRoleChange.bind(this);
     }
 
     handleSubmit(event) {
@@ -29,6 +32,8 @@ class Team extends React.Component {
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
         const confirmPassword = document.getElementById("confirmPassword").value;
+        const role = document.getElementById("role").value;
+        
 
         const farmId = this.props.farmDetails.id;
         console.log(farmId);
@@ -41,12 +46,11 @@ class Team extends React.Component {
                 name: name,
                 email: email,
                 password: password,
-                role: 'farmer'
+                role: role
             }).then(response => {
-                console.log(response);
-
-                axios.put("http://localhost:8000/adduser/" + farmId + "/", {
-                    email: response.data.email
+                if (role === "farmer") {
+                    axios.put("http://localhost:8000/addfarmer/" + farmId + "/", {
+                        email: email
                     }).then(response => {
                         console.log(response);
 
@@ -55,10 +59,30 @@ class Team extends React.Component {
                         document.getElementById("password").value = "";
                         document.getElementById("confirmPassword").value = "";
                     }
-                ).catch(error => {
-                    console.log(error);
+                    ).catch(error => {
+                        console.log(error);
+                    }
+                    );
+                } else {
+                    const fields = document.getElementById("fields").value;
+                   axios.put("http://localhost:8000/addfieldmanager/" + fields + "/", {
+                          email: email
+                    }).then(response => {
+                      
+                        //console.log(response);
+
+                        document.getElementById("name").value = "";
+                        document.getElementById("email").value = "";
+                        document.getElementById("password").value = "";
+                        document.getElementById("confirmPassword").value = "";
+                    }
+                    ).catch(error => {
+                        console.log(email);
+                        console.log(error);
+                    }
+                    );
                 }
-                );        
+
             }).catch(error => {
                 console.log(error);
             });
@@ -70,7 +94,30 @@ class Team extends React.Component {
     }
 
 
+    handleRoleChange = (event) => {
+        this.setState({
+          role: event.target.value,
+        });
+
+        if (event.target.value === "field manager") {
+            axios.get("http://localhost:8000/getfieldsbyid/" + this.props.farmDetails.id + "/")
+            .then(response => {
+                const fields = response.data.filter(field => !field.manager);
+                console.log(fields);
+                this.setState({ fields });
+            }).catch(error => {
+                console.log(error);
+            });
+        }
+    }
+     
+
     render() {
+
+        const { role } = this.state;
+
+        console.log(this.state.role);
+
         return (
             <>
                 <h1>Team</h1>
@@ -91,7 +138,25 @@ class Team extends React.Component {
                         <label htmlFor="confirmPassword">Confirm Password</label>
                         <input required type="password" id="confirmPassword" name="confirmPassword" className="form-control" placeholder="Confirm Password" />
                     </div>
-
+                    <div className="form-group">
+                        <label htmlFor="role">Role</label>
+                        <select id="role" name="role" className="form-control" onChange={this.handleRoleChange}>
+                            <option value="" selected disabled>Select the role you want</option>
+                            <option value="field manager">field manager</option>
+                            <option value="farmer">farmer</option>
+                        </select>
+                    </div>
+                    {role === 'field manager' && (
+                        <div className="form-group">
+                            <label htmlFor="fields">Fields</label>
+                            <select id="fields" name="fields" className="form-control">
+                                <option value="" selected disabled>Select a field</option>
+                                {this.state.fields.map(field => (
+                                    <option key={field.id} value={field.id}>{field.name}</option>
+                                ))}
+                            </select>
+                        </div>
+                    )}
                     {this.state.passwordMatchError && (
                         <p style={{ color: "red" }}>Passwords do not match</p>
                     )}
