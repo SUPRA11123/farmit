@@ -32,6 +32,7 @@ def signin(request):
 
             payload = {
                 'id': user.id,
+                'role': user.role,
                 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
                 'iat': datetime.datetime.utcnow()
             }

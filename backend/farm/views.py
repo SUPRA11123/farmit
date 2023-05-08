@@ -9,6 +9,7 @@ from django.db.models import Q
 from .models import User
 from .serializers import FarmSerializer
 from .models import Farm
+from field.models import Field
 
 
 @api_view(['POST'])
@@ -35,7 +36,7 @@ def getFarmByOwnerOrFarmer(request, id):
         return JsonResponse({'message': 'Farm not found'}, status=200)
 
 @api_view(['PUT'])
-def addUser(request, id):
+def addFarmer(request, id):
     # with id of the user, add user to the field 'farmers' of the farm
     if Farm.objects.filter(id=id).exists():
         farm = Farm.objects.get(id=id)
@@ -47,4 +48,18 @@ def addUser(request, id):
         farm.farmers.add(user)
         farm.save()
         return JsonResponse({'message': 'User added to the farm successfully'}, status=200)
+    
+@api_view(['GET'])
+def getFarmByFieldManager(request, id):
+    # get field by field manager
+    try:
+        field = Field.objects.get(manager=id)
+        farm = field.farm
+        serializer = FarmSerializer(farm)
+        return JsonResponse(serializer.data)
+    except Field.DoesNotExist:
+        return JsonResponse({'message': 'Field not found'}, status=400)
+    except Farm.DoesNotExist:
+        return JsonResponse({'message': 'Farm not found'}, status=400)
+
      

@@ -6,15 +6,15 @@ class Home extends React.Component {
         this.populateWeather(this.props.weatherData);
     }
 
-    displayTime(){
+    displayTime() {
         var x = new Date();
         var zero;
-        if(x.getMinutes() < 10) {zero = "0";}else{zero=""}
-        var date = ' ' + x.getHours( )+ ":" + zero +  x.getMinutes();
+        if (x.getMinutes() < 10) { zero = "0"; } else { zero = "" }
+        var date = ' ' + x.getHours() + ":" + zero + x.getMinutes();
         return date;
     }
-  
-    populateWeather(data){
+
+    populateWeather(data) {
         var iconcode = data.weather[0].icon;
         var iconurl = "http://openweathermap.org/img/w/" + iconcode + ".png";
         document.getElementById("widgetWeatherIcon").src = iconurl;
@@ -26,12 +26,13 @@ class Home extends React.Component {
         document.getElementById("widgetHumidity").innerHTML += " " + data.main.humidity + "%";
     }
 
-    convertToKM(speed){
+    convertToKM(speed) {
         return (speed * 3.6).toFixed(2);
     }
 
     render() {
-        return (<>
+        return (
+            <>
             <div onClick={() => this.props.displayScreen("weather")} id="weatherWidget" className="Col2Card">
                 <div className="weatherWigetTop">
                     <p id="wigetLocation"><i id="widgetPin"  className="fa-solid fa-location-pin"></i></p>
@@ -44,17 +45,17 @@ class Home extends React.Component {
                 <div className="weatherWigetBottom">
                     <p id="wigetWind"><i className="fa-solid fa-wind"></i></p>
                     <p id="widgetHumidity"><i className="fa-solid fa-droplet"></i></p>
-
-
-               
                 </div>
+                
+               
             </div>
-
             <div id='alertWidget' className="col4Card">
 
-            </div>
+</div>
 
             </>
+
+
         )
     }
 }

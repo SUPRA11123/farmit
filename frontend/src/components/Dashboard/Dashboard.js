@@ -4,6 +4,7 @@ import Weather from './Utilities/Weather';
 import Monitor from './Utilities/Monitor';
 import Maps from './Utilities/Maps';
 import Predictions from './Utilities/Predictions';
+import Tasks from './Utilities/Tasks';
 import Team from './Utilities/Team';
 import Settings from './Utilities/Settings';
 import axios from 'axios';
@@ -25,6 +26,7 @@ class Dashboard extends React.Component {
         predictions: Predictions,
         settings: Settings,
         team: Team,
+        tasks: Tasks
 
     }
 
@@ -47,6 +49,8 @@ class Dashboard extends React.Component {
         const base64 = base64Url.replace('-', '+').replace('_', '/');
         const decodedToken = JSON.parse(window.atob(base64));
 
+        console.log(decodedToken);
+
         // get the current user
 
         const user = await this.getUser(decodedToken.id);
@@ -54,7 +58,7 @@ class Dashboard extends React.Component {
 
 
 
-        const farmDetails = await this.getFarmDetails(decodedToken.id);
+        const farmDetails = await this.getFarmDetails(decodedToken);
 
          // print the farm details
          this.farmDetails = farmDetails;
@@ -85,18 +89,34 @@ class Dashboard extends React.Component {
 
 }
 
-getFarmDetails(id) {
-    return axios
-    .get(URL + "getfarmbyownerorfarmer/" + id + "/")
-    .then((res) => {
-        console.log(res);
-        return res.data;
+getFarmDetails(token) {
+
+    if(token.role === "field manager"){
+       return axios
+       .get(URL + "getfarmbyfieldmanager/" + token.id + "/")
+         .then((res) => {
+                console.log(res);
+                return res.data;
+            }
+        )
+        .catch((err) => {
+            console.log(err);
+        }
+        );
+    }else{
+        return axios
+        .get(URL + "getfarmbyownerorfarmer/" + token.id + "/")
+        .then((res) => {
+            console.log(res);
+            return res.data;
+        }
+        )
+        .catch((err) => {
+            console.log(err);
+        }
+        );
     }
-    )
-    .catch((err) => {
-        console.log(err);
-    }
-    );
+   
 }
 
 
@@ -188,6 +208,7 @@ getFarmDetails(id) {
                             <li onClick={() => this.setState({currentDashboardScreen: "monitor"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "monitor" ? "navActive": ""}><p><i className="fa-solid fa-desktop"></i>Monitor</p></li>
                             <li onClick={() => this.setState({currentDashboardScreen: "maps"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "maps" ? "navActive": ""}><p><i className="fa-regular fa-map"></i>Maps</p></li>
                             <li onClick={() => this.setState({currentDashboardScreen: "predictions"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "predictions" ? "navActive": ""}><p><i className="fa-solid fa-bullhorn"></i>Predictions</p></li>
+                            <li onClick={() => this.setState({currentDashboardScreen: "tasks"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "tasks" ? "navActive": ""}><p><i className="fa-solid fa-tasks"></i>Tasks</p></li>
                             {this.state.user.role === 'owner' && (                           
                             <li onClick={() => this.setState({currentDashboardScreen: "team"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "team" ? "navActive": ""}><p><i className="fa-solid fa-people-group"></i>Team</p></li>
                             )}
