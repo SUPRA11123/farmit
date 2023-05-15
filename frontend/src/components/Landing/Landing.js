@@ -268,6 +268,10 @@ class Landing extends React.Component {
             <label htmlFor="pwd">Password</label><br />
             <input onChange={this.checkAccountComplete} required type="password" id="createPwd" name="pwd" /><br />
 
+            {/* <label htmlFor="confrimPwd">Confrim Password</label><br />
+            <input onChange={this.checkAccountComplete} required type="password" id="confrimPwd" name="confirmPwd" /><br />
+            */}
+            
             <input id="accountNext" type="submit" value="Next" />
 
             <p><span onClick={this.toLogin}>Login to a account</span></p>
