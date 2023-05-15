@@ -15,94 +15,98 @@ class Weather extends React.Component {
     }
 
     async populateWeatherForecast(weatherForecast) {
-        console.log(weatherForecast);
-    
-        let temperature = [];
-        let Labels = [];
-        let forecast = [];
-        let forecastLabels = [];
-
-        this.setState({
-            forecastData: forecast,
-            forecastLabels: forecastLabels
-          });
-    
+        let dailyForecasts = [];
         const today = new Date();
-    
+      
         for (let i = 0; i < weatherForecast.list.length; i++) {
-            temperature.push(weatherForecast.list[i].main.temp);
-    
-            var day = new Date(
-                weatherForecast.list[i].dt_txt.slice(0, 4),
-                weatherForecast.list[i].dt_txt.slice(5, 7) - 1,
-                weatherForecast.list[i].dt_txt.slice(8, 10)
-            );
-            Labels.push(
-                this.getLabels(day) + ' @' + weatherForecast.list[i].dt_txt.slice(10, 16)
-            );
+          const day = new Date(
+            weatherForecast.list[i].dt_txt.slice(0, 4),
+            weatherForecast.list[i].dt_txt.slice(5, 7) - 1,
+            weatherForecast.list[i].dt_txt.slice(8, 10)
+          );
+      
+          const dayIndex = Math.floor((day - today) / (24 * 60 * 60 * 1000));
+      
+          if (!dailyForecasts[dayIndex]) {
+            dailyForecasts[dayIndex] = {
+              temperature: [],
+              labels: []
+            };
+          }
+      
+          dailyForecasts[dayIndex].temperature.push(weatherForecast.list[i].main.temp);
+          dailyForecasts[dayIndex].labels.push(this.getLabels(day) + ' @' + weatherForecast.list[i].dt_txt.slice(10, 16));
         }
-    
-        const chunkSize = 10;
-        for (let i = 0; i < temperature.length; i += chunkSize) {
-            const tempChunk = temperature.slice(i, i + chunkSize);
-            const labelChunk = Labels.slice(i, i + chunkSize);
-            forecast.push(tempChunk);
-            forecastLabels.push(labelChunk);
-        }
-    
-        const forecastData = forecast[this.state.day]; // Initialize forecastData
-        const forecastLabelsData = forecastLabels[this.state.day]; // Initialize forecastLabelsData
-    
-        const ctx = document.getElementById('myChart').getContext('2d');
-    
-        this.myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: forecastLabelsData,
-                datasets: [
-                    {
-                        label: 'Temperature',
-                        gridLines: 'false',
-                        data: forecastData,
-                        borderColor: '#0ba837',
-                        tension: 0.4,
-                        backgroundColor: '#BAECB8',
-                        pointStyle: 'rectRounded',
-                        fill: true,
-                        lineTension: 0.4,
-                    },
-                ],
-            },
-            options: {
-                plugins: {
-                    legend: {
-                        display: false,
-                    },
-                },
-                scales: {
-                    y: {
-                        grid: {
-                            display: false,
-                        },
-                    },
-                    x: {
-                        grid: {
-                            display: false,
-                        },
-                    },
-                },
-            },
+      
+        const forecastData = dailyForecasts.map(day => day.temperature);
+        const forecastLabelsData = dailyForecasts.map(day => day.labels);
+      
+        this.setState({
+          forecastData: forecastData,
+          forecastLabels: forecastLabelsData
+        }, () => {
+          this.updateChart();
         });
-    }
-    
+      }
+      
+      
+      updateChart() {
+
+        const forecastData = this.state.forecastData;
+        const forecastLabels = this.state.forecastLabels;
+      
+        const ctx = document.getElementById('myChart').getContext('2d');
+      
+        if (this.myChart) {
+          this.myChart.destroy(); // Destroy the existing chart instance before creating a new one
+        }
+      
+        this.myChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: forecastLabels[this.state.day], // Use labels based on the selected day
+            datasets: [{
+              label: 'Temperature',
+              gridLines: 'false',
+              data: forecastData[this.state.day], // Use data based on the selected day
+              borderColor: '#0ba837',
+              tension: 0.4,
+              backgroundColor: '#BAECB8',
+              pointStyle: 'rectRounded',
+              fill: true,
+              lineTension: 0.4,
+            }],
+          },
+          options: {
+            plugins: {
+              legend: {
+                display: false,
+              },
+            },
+            scales: {
+              y: {
+                grid: {
+                  display: true,
+                },
+              },
+              x: {
+                grid: {
+                  display: false,
+                },
+              },
+            },
+          },
+        });
+      }
+      
+      
 
     componentDidMount() {
         this.populateWeatherForecast(this.props.weatherForecast);
-        this.getDayBtns();
     }
 
     convertToKM(speed){
-        return (speed * 3.6).toFixed(2);
+        return (speed*3.6).toFixed(2);
     }
 
     getSunriseSunset() {
@@ -130,44 +134,43 @@ class Weather extends React.Component {
     }
 
     getDay(x) {
+
         let weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
         var today = new Date();
         var result = today.setDate(today.getDate() + x);
         let date = new Date(result);
         return weekday[date.getDay()];
+
     }
 
     getLabels(day) {
+
         let weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
        
         return weekday[day.getDay()];
     }
 
-    getDayBtns(){
-    
-        for(let i = 1; i < 4; i++ ) {
-            var dayBtn = document.getElementById('dayBtn' + i);
-            dayBtn.innerHTML = this.getDay(i);
-
+      setForecast(x) {
+        const currentActiveBtn = document.querySelector('.daySelectorActive');
+        if (currentActiveBtn) {
+          currentActiveBtn.classList.remove('daySelectorActive');
         }
-    }
-
-    setForecast(x) {
-
-        this.setState({
-            day: x
-        }, () => {
+      
+        const activeDayBtn = document.getElementById('dayBtn' + x);
+        activeDayBtn.classList.add('daySelectorActive');
+      
+        this.setState(
+          {
+            day: x,
+          },
+          () => {
             this.updateChart();
-        });
-    }
+          }
+        );
+      }
+      
 
-    updateChart() {
-        const forecastData = this.state.forecastData;
-        const forecastLabels = this.state.forecastLabels;
-        this.myChart.data.labels = forecastLabels[this.state.day];
-        this.myChart.data.datasets[0].data = forecastData[this.state.day];
-        this.myChart.update();
-    }
+    
 
     render() {
 
@@ -176,12 +179,11 @@ class Weather extends React.Component {
 
         return (
             <>
-            <div className="weatherCityContainer">
+            <div className="weatherCityContainer">          
                 <h2>{(this.props.weatherData.main.temp).toFixed(0)}°C</h2>
                 <ul>
-                    <li>{weekday[today.getDay()]}</li>
-                    <li>{this.displayTime()}</li>
-                    <li>{this.props.weatherData.weather[0].description}</li>
+                    <li>{weekday[today.getDay()]} @ {this.displayTime()}</li>
+                    <li>Climate: {this.props.weatherData.weather[0].description}</li>
                 </ul>
             </div>
 
@@ -207,20 +209,26 @@ class Weather extends React.Component {
                 </div>
  
             </div>
+
+    
             
             <div className="lineChartContainer">
-            <h2>5 Day Forecast</h2>
-            <canvas id="myChart" height='25' width='100px'></canvas>
+                <ul className="daySelector">
+                    <h2>
+                        Display:
+                        <select name="statSelector" id="statSelector">
+                        <option value="temperature">temperature</option>
+                        <option value="humidity">humidity</option>
+                        </select>
+                    </h2>
+                    <li><button onClick={() => this.setForecast(0)} className="daySelectorActive" id="dayBtn0">Tomorrow: <span>{Math.max.apply(Math, this.state.forecastData[0]).toFixed(0)}°C</span></button></li>
+                    <li><button onClick={() => this.setForecast(1)} id="dayBtn1">{this.getDay(2)}: <span>{Math.max.apply(Math, this.state.forecastData[1]).toFixed(0)}°C</span></button></li>
+                    <li><button onClick={() => this.setForecast(2)} id="dayBtn2">{this.getDay(3)}: <span>{Math.max.apply(Math, this.state.forecastData[2]).toFixed(0)}°C</span></button></li>
+                    <li><button onClick={() => this.setForecast(3)} id="dayBtn3">{this.getDay(4)}: <span>{Math.max.apply(Math, this.state.forecastData[3]).toFixed(0)}°C</span></button></li>
+                </ul>
+                <canvas id="myChart" height='25' width='100px'></canvas>
             </div>
-            <ul className="daySelector">
-               
-                <li><button onClick={() => this.setForecast(0)} className="daySelectorActive" id="dayBtn0">Today</button></li>
-                <li><button onClick={() => this.setForecast(1)} id="dayBtn1"></button></li>
-                <li><button onClick={() => this.setForecast(2)} id="dayBtn2"></button></li>
-                <li><button onClick={() => this.setForecast(3)} id="dayBtn3"></button></li>
-              
-
-            </ul>
+           
     
             </>
         )

@@ -30,9 +30,36 @@ class Home extends React.Component {
         return (speed * 3.6).toFixed(2);
     }
 
+    getWelcomeMessage() {
+        var today = new Date();
+        var curHr = today.getHours();
+
+        if (curHr < 12) {
+        return "Good morning,";
+        } else if (curHr < 18) {
+        return "Good afternoon,";
+        } else {
+        return "Good evening,";
+        }
+    }
+
+    
+
     render() {
         return (
             <>
+             <section id='fixedUtility'>
+
+                <h2>{this.getWelcomeMessage()} {this.props.user.name}</h2>
+                <p>your current dashboard for today</p>
+
+                <i id='alertBell' className="fa-regular fa-bell"></i>
+
+                <div id='userIcon'>
+                    {(this.props.user.name).charAt(0).toUpperCase()}
+                </div>
+
+            </section>
             <div onClick={() => this.props.displayScreen("weather")} id="weatherWidget" className="Col2Card">
                 <div className="weatherWigetTop">
                     <p id="wigetLocation"><i id="widgetPin"  className="fa-solid fa-location-pin"></i></p>

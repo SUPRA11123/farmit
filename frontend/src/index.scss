@@ -2,6 +2,7 @@
 
 $font1: 'Inter', sans-serif;
 $green: #0ba837;
+$lightGreen: #BAECB8;
 $grey: #f4f4f4;
 $darkGrey: #8D8D8D;
 $red: #C44940;
@@ -21,9 +22,6 @@ $lightBlue: #D0DDFF;
     visibility: hidden;
 }
 
-.visible {
-    visibility: visible;
-  }
 
 body {
     margin: 0;
@@ -166,24 +164,21 @@ body {
     color: $green;
 }
 
+#navContainerMobile {
+    display: none;
+}
+
+#navContainer:hover {
+    filter: brightness(100%);
+  }
+
 #navContainer {
-
-    #logout {
-       position: fixed;
-       bottom: 0;
-       width: 20%;
-    }
-
-    #logout:hover {
-        background-color: $red;
-        color: white;
-    }
-
+    filter: brightness(97.5%);
     position: absolute;
     height: 100%;
     width: 20%;
     background-color: #f4f4f4;
-
+   
     #navTop {
         position: relative;
         width: 100%;
@@ -191,7 +186,7 @@ body {
         display: flex;
         align-items: center;
         justify-content: center;
-        img {width: 70%;}
+        img {width: 30%;}
     }
 
     #mobileNavBtn {
@@ -205,17 +200,23 @@ body {
     }
 
     ul {
+        -webkit-user-select: none;    
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
         font-family: $font1;
         padding: 0;
         display: flex;
         flex-direction: column;
         list-style-type: none;
         color: $darkGrey;
+        text-align: center;
 
         li p {
             font-size: 2.5vh;
             margin: 2.5%;
             margin-left: 10%;
+            padding: 2.5% 0 2.5% 0;
         }
 
         li:hover {
@@ -232,6 +233,27 @@ body {
         }
 
     }
+
+    #logout {
+        position: absolute;
+        bottom: -50%;
+        width: 100%;
+        color: rgb(177, 175, 175);
+
+
+        i {
+            -moz-transform: scale(-1, 1);
+            -webkit-transform: scale(-1, 1);
+            -o-transform: scale(-1, 1);
+            -ms-transform: scale(-1, 1);
+            transform: scale(-1, 1);
+        }
+     }
+ 
+     #logout:hover {
+         color: $red;
+         background-color: unset;
+     }
 
 }
 
@@ -253,6 +275,15 @@ body {
     left: 20%;
 }
 
+@keyframes slideInFromLeft {
+    0% {
+      transform: translateX(-5%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+
 #fixedUtility {
     position: absolute;
     width: 95%;
@@ -266,6 +297,7 @@ body {
     border-bottom: 1px solid black;
 
     h2 {
+        animation: 0.5s ease-out 0s 1 slideInFromLeft;
         color: black;
         margin: 0;
     }
@@ -301,7 +333,7 @@ body {
     width: 95%;
     height: 100%;
     left: 2.5%;
-    top: 25%;
+    top: 2.5%;
     font-family: $font1;
 }
 
@@ -327,10 +359,11 @@ body {
     }
 
     position: absolute;
+    top: 25%;
     width: 30%;
     height: 30%;
     background-color: $grey;
-    border-radius: 25px;
+    border-radius: 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -364,22 +397,36 @@ body {
     height: 30%;
     width: 67.5%;
     left: 32.5%;
-    border-radius: 25px;
+    top: 25%;
+    border-radius: 15px;
     background-color: $grey;
 }
 
+
 .lineChartContainer {
+    position: absolute;
+    border-radius: 5px;
+    bottom: 5%;
+    width: 100%;
+    height: 65%;
     font-family: $font1;
+
     h2 {
         font-size: 1.5vw;
-        color: $darkGrey;
+        color: rgb(177, 175, 175);
+    }
+
+    #myChart {
+        position: absolute;
+        bottom: 0;
     }
 }
 
 .weatherCityContainer {
     position: relative;
+    top: 5%;
     height: 10%;
-    width: 40%;
+    width: 100%;
     left: 0%;
     margin-bottom: 2%;
     background-color: $grey;
@@ -398,10 +445,13 @@ body {
     ul {
         margin-right: 2.5%;
         list-style: none;
+        color: black;
     }
 }
 
 .weatheDataContainer  {
+    position: absolute;
+    top: 17.5%;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -420,7 +470,7 @@ body {
         }
         
         p {
-            color: $green;
+            color: $darkGrey;
             text-align: center;
             font-weight: bold;
             font-size: 1.5vw;
@@ -431,38 +481,71 @@ body {
     }
     #sunsetSunrise {
         width: 40%;
+        i {color: $darkGrey;}
     }
 }
 
 .daySelector {
     position: absolute;
-    top: 25%;
-    width: 100%;
-    top: 25%;
-    left: 0;
+    width: 90%;
     list-style: none;
     display: flex;
     flex-direction: row;
     justify-content: center;
-    gap: 10px;
+    padding-left: 0;
+    gap: 25px;
+    background-color: $grey;
+    padding: 5% 5% 2.5% 5%;
+    border-radius: 15px;
+
+    h2 {
+        color: $darkGrey;
+        font-size: 1vw;
+        position: absolute;
+        top: 0;
+        text-align: center;
+        width: 100%;
+    }
+
+    select {
+        margin-left: 5px;
+        font-family: $font1;
+        background-color: $grey;
+        border-radius: 5px;
+        color: $darkGrey;
+    }
+
+    
+
+    li {
+        width: 25%;
+    }
 
     li button {
         font-family: $font1;
-        background-color: $grey;
-        border: 1px solid $darkGrey;
+        border: 2px solid $grey;
+        background-color: unset;
         font-size: 1.5vw;
-        border-radius: 15px;
+        border-radius: 5px;
         padding: 10px;
         color: $darkGrey;
+        width: 100%;
+        span {
+            color: $green;
+            font-weight: bold;
+        }
     }
 
     li button:hover {
         cursor: pointer;
-        background-color: $lightBlue;
+        background-color: $green;
+        color: white;
+        span {color: white;}
+        
     }
 
     .daySelectorActive {
-        color: $green;
+        border: 2px solid $green;
     }
     
 }
@@ -470,7 +553,7 @@ body {
 .fieldsTableConatiner {
     position: absolute;
     width: 100%;
-    top: 40%;
+    top: 62.5%;
     height: 35%;
     font-family: $font1;
 
@@ -594,7 +677,6 @@ body {
 }
 
 #map{
-    top: -22.5%;
     position: relative;
     height: 60%;
  }
@@ -658,18 +740,36 @@ body {
 
 
     // MAIN STYLES
-   
+
     #navContainer {
+        display: none;
+    }
+   
+    #navContainerMobile {
+        display: inline;
+        position: absolute;
         top: 0;
         width: 100%;
         height: 100%;
 
-        #mobileNavBtn {
-            display: inline-block;
+        #navTop {
+            display: flex;
+            align-items: center;
+        }
+
+        #navListMobile {
             position: absolute;
-            left: 5%;
+            height: 90%;
+            top: 10%;
+            width: 100%;
+            z-index: 99;
+            background-color: $grey;
+        }
+
+        #mobileNavBtn {
             color: white;
             font-size: 3vh;
+            margin-left: 25px;
         }
        
         #navTop {
@@ -677,7 +777,26 @@ body {
             background-color: $green;
             img {display: none;}
         }
-
+        ul {
+            -webkit-user-select: none;    
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            font-family: $font1;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            list-style-type: none;
+            color: $darkGrey;
+            text-align: center;
+    
+            li p {
+                font-size: 2.5vh;
+                margin: 2.5%;
+                margin-left: 10%;
+                padding: 2.5% 0 2.5% 0;
+            }
+        }
         nav ul {
             margin-top: 0;
         }
@@ -727,10 +846,10 @@ body {
     }
 
     #scrollUtility {
-        top: 22.5%;
         width: 100%;
         background-color: white;
         left: 0;
+        top: 0;
     }
 
     //DASHBOARD STYLES
@@ -747,6 +866,7 @@ body {
     //WEATHER STYLES 
 
     .weatherCityContainer {
+        top: 2.5%;
         width: 95%;
         left: 2.5%;
         background-color: $grey;
@@ -755,22 +875,46 @@ body {
 
     .weatheDataContainer { 
         
-        position: absolute;
+        position: relative;
+        top: 5%;
         width: 95%;
         left: 2.5%;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 5px;
+
+        div, #sunsetSunrise {
+            width: 45%;
+        }
 
         div h2, div p {
             font-size: 3vw;
         }
+
+
     }
 
     .lineChartContainer {
-        position: absolute;
-        top: 25%;
+        position: relative;
+        top: 5%;
+
+        #myChart {
+            top: 5%;
+        }
     }
 
     .daySelector {
-        top: 50%;
+        position: relative;
+        top: 25%;
+        width: 95%;
+        left: 2.5%;
+        padding: 5% 0 5% 0;
+
+        li button {
+            font-size: 3vw;
+        }
+
+    
     }
 
   }

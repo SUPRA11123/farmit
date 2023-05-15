@@ -52,20 +52,18 @@ class Maps extends React.Component {
 
         if (fields.length > 0) {
 
-            var i = 0;
-
             fields.forEach((field) => {
 
                 var row = table.insertRow(0);
 
-                var cell = row.insertCell(0);
-                cell.innerHTML = "<span>" + field.name + "</span>";
+                var cell1 = row.insertCell(0);
+                cell1.innerHTML = "<span>" + field.name + "</span>";
 
-                var cell = row.insertCell(1);
-                cell.innerHTML = "<span>Conditions</span>";
+                var cell2 = row.insertCell(1);
+                cell2.innerHTML = "<span>Conditions</span>";
 
-                var cell = row.insertCell(2);
-                cell.innerHTML = "<span>" + field.crop_type + "</span>";
+                var cell3 = row.insertCell(2);
+                cell3.innerHTML = "<span>" + field.crop_type + "</span>";
 
 
                 if (field.type === "rectangle") {
@@ -616,11 +614,8 @@ class Maps extends React.Component {
 
         return (
             <>
-
-
                 <div id="map">
                 </div>
-
                 <div className="fieldsTableConatiner">
 
                     <h2 className="hidden" id="addFieldsHeader">Use the rectangle/polygon tool to draw the field onto map</h2>
@@ -684,9 +679,6 @@ class Maps extends React.Component {
 
                 </div>
             </>
-
-
-
         )
     }
 }
