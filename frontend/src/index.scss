@@ -670,6 +670,10 @@ body {
         color: white;
     }
 
+    .fieldsTable tbody tr:hover {
+        background-color: #D0FFBC; /* Change this to the desired hover color */
+      }
+
     #addFieldsHeader {
         position: absolute;
         height: 15%;
@@ -884,6 +888,64 @@ body {
     padding: 5%;
 }
 
+.modalBackground {
+    z-index: 2;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(4px); /* Apply a blur effect to the background */
+  }
+
+  .modalContainer {
+    width: 500px;
+    height: 500px;
+    border-radius: 12px;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2; /* Set a higher z-index to ensure the modal appears above the blurred background */
+  }
+
+  .modalContainer .title {
+    position: absolute;
+    top: 2%;
+  }
+
+  .titleCloseBtn {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .titleCloseBtn button {
+    background-color: transparent;
+    border: none;
+    font-size: 25px;
+    cursor: pointer;
+  }
+
+  .modalContainer .body {
+  flex: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.7rem;
+  text-align: center;
+}
+
+.highlighted {
+    background-color: yellow; /* Customize the highlighting style as desired */
+  }
+
+
+
 #teamContainer {
     position: absolute;
     width: 100%;
@@ -933,6 +995,112 @@ body {
         }
     }
 }
+
+#teamContainer {
+    position: absolute;
+    width: 100%;
+    height: 77.5%;
+    bottom: 5%;
+    background-color: $grey;
+    border-radius: 15px;
+    display: block;
+
+    h2 {
+        font-size: 2.5vh;
+        font-family: "Inter", sans-serif;
+        color: $darkGrey;
+        margin: 2.5%;
+        width: 95%;
+        padding-bottom: 2.5%;
+        border-bottom: 1px solid black;
+    }
+
+    #addNewMember {
+        position: absolute;
+        right: 2.5%;
+        color: $green;
+        cursor: pointer;
+        background-color: $grey;
+        border: 1px solid $darkGrey;
+        border-radius: 5px;
+        font-size: 2.5vh;
+    }
+
+    #addNewMember:hover {
+        background-color: $green;
+        color: white;
+    }
+
+    #teamTable {
+        position: absolute;
+        top: 15%;
+        width: 95%;
+        left: 2.5%;
+        border-radius: 5px;
+
+        thead {
+            text-align: left;
+            border-bottom: 1px solid black;
+            color: $green;
+        }
+    }
+}
+
+.modalBackground {
+    z-index: 2;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(4px); /* Apply a blur effect to the background */
+  }
+
+  .modalContainer {
+    width: 500px;
+    height: 500px;
+    border-radius: 12px;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2; /* Set a higher z-index to ensure the modal appears above the blurred background */
+  }
+
+  .modalContainer .title {
+    position: absolute;
+    top: 2%;
+  }
+
+  .titleCloseBtn {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .titleCloseBtn button {
+    background-color: transparent;
+    border: none;
+    font-size: 25px;
+    cursor: pointer;
+  }
+
+  .modalContainer .body {
+  flex: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.7rem;
+  text-align: center;
+}
+
+.highlighted {
+    background-color: yellow; /* Customize the highlighting style as desired */
+  }
 
 // MOBILE STYLES
 

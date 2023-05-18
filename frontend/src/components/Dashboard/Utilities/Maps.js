@@ -1,11 +1,22 @@
 import React from "react";
 import axios from "axios";
+import { useState } from "react";
+import Modal from "./Modal";
 
 
 const URL = process.env.REACT_APP_URL;
 
 
 class Maps extends React.Component {
+
+
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            modalOpen: false,
+        };
+    }
 
     async componentDidMount() {
 
@@ -15,10 +26,10 @@ class Maps extends React.Component {
 
         if (role === "field manager") {
             fields = await this.getFieldsByManager(this.props.user.id);
-        }else{
+        } else {
             fields = await this.getFields(this.props.farmDetails.id);
         }
-       
+
 
         const map = new window.google.maps.Map(document.getElementById("map"), {
 
@@ -68,6 +79,7 @@ class Maps extends React.Component {
 
                 if (field.type === "rectangle") {
 
+    
                     const coordinates = field.coordinates.split(";");
 
                     const rectangle = new window.google.maps.Rectangle({
@@ -87,10 +99,21 @@ class Maps extends React.Component {
                     });
 
 
+                    rectangle.addListener("mouseover", () => {
+                      console.log("mouseover");
+                      this.highlightRow(field.name);
+                    });       
+                    
+                    rectangle.addListener("mouseout", () => {
+                        console.log("mouseout");
+                        this.unhighlightRow(field.name);
+                    });
+
+
                     const lat = (parseFloat(coordinates[0]) + parseFloat(coordinates[2])) / 2;
                     const lng = (parseFloat(coordinates[1]) + parseFloat(coordinates[3])) / 2;
 
-                    const marker = new window.google.maps.Marker({
+                    /*const marker = new window.google.maps.Marker({
                         position: { lat: lat, lng: lng },
                         map: map,
                         label: {
@@ -104,6 +127,16 @@ class Maps extends React.Component {
                             scale: 0,
                         },
 
+                    });*/
+
+                    console.log("lat: " + lat + " lng: " + lng);
+                 
+                    row.addEventListener("click", () => {
+                        map.setCenter({ lat: lat, lng: lng });
+                        map.setZoom(15);
+                    });
+                    rectangle.addListener("click", () => {
+                        this.showData();
                     });
 
 
@@ -125,6 +158,10 @@ class Maps extends React.Component {
 
                     // create polygon
                     const polygon = new window.google.maps.Polygon({
+                        paths: coordinates.map((coord) => {
+                            const [lat, lng] = coord.split(",");
+                            return { lat: parseFloat(lat), lng: parseFloat(lng) };
+                          }),
                         strokeColor: "#0ba837",
                         strokeOpacity: 0.8,
                         strokeWeight: 2,
@@ -135,6 +172,30 @@ class Maps extends React.Component {
                         isComplete: false,
                     });
 
+                    polygon.addListener("mouseover", () => {
+                        console.log("mouseover");
+                        this.highlightRow(field.name);
+                      });       
+                      
+                      polygon.addListener("mouseout", () => {
+                          console.log("mouseout");
+                          this.unhighlightRow(field.name);
+                      });
+                      const bounds = new window.google.maps.LatLngBounds();
+                      const polygonPath = polygon.getPath();
+                    
+                      polygonPath.forEach((latLng) => {
+                        bounds.extend(latLng);
+                      });
+                    
+                      const polygonCenter = bounds.getCenter();
+                    
+                      row.addEventListener("click", () => {
+                        map.setCenter(polygonCenter);
+                        map.setZoom(15);
+                      });
+
+                      
                     polygon.addListener("click", () => {
                         this.showData();
                     });
@@ -539,7 +600,6 @@ class Maps extends React.Component {
                     });
 
 
-                    // add click listener to the rectangle
                     rectangle.addListener("click", () => {
                         this.showData();
                     });
@@ -547,6 +607,10 @@ class Maps extends React.Component {
                     document.getElementById("fieldName").value = "";
                     document.getElementById("cropType").value = "";
                 });
+            });
+
+            rectangle.addListener("click", () => {
+                this.showData();
             });
 
             cancelButton.addEventListener('click', () => {
@@ -580,6 +644,7 @@ class Maps extends React.Component {
         document.getElementById("addFieldsHeader").classList.add("hidden");
     }
 
+   
 
 
     /*cancel() {
@@ -607,14 +672,56 @@ class Maps extends React.Component {
 
     showData() {
         console.log("show data");
+        this.setState({ modalOpen: true });
     }
+
+    highlightRow(fieldName) {
+        const table = document.getElementById("fieldTable"); // Replace "your-table-id" with the actual ID of your table
+        const rows = table.getElementsByTagName("tr");
+      
+        for (let i = 0; i < rows.length; i++) {
+          const row = rows[i];
+          const firstColumnValue = row.cells[0].textContent.trim();
+      
+          if (firstColumnValue === fieldName) {
+            console.log(row);
+            row.style.backgroundColor = "#D0FFBC"; //
+            // change the color of the background of the row
+        }
+      }
+    }
+
+    unhighlightRow(fieldName) {
+        const table = document.getElementById("fieldTable"); 
+        const rows = table.getElementsByTagName("tr");
+
+        for (let i = 0; i < rows.length; i++) {
+            const row = rows[i];
+            const firstColumnValue = row.cells[0].textContent.trim();
+
+            if (firstColumnValue === fieldName) {
+                console.log(row);
+                row.style.backgroundColor = ""; 
+            }
+        }
+    }
+
+
+
+
 
 
     render() {
 
+        const { modalOpen } = this.state;
+
         return (
             <>
+             
                 <div id="map">
+                {modalOpen && (
+                        <Modal setOpenModal={(isOpen) => this.setState({ modalOpen: isOpen })} />
+                    )}
                 </div>
                 <div className="fieldsTableConatiner">
 
@@ -678,6 +785,7 @@ class Maps extends React.Component {
                     }
 
                 </div>
+
             </>
         )
     }

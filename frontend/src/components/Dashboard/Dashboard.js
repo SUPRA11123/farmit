@@ -1,6 +1,7 @@
 import React from 'react';
 import Home from './Utilities/Home';
 import Weather from './Utilities/Weather';
+import Modal from './Utilities/Modal';
 import Monitor from './Utilities/Monitor';
 import Maps from './Utilities/Maps';
 import Predictions from './Utilities/Predictions';
@@ -26,7 +27,8 @@ class Dashboard extends React.Component {
         predictions: Predictions,
         settings: Settings,
         team: Team,
-        tasks: Tasks
+        tasks: Tasks,
+        modal: Modal,
 
     }
 
