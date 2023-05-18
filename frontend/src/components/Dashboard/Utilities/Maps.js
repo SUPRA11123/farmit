@@ -80,7 +80,6 @@ class Maps extends React.Component {
                 if (field.type === "rectangle") {
 
     
-
                     const coordinates = field.coordinates.split(";");
 
                     const rectangle = new window.google.maps.Rectangle({
@@ -130,6 +129,12 @@ class Maps extends React.Component {
 
                     });*/
 
+                    console.log("lat: " + lat + " lng: " + lng);
+                 
+                    row.addEventListener("click", () => {
+                        map.setCenter({ lat: lat, lng: lng });
+                        map.setZoom(15);
+                    });
                     rectangle.addListener("click", () => {
                         this.showData();
                     });
@@ -153,6 +158,10 @@ class Maps extends React.Component {
 
                     // create polygon
                     const polygon = new window.google.maps.Polygon({
+                        paths: coordinates.map((coord) => {
+                            const [lat, lng] = coord.split(",");
+                            return { lat: parseFloat(lat), lng: parseFloat(lng) };
+                          }),
                         strokeColor: "#0ba837",
                         strokeOpacity: 0.8,
                         strokeWeight: 2,
@@ -172,7 +181,21 @@ class Maps extends React.Component {
                           console.log("mouseout");
                           this.unhighlightRow(field.name);
                       });
+                      const bounds = new window.google.maps.LatLngBounds();
+                      const polygonPath = polygon.getPath();
+                    
+                      polygonPath.forEach((latLng) => {
+                        bounds.extend(latLng);
+                      });
+                    
+                      const polygonCenter = bounds.getCenter();
+                    
+                      row.addEventListener("click", () => {
+                        map.setCenter(polygonCenter);
+                        map.setZoom(15);
+                      });
 
+                      
                     polygon.addListener("click", () => {
                         this.showData();
                     });
