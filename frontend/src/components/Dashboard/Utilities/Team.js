@@ -105,6 +105,27 @@ class Team extends React.Component {
         document.getElementById("addTask").classList.add('hidden');
     }
 
+    changeScreen(choice){
+
+        switch(choice){
+            case "team":
+                document.getElementById('taskBoard').classList.add("hidden");
+                document.getElementById('teamContainer').classList.remove("hidden");
+                document.getElementById('taskManagementBTN').classList.remove('manageBtnActive');
+                document.getElementById('teamManagementBTN').classList.add('manageBtnActive');
+                break;
+            case "task":
+                document.getElementById('taskBoard').classList.remove("hidden");
+                document.getElementById('teamContainer').classList.add("hidden");
+                document.getElementById('taskManagementBTN').classList.add('manageBtnActive');
+                document.getElementById('teamManagementBTN').classList.remove('manageBtnActive');
+                break;
+            default:
+                console.log("error changing screens");
+        }
+
+    }
+
 
     handleRoleChange = (event) => {
         this.setState({
@@ -133,10 +154,15 @@ class Team extends React.Component {
         return (
             <>
 
+                <nav className="teamNav">
+                    <button onClick={() => this.changeScreen("task")} id="taskManagementBTN" className="manageBtnActive teamNavBtn">Task Management</button>
+                    <button onClick={() => this.changeScreen("team")} id="teamManagementBTN" className="teamNavBtn">Team Management</button>
+                </nav>
+
                 <section id="taskBoard">
 
                     <div className="taskColumn">
-                        <h2>To Do<button id="addNewTask" onClick={this.showAddTaskForm}><i class="fa-solid fa-plus"></i> Add new</button></h2>
+                        <h2>To Do<button id="addNewTask" onClick={this.showAddTaskForm}><i class="fa-solid fa-plus"></i> Add Task</button></h2>
 
                         <div id='toDoTasksContainer' className="taskContainer">
                             <div className="taskCard">
@@ -165,6 +191,28 @@ class Team extends React.Component {
 
                 </section>
 
+                <section id="teamContainer" className="hidden">
+
+                    <h2>My Team <button id="addNewMember"><i className="fa-solid fa-plus"></i>Add Member</button></h2>
+
+                    <table id="teamTable">
+                        <thead>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th>Email</th>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Cell</td>
+                            <td>Cell</td>
+                            <td>Cell</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+
+                </section>
+                
         
                 <form id="addTask" className="hidden">
                     <h2>Add a new task</h2>

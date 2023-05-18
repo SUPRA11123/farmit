@@ -168,25 +168,39 @@ body {
     display: none;
 }
 
-#navContainer:hover {
-    filter: brightness(100%);
-  }
-
-#navContainer {
-    filter: brightness(97.5%);
+.navContainer {
     position: absolute;
     height: 100%;
-    width: 20%;
+    width: 15%;
     background-color: #f4f4f4;
+    transition: 1s;
    
-    #navTop {
+    .navTop {
         position: relative;
         width: 100%;
         height: 20%;
         display: flex;
         align-items: center;
         justify-content: center;
-        img {width: 30%;}
+    }
+
+
+    #toggleNavMenu {
+        position: absolute;
+        top: 0;
+        right: 0;
+        font-size: 2.5vh;
+        background-color: rgb(177, 175, 175);
+        padding: 5px;
+        color: white;
+        border-radius: 0 0 0 5px;
+    }
+
+
+    #toggleNavMenu:hover {
+        background-color: $green;
+        color: white;
+        cursor: pointer;
     }
 
     #mobileNavBtn {
@@ -210,13 +224,21 @@ body {
         flex-direction: column;
         list-style-type: none;
         color: $darkGrey;
-        text-align: center;
+
+        li {
+            display: flex;
+            align-items: center;
+            justify-content: right;
+            flex-direction: row;
+            padding: 2.5% 0 2.5% 0;
+            white-space:nowrap;
+
+        }
 
         li p {
             font-size: 2.5vh;
-            margin: 2.5%;
             margin-left: 10%;
-            padding: 2.5% 0 2.5% 0;
+           
         }
 
         li:hover {
@@ -226,10 +248,8 @@ body {
             transition: 0.25s;
         }
 
-        
-
         li i {
-            margin: 5%;
+            margin: 5% 15% 5% 5%;
         }
 
     }
@@ -257,6 +277,24 @@ body {
 
 }
 
+.navLogoImg {
+    width: 40%;
+}
+
+.smallNav {
+
+    width: 5%;
+
+    img {transition-delay: 0.5;}
+    nav ul li i { font-size: 2.5vh;}
+    #toggleNavMenu {transform: rotate(180deg);border-radius: 0 5px 0 0;}
+}
+
+@keyframes ripple{
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); opacity:1; }
+    100% { transform: scale(1.6); opacity:0; }
+  }
 
 
 .navActive {
@@ -267,12 +305,18 @@ body {
 
 .settingsActive {color: $green;}
 
-#utilityContainer {
+.utilityContainer {
     font-family: $font1;
     position: absolute;
-    width: 80%;
+    width: 85%;
     height: 100%;
-    left: 20%;
+    left: 15%;
+    transition: 1s;
+}
+
+.expandedUtility {
+    width: 95%;
+    left: 5%;
 }
 
 @keyframes slideInFromLeft {
@@ -286,36 +330,36 @@ body {
 
 #fixedUtility {
     position: absolute;
-    width: 95%;
+    width: 30%;
     left: 2.5%;
-    height: 20%;
+    top: 15%;
+    height: 10%;
     color: $darkGrey;
+    background-color: rgba( 244, 244, 244, 0.61);
+    backdrop-filter: blur(5px);
     font-family: $font1;
     display: flex;
     flex-direction: column;
     justify-content: center;
     border-bottom: 1px solid black;
+    border-radius: 15px 15px 0 0;
 
     h2 {
+        font-size: 2.5vh;
         animation: 0.5s ease-out 0s 1 slideInFromLeft;
         color: black;
         margin: 0;
+        margin-left: 2.5%;
+    }
+
+    p {
+        font-size: 2vh;
+        margin: 0;
+        margin-left: 2.5%;
+        color: black;
     }
 }
 
-#userIcon {
-    position: absolute;
-    right: 0;
-    width: 5vh;
-    height: 5vh;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: $green;
-    font-weight: bolder;
-    color: white;
-}
 
 #alertBell {
     position: absolute;
@@ -324,7 +368,7 @@ body {
 
 }
 
-#alertBell:hover, #userIcon:hover {
+#alertBell:hover{
     cursor: pointer;
 }
 
@@ -344,6 +388,17 @@ body {
     transition: 0.25s;
 }
 
+.homeBackground {
+    position: absolute;
+    width: 100%;
+    height: 30%;
+    top: 0;
+    background-image: url("https://img.freepik.com/free-photo/harvested-grain-field-captured-sunny-day-with-some-clouds_181624-44956.jpg?w=1800&t=st=1684370902~exp=1684371502~hmac=cb72f01976942c7d753cb16fb4eb547d09496bfa64056cf06a7893905dc92a1f");
+    background-size: cover;
+    background-position: 50%;
+    border-radius: 15px 15px 0 0;
+}
+
 .Col2Card {
 
     #widgetPin {
@@ -360,10 +415,11 @@ body {
 
     position: absolute;
     top: 25%;
+    left: 2.5%;
     width: 30%;
     height: 30%;
     background-color: $grey;
-    border-radius: 15px;
+    border-radius: 0 0 15px 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -395,8 +451,8 @@ body {
 .col4Card {
     position: absolute;
     height: 30%;
-    width: 67.5%;
-    left: 32.5%;
+    width: 60%;
+    right: 2.5%;
     top: 25%;
     border-radius: 15px;
     background-color: $grey;
@@ -494,7 +550,6 @@ body {
     justify-content: center;
     padding-left: 0;
     gap: 25px;
-    background-color: $grey;
     padding: 5% 5% 2.5% 5%;
     border-radius: 15px;
 
@@ -552,9 +607,10 @@ body {
 
 .fieldsTableConatiner {
     position: absolute;
-    width: 100%;
-    top: 62.5%;
-    height: 35%;
+    width: 40%;
+    right: 0;
+    top: 0;
+    height: 60%;
     font-family: $font1;
 
     #createField {
@@ -589,11 +645,9 @@ body {
     }
 
     #centreToMap {
-        width: 5%;
-        position: absolute;
-        right: 0;
-        top: 0;
-        margin: 0;
+        width: 20%;
+        position: relative;
+        margin-bottom: 2.5%;
   
     }
 
@@ -601,11 +655,12 @@ body {
         border: 1px solid $darkGrey;
         background-color: white;
         border-radius: 5px;
-        font-size: 2vh;
-        margin-right: 2.5%;
-        width: 15%;
-        height: 15%;
-        top: 5%;
+        font-size: 2.5vh;
+        width: 95%;
+        margin-top: 2.5%;
+        margin-left: 5%;
+        position: absolute;
+        width: 70%;
         z-index: 1;
     }
 
@@ -631,26 +686,27 @@ body {
 
 .fieldsTable {
     font-family: $font1;
-    width: 100%;
+    width: 95%;
     height: 50%;
-    border-radius: 25px;
+    margin-left: 5%;
     background-color: #F4F4F4;
     border-collapse: collapse;
-    position: absolute;
-    top: 22.5%;
+    position: relative;
+    top: 0;
 
     th h2 {
         position: relative;
         text-align: left;
         border-radius: 25px;
         margin: 5%;
-        font-size: 2vh;
-        font-weight: normal;
+        font-size: 2.5vh;
+        font-weight: bold;
     }
 
     thead tr {
         border-radius: 25px;
     }
+    
 
     tbody tr:nth-child(odd) {
         background-color: white;
@@ -679,6 +735,7 @@ body {
 #map{
     position: relative;
     height: 60%;
+    width: 60%;
  }
 
  #add{
@@ -708,10 +765,27 @@ body {
 
 //TEAM STYLES
 
+.teamNavBtn {
+    font-family: $font1;
+    font-size: 2.5vh;
+    background-color: unset;
+    margin: 5px;
+    color: $darkGrey;
+    cursor: pointer;
+    background-color: $grey;
+    border: 1px solid $darkGrey;
+    border-radius: 5px;
+}
+
+.manageBtnActive {
+    background-color: $green;
+    color: white;
+}
+
 #taskBoard {
     position: absolute;
     width: 100%;
-    height: 75%;
+    height: 77.5%;
     bottom: 5%;
     background-color: $grey;
     border-radius: 15px;
@@ -808,6 +882,56 @@ body {
     position: absolute;
     background-color: $grey;
     padding: 5%;
+}
+
+#teamContainer {
+    position: absolute;
+    width: 100%;
+    height: 77.5%;
+    bottom: 5%;
+    background-color: $grey;
+    border-radius: 15px;
+    display: block;
+
+    h2 {
+        font-size: 2.5vh;
+        font-family: "Inter", sans-serif;
+        color: $darkGrey;
+        margin: 2.5%;
+        width: 95%;
+        padding-bottom: 2.5%;
+        border-bottom: 1px solid black;
+    }
+
+    #addNewMember {
+        position: absolute;
+        right: 2.5%;
+        color: $green;
+        cursor: pointer;
+        background-color: $grey;
+        border: 1px solid $darkGrey;
+        border-radius: 5px;
+        font-size: 2.5vh;
+    }
+
+    #addNewMember:hover {
+        background-color: $green;
+        color: white;
+    }
+
+    #teamTable {
+        position: absolute;
+        top: 15%;
+        width: 95%;
+        left: 2.5%;
+        border-radius: 5px;
+
+        thead {
+            text-align: left;
+            border-bottom: 1px solid black;
+            color: $green;
+        }
+    }
 }
 
 // MOBILE STYLES
@@ -926,11 +1050,6 @@ body {
         width: 100%;
         overflow: hidden;
         background-color: white;
-    
-        #userIcon {
-            display: none;
-        }
-
     }
 
     #fixedUtility {

@@ -80,55 +80,47 @@ class Dashboard extends React.Component {
 
         this.weatherForecast = data2;
         this.setState({weatherForecast: data2})
-}
+    }
 
-getFarmDetails(token) {
+    getFarmDetails(token) {
 
-    if(token.role === "field manager"){
-       return axios
-       .get(URL + "getfarmbyfieldmanager/" + token.id + "/")
-         .then((res) => {
+        if(token.role === "field manager"){
+        return axios
+        .get(URL + "getfarmbyfieldmanager/" + token.id + "/")
+            .then((res) => {
+                    console.log(res);
+                    return res.data;
+                }
+            )
+            .catch((err) => {
+                console.log(err);
+            });
+        }else{
+            return axios
+            .get(URL + "getfarmbyownerorfarmer/" + token.id + "/")
+            .then((res) => {
                 console.log(res);
                 return res.data;
             }
-        )
-        .catch((err) => {
-            console.log(err);
+            )
+            .catch((err) => {
+                console.log(err);
+            }
+            );
         }
-        );
-    }else{
-        return axios
-        .get(URL + "getfarmbyownerorfarmer/" + token.id + "/")
-        .then((res) => {
-            console.log(res);
-            return res.data;
-        }
-        )
-        .catch((err) => {
-            console.log(err);
-        }
-        );
-    }
-   
-}
-
-
-    changeUtility(util){
-        this.setState({currentDashboardScreen: util});
+    
     }
 
-    displaySettings(){
-        document.getElementById('fixedUtility').classList.add("expandFixed");
-    }
+    changeUtility(util){this.setState({currentDashboardScreen: util});}
+
+    displaySettings(){document.getElementById('fixedUtility').classList.add("expandFixed");}
 
     displayDashboardScreen(screen){this.setState({currentDashboardScreen: screen});}
-
 
     handleLogout(){
         localStorage.removeItem("token");
         window.location.href = "/";    
     }
-
 
     getUser(id) {
         return axios
@@ -152,6 +144,17 @@ getFarmDetails(token) {
             document.getElementById("navListMobile").classList.add('hidden');
          }
     }
+
+    toggleMenu() {
+        const navItems = document.querySelectorAll('#navList li p');
+        navItems.forEach(item => { item.classList.toggle("hidden"); });
+        document.getElementById('navContainer').classList.toggle('smallNav');
+        document.getElementById('utilityContainer').classList.toggle('expandedUtility')
+
+      }
+      
+      
+      
  
     render() {
 
@@ -168,21 +171,22 @@ getFarmDetails(token) {
         return(
             <div id='appContainer' className='screen'>
 
-                <aside id='navContainer'>
-                    <div id='navTop'>
-                    <img src={require('../../resources/img/roundLogo.png')} draggable="false" alt="Agrosensor logo"/>
+                <aside id="navContainer" className='navContainer'>
+                    <div id='navTop' className='navTop'>
+                    <img className="navLogoImg" src={require('../../resources/img/roundLogo.png')} draggable="false" alt="Agrosensor logo"/>
+                    <i onClick={this.toggleMenu} id="toggleNavMenu" className="fa-solid fa-angles-left"></i>
                     </div>
                     <nav id='navList'>
                         <ul>
-                            <li onClick={() => this.setState({currentDashboardScreen: "dashboard"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "dashboard" ? "navActive": ""}><p>Dashboard<i className="fa-solid fa-table-cells-large"></i></p></li>
-                            <li onClick={() => this.setState({currentDashboardScreen: "maps"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "maps" ? "navActive": ""}><p>My Fields<i className="fa-regular fa-map"></i></p></li>
+                            <li onClick={() => this.setState({currentDashboardScreen: "dashboard"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "dashboard" ? "navActive": ""}><p>Dashboard</p><i className="fa-solid fa-table-cells-large"></i></li>
+                            <li onClick={() => this.setState({currentDashboardScreen: "maps"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "maps" ? "navActive": ""}><p>My Fields</p><i className="fa-regular fa-map"></i></li>
                             {this.state.user.role === 'owner' && (                           
-                            <li onClick={() => this.setState({currentDashboardScreen: "team"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "team" ? "navActive": ""}><p>Tasks<i className="fa-solid fa-people-group"></i></p></li>
+                            <li onClick={() => this.setState({currentDashboardScreen: "team"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "team" ? "navActive": ""}><p>Tasks</p><i className="fa-solid fa-people-group"></i></li>
                             )}
-                            <li onClick={() => this.setState({currentDashboardScreen: "weather"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "weather" ? "navActive": ""}><p>Weather<i className="fa-solid fa-cloud-sun"></i></p></li>
-                            <li onClick={() => this.setState({currentDashboardScreen: "predictions"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "predictions" ? "navActive": ""}><p>Predictions<i className="fa-solid fa-bullhorn"></i></p></li>
-                            <li onClick={() => this.setState({currentDashboardScreen: "settings"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "settings" ? "navActive": ""}><p>Settings<i className="fa-solid fa-gear"></i></p></li>
-                            <li id='logout' onClick={this.handleLogout}><p>Logout<i className="fa-solid fa-arrow-right-from-bracket"></i></p></li>
+                            <li onClick={() => this.setState({currentDashboardScreen: "weather"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "weather" ? "navActive": ""}><p>Weather</p><i className="fa-solid fa-cloud-sun"></i></li>
+                            <li onClick={() => this.setState({currentDashboardScreen: "predictions"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "predictions" ? "navActive": ""}><p>Predictions</p><i className="fa-solid fa-bullhorn"></i></li>
+                            <li onClick={() => this.setState({currentDashboardScreen: "settings"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "settings" ? "navActive": ""}><p>Settings</p><i className="fa-solid fa-gear"></i></li>
+                            <li id='logout' onClick={this.handleLogout}><p>Logout</p><i className="fa-solid fa-arrow-right-from-bracket"></i></li>
                         </ul>
                     </nav>
                 </aside>
@@ -207,7 +211,7 @@ getFarmDetails(token) {
                     </nav>
                 </aside>
 
-                <main ref={this.divRef} id='utilityContainer'>
+                <main ref={this.divRef} id='utilityContainer' className='utilityContainer'>
 
                 <section id='scrollUtility'>
 
@@ -218,8 +222,6 @@ getFarmDetails(token) {
                 </main>
 
             </div>
-
-
         )
     }
 

@@ -619,12 +619,7 @@ class Maps extends React.Component {
                 <div className="fieldsTableConatiner">
 
                     <h2 className="hidden" id="addFieldsHeader">Use the rectangle/polygon tool to draw the field onto map</h2>
-                    {this.props.user.role === 'farmer' || this.props.user.role === 'field manager' ? null :
-                        <button onClick={this.showFieldForm} id="addNewField" className="fieldsTableBtn"> <i className="fa-solid fa-plus"></i> Add Field</button>
-                    }
-                    <button onClick={this.centreToMap} id="centreToMap" className="fieldsTableBtn"><i className="fa-solid fa-location-crosshairs"></i></button>
-
-
+                   
                     <form id="createField" className="hidden" onSubmit={this.createField}>
                         <label htmlFor="name">Field Name</label>
                         <input required type="text" name="name" id="fieldName" placeholder="enter name" />
@@ -676,6 +671,11 @@ class Maps extends React.Component {
                             </tr>
                         </tbody>
                     </table>
+                    
+                    <button onClick={this.centreToMap} id="centreToMap" className="fieldsTableBtn"><i className="fa-solid fa-location-crosshairs"></i></button>
+                    {this.props.user.role === 'farmer' || this.props.user.role === 'field manager' ? null :
+                        <button onClick={this.showFieldForm} id="addNewField" className="fieldsTableBtn"> <i className="fa-solid fa-plus"></i> Add Field</button>
+                    }
 
                 </div>
             </>

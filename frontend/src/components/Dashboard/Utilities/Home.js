@@ -41,6 +41,8 @@ class Home extends React.Component {
         } else {
         return "Good evening,";
         }
+
+        //<img id='homeBackground' src="https://img.freepik.com/free-photo/harvested-grain-field-captured-sunny-day-with-some-clouds_181624-44956.jpg?w=1800&t=st=1684370902~exp=1684371502~hmac=cb72f01976942c7d753cb16fb4eb547d09496bfa64056cf06a7893905dc92a1f" draggable="false" alt="Agrosensor logo" />
     }
 
     
@@ -48,16 +50,15 @@ class Home extends React.Component {
     render() {
         return (
             <>
+            <div className="homeBackground">
+
+            </div>
              <section id='fixedUtility'>
 
                 <h2>{this.getWelcomeMessage()} {this.props.user.name}</h2>
                 <p>your current dashboard for today</p>
 
                 <i id='alertBell' className="fa-regular fa-bell"></i>
-
-                <div id='userIcon'>
-                    {(this.props.user.name).charAt(0).toUpperCase()}
-                </div>
 
             </section>
             <div onClick={() => this.props.displayScreen("weather")} id="weatherWidget" className="Col2Card">
