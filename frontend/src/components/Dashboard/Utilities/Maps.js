@@ -746,36 +746,7 @@ class Maps extends React.Component {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td><p></p></td>
-                                <td><p></p></td>
-                                <td><p></p></td>
-                            </tr>
-                            <tr>
-                                <td><p></p></td>
-                                <td><p></p></td>
-                                <td><p></p></td>
-                            </tr>
-                            <tr>
-                                <td><p></p></td>
-                                <td><p></p></td>
-                                <td><p></p></td>
-                            </tr>
-                            <tr>
-                                <td><p></p></td>
-                                <td><p></p></td>
-                                <td><p></p></td>
-                            </tr>
-                            <tr>
-                                <td><p></p></td>
-                                <td><p></p></td>
-                                <td><p></p></td>
-                            </tr>
-                            <tr>
-                                <td><p></p></td>
-                                <td><p></p></td>
-                                <td><p></p></td>
-                            </tr>
+                            
                         </tbody>
                     </table>
                     

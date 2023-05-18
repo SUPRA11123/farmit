@@ -614,7 +614,10 @@ body {
     font-family: $font1;
 
     #createField {
-        width: 100%;
+        top: 0;
+        left: 5%;
+        width: 95%;
+        height: 50%;
         background-color: $grey;
         border-radius: 25px;
         display: inline-flex;
@@ -691,7 +694,7 @@ body {
 .fieldsTable {
     font-family: $font1;
     width: 95%;
-    height: 50%;
+    height: 90%;
     margin-left: 5%;
     background-color: #F4F4F4;
     border-collapse: collapse;
