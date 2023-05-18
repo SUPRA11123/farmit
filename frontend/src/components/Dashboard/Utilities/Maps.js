@@ -1,11 +1,22 @@
 import React from "react";
 import axios from "axios";
+import { useState } from "react";
+import Modal from "./Modal";
 
 
 const URL = process.env.REACT_APP_URL;
 
 
 class Maps extends React.Component {
+
+
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            modalOpen: false,
+        };
+    }
 
     async componentDidMount() {
 
@@ -15,10 +26,10 @@ class Maps extends React.Component {
 
         if (role === "field manager") {
             fields = await this.getFieldsByManager(this.props.user.id);
-        }else{
+        } else {
             fields = await this.getFields(this.props.farmDetails.id);
         }
-       
+
 
         const map = new window.google.maps.Map(document.getElementById("map"), {
 
@@ -104,6 +115,10 @@ class Maps extends React.Component {
                             scale: 0,
                         },
 
+                    });
+
+                    rectangle.addListener("click", () => {
+                        this.showData();
                     });
 
 
@@ -539,7 +554,6 @@ class Maps extends React.Component {
                     });
 
 
-                    // add click listener to the rectangle
                     rectangle.addListener("click", () => {
                         this.showData();
                     });
@@ -547,6 +561,10 @@ class Maps extends React.Component {
                     document.getElementById("fieldName").value = "";
                     document.getElementById("cropType").value = "";
                 });
+            });
+
+            rectangle.addListener("click", () => {
+                this.showData();
             });
 
             cancelButton.addEventListener('click', () => {
@@ -607,14 +625,23 @@ class Maps extends React.Component {
 
     showData() {
         console.log("show data");
+        this.setState({ modalOpen: true });
     }
+
+
 
 
     render() {
 
+        const { modalOpen } = this.state;
+
         return (
             <>
+             
                 <div id="map">
+                {modalOpen && (
+                        <Modal setOpenModal={(isOpen) => this.setState({ modalOpen: isOpen })} />
+                    )}
                 </div>
                 <div className="fieldsTableConatiner">
 
@@ -678,6 +705,7 @@ class Maps extends React.Component {
                     </table>
 
                 </div>
+
             </>
         )
     }
