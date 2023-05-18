@@ -79,6 +79,8 @@ class Maps extends React.Component {
 
                 if (field.type === "rectangle") {
 
+    
+
                     const coordinates = field.coordinates.split(";");
 
                     const rectangle = new window.google.maps.Rectangle({
@@ -98,10 +100,21 @@ class Maps extends React.Component {
                     });
 
 
+                    rectangle.addListener("mouseover", () => {
+                      console.log("mouseover");
+                      this.highlightRow(field.name);
+                    });       
+                    
+                    rectangle.addListener("mouseout", () => {
+                        console.log("mouseout");
+                        this.unhighlightRow(field.name);
+                    });
+
+
                     const lat = (parseFloat(coordinates[0]) + parseFloat(coordinates[2])) / 2;
                     const lng = (parseFloat(coordinates[1]) + parseFloat(coordinates[3])) / 2;
 
-                    const marker = new window.google.maps.Marker({
+                    /*const marker = new window.google.maps.Marker({
                         position: { lat: lat, lng: lng },
                         map: map,
                         label: {
@@ -115,7 +128,7 @@ class Maps extends React.Component {
                             scale: 0,
                         },
 
-                    });
+                    });*/
 
                     rectangle.addListener("click", () => {
                         this.showData();
@@ -149,6 +162,16 @@ class Maps extends React.Component {
                         path: path,
                         isComplete: false,
                     });
+
+                    polygon.addListener("mouseover", () => {
+                        console.log("mouseover");
+                        this.highlightRow(field.name);
+                      });       
+                      
+                      polygon.addListener("mouseout", () => {
+                          console.log("mouseout");
+                          this.unhighlightRow(field.name);
+                      });
 
                     polygon.addListener("click", () => {
                         this.showData();
@@ -598,6 +621,7 @@ class Maps extends React.Component {
         document.getElementById("addFieldsHeader").classList.add("hidden");
     }
 
+   
 
 
     /*cancel() {
@@ -627,6 +651,39 @@ class Maps extends React.Component {
         console.log("show data");
         this.setState({ modalOpen: true });
     }
+
+    highlightRow(fieldName) {
+        const table = document.getElementById("fieldTable"); // Replace "your-table-id" with the actual ID of your table
+        const rows = table.getElementsByTagName("tr");
+      
+        for (let i = 0; i < rows.length; i++) {
+          const row = rows[i];
+          const firstColumnValue = row.cells[0].textContent.trim();
+      
+          if (firstColumnValue === fieldName) {
+            console.log(row);
+            row.style.backgroundColor = "#D0FFBC"; //
+            // change the color of the background of the row
+        }
+      }
+    }
+
+    unhighlightRow(fieldName) {
+        const table = document.getElementById("fieldTable"); 
+        const rows = table.getElementsByTagName("tr");
+
+        for (let i = 0; i < rows.length; i++) {
+            const row = rows[i];
+            const firstColumnValue = row.cells[0].textContent.trim();
+
+            if (firstColumnValue === fieldName) {
+                console.log(row);
+                row.style.backgroundColor = ""; 
+            }
+        }
+    }
+
+
 
 
 
