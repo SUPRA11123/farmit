@@ -2,6 +2,9 @@ import React from "react";
 import axios from "axios";
 import { useState } from "react";
 import Modal from "./Modal";
+import { InfluxDB } from "@influxdata/influxdb-client";
+import { point } from "leaflet";
+
 
 
 const URL = process.env.REACT_APP_URL;
@@ -15,10 +18,17 @@ class Maps extends React.Component {
         super(props);
         this.state = {
             modalOpen: false,
+            sensor_latitude: null,
+            sensor_longitude: null,
         };
     }
 
     async componentDidMount() {
+
+
+
+
+        await this.sensorLocationQuery();
 
         // check if any field already exists
         var fields;
@@ -39,6 +49,10 @@ class Maps extends React.Component {
             streetViewControl: false,
             mapTypeControl: false,
         });
+
+        map.addListener("click", (event) => {
+            this.showClickedCoordinates(event.latLng);
+          });
 
 
         const marker = new window.google.maps.Marker({
@@ -79,8 +93,14 @@ class Maps extends React.Component {
 
                 if (field.type === "rectangle") {
 
-    
                     const coordinates = field.coordinates.split(";");
+
+                    const rectangleBounds = coordinates.map(parseFloat);
+                    console.log(rectangleBounds);
+
+                    // iterate through every sensor in sensors state
+                    
+
 
                     const rectangle = new window.google.maps.Rectangle({
                         strokeColor: "#0ba837",
@@ -98,16 +118,51 @@ class Maps extends React.Component {
                         isComplete: false,
                     });
 
+                    this.state.sensors.forEach((sensor) => {
+                        // check if the sensor is inside the rectangle
+                        if (this.isPointInsideRectangle(sensor, rectangleBounds)) {
+
+
+                        // add a little point in the rectangle in the point position
+                        const marker = new window.google.maps.Marker({
+                            position: { lat: sensor.latitude, lng: sensor.longitude },
+                            map: map,
+                            // make a dot
+                            icon: {
+                                path: window.google.maps.SymbolPath.CIRCLE,
+                                scale: 5,
+                                fillColor: "#000000",
+                                fillOpacity: 1,
+                                strokeWeight: 0,
+                                clickable: true,
+                                // add a label to the dot
+                            },
+                        });
+
+                        // on click, open the modal
+                        marker.addListener("click", () => {
+                            this.showData(sensor);
+                        });
+                    }
+                });
+
+
 
                     rectangle.addListener("mouseover", () => {
-                      console.log("mouseover");
-                      this.highlightRow(field.name);
-                    });       
-                    
+                        this.highlightRow(field.name);
+                    });
+
                     rectangle.addListener("mouseout", () => {
-                        console.log("mouseout");
                         this.unhighlightRow(field.name);
                     });
+
+                    rectangle.addListener("click", (event) => {
+                        this.showClickedCoordinates(event.latLng);
+                      });
+
+                   
+
+
 
 
                     const lat = (parseFloat(coordinates[0]) + parseFloat(coordinates[2])) / 2;
@@ -129,14 +184,10 @@ class Maps extends React.Component {
 
                     });*/
 
-                    console.log("lat: " + lat + " lng: " + lng);
-                 
+
                     row.addEventListener("click", () => {
                         map.setCenter({ lat: lat, lng: lng });
                         map.setZoom(15);
-                    });
-                    rectangle.addListener("click", () => {
-                        this.showData();
                     });
 
 
@@ -161,7 +212,7 @@ class Maps extends React.Component {
                         paths: coordinates.map((coord) => {
                             const [lat, lng] = coord.split(",");
                             return { lat: parseFloat(lat), lng: parseFloat(lng) };
-                          }),
+                        }),
                         strokeColor: "#0ba837",
                         strokeOpacity: 0.8,
                         strokeWeight: 2,
@@ -172,34 +223,70 @@ class Maps extends React.Component {
                         isComplete: false,
                     });
 
-                    polygon.addListener("mouseover", () => {
-                        console.log("mouseover");
-                        this.highlightRow(field.name);
-                      });       
-                      
-                      polygon.addListener("mouseout", () => {
-                          console.log("mouseout");
-                          this.unhighlightRow(field.name);
-                      });
-                      const bounds = new window.google.maps.LatLngBounds();
-                      const polygonPath = polygon.getPath();
-                    
-                      polygonPath.forEach((latLng) => {
-                        bounds.extend(latLng);
-                      });
-                    
-                      const polygonCenter = bounds.getCenter();
-                    
-                      row.addEventListener("click", () => {
-                        map.setCenter(polygonCenter);
-                        map.setZoom(15);
-                      });
-
-                      
-                    polygon.addListener("click", () => {
-                        this.showData();
+                    const polygonCoordinates = coordinates.map((coord) => {
+                        const [lat, lng] = coord.split(",");
+                        return { lat: parseFloat(lat), lng: parseFloat(lng) };
                     });
 
+                    console.log("Polygon Coordinates:", polygonCoordinates);
+
+                    this.state.sensors.forEach((sensor) => {
+                        // check if the sensor is inside the rectangle
+                        console.log("Sensor:", sensor);
+                        if (this.isPointInsidePolygon(sensor, polygonCoordinates)) {
+
+                            console.log("Sensor inside polygon");
+
+
+                        // add a little point in the rectangle in the point position
+                        const marker = new window.google.maps.Marker({
+                            position: { lat: sensor.latitude, lng: sensor.longitude },
+                            map: map,
+                            // make a dot
+                            icon: {
+                                path: window.google.maps.SymbolPath.CIRCLE,
+                                scale: 5,
+                                fillColor: "#000000",
+                                fillOpacity: 1,
+                                strokeWeight: 0,
+                                clickable: true,
+                            },
+                        });
+
+                        // on click, open the modal
+                        marker.addListener("click", () => {
+                            this.showData(sensor);
+                        });
+                    }
+                });
+
+
+                    polygon.addListener("mouseover", () => {
+                        this.highlightRow(field.name);
+                    });
+
+                    polygon.addListener("mouseout", () => {
+                        this.unhighlightRow(field.name);
+                    });
+
+                    polygon.addListener("click", (event) => {
+                        this.showClickedCoordinates(event.latLng);
+                      });
+
+
+                    const bounds = new window.google.maps.LatLngBounds();
+                    const polygonPath = polygon.getPath();
+
+                    polygonPath.forEach((latLng) => {
+                        bounds.extend(latLng);
+                    });
+
+                    const polygonCenter = bounds.getCenter();
+
+                    row.addEventListener("click", () => {
+                        map.setCenter(polygonCenter);
+                        map.setZoom(15);
+                    });
                 }
 
             });
@@ -207,11 +294,112 @@ class Maps extends React.Component {
         this.initDrawing(map);
     }
 
+    sensorLocationQuery() {
+        return new Promise((resolve, reject) => {
+            const influxDB = new InfluxDB({
+                url: "https://eu-central-1-1.aws.cloud2.influxdata.com",
+                token: "m6MJWTKk2p2bCoq1hqmsyt44relL7JCGpu-NbPh5iMPDODLf9ALAeXdbfY77iXr3T-eY7GkbU1BKhf6hMzT4eA==",
+            });
+
+            const queryApi = influxDB.getQueryApi("FarmIT");
+
+            const sensorLocationQuery = `
+            from(bucket: "test")
+            |> range(start: -50m)
+            |> filter(fn: (r) =>
+              r._measurement == "mqtt_consumer" and
+              (
+                r._field == "temperature" or
+                r._field == "humidity" or
+                r._field == "locations_user_latitude" or
+                r._field == "locations_user_longitude"
+              ) and
+              exists r._value
+            )
+      |> last()
+          `;
+
+            const sensors = {}; // Object to store sensor data
+
+            const fetchSensorLocationData = queryApi.queryRows(sensorLocationQuery, {
+                next: (row, tableMeta) => {
+                    const sensorData = tableMeta.toObject(row);
+
+                    const { _field, _value, topic } = sensorData;
+
+                    // Extract the sensor ID from the topic. its the 4th part of the topic
+                    const sensorId = topic.split("/")[3];
+
+                    console.log(sensorId);
+
+
+                    if (_field === "locations_user_latitude") {
+                        sensors[sensorId] = { ...sensors[sensorId], latitude: _value };
+                    } else if (_field === "locations_user_longitude") {
+                        sensors[sensorId] = { ...sensors[sensorId], longitude: _value };
+                    }
+                },
+                error: (error) => {
+                    console.error(error);
+                    console.log("\nFinished ERROR");
+                    reject(error);
+                },
+                complete: () => {
+                    console.log("\nFinished SUCCESS");
+                   // set the sensor id and the location in the state
+                   console.log(sensors);
+                    this.setState({ sensors: Object.values(sensors) });
+                    resolve();
+                },
+            });
+        });
+    }
+
+    showClickedCoordinates(latLng) {
+        const { lat, lng } = latLng.toJSON();
+        console.log(`Clicked coordinates: Latitude: ${lat}, Longitude: ${lng}`);
+      }
+
+
+
+
+    isPointInsideRectangle(point, rectangleBounds) {
+        var [north, east, south, west] = rectangleBounds;
+
+        return (
+            point.longitude >= west &&
+            point.longitude <= east &&
+            point.latitude >= south &&
+            point.latitude <= north
+        );
+    }
+
+    isPointInsidePolygon(point, coordinates) {
+
+        var inside = false;
+        var [x, y] = [point.latitude, point.longitude];
+
+        for (var i = 0, j = coordinates.length - 1; i < coordinates.length; j = i++) {
+            var xi = coordinates[i].lat;
+            var yi = coordinates[i].lng;
+            var xj = coordinates[j].lat;
+            var yj = coordinates[j].lng;
+
+            var intersect =
+                yi > y != yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi;
+
+            if (intersect) {
+                inside = !inside;
+            }
+        }
+
+        return inside;
+    }
+
     getFieldsByManager(id) {
         return axios
             .get(URL + "getfieldsbymanager/" + id + "/")
             .then((res) => {
-                console.log(res);
                 return res.data;
             }
             )
@@ -225,7 +413,6 @@ class Maps extends React.Component {
         return axios
             .get(URL + "getfieldsbyid/" + id + "/")
             .then((res) => {
-                console.log(res);
                 return res.data;
             }
             )
@@ -403,7 +590,6 @@ class Maps extends React.Component {
                         coordinates: coordinates,
                         farm: this.props.farmDetails.id,
                     }).then((res) => {
-                        console.log(res);
                         var table = document.getElementById("fieldTable").getElementsByTagName('tbody')[0];
 
                         var row = table.insertRow(0);
@@ -412,7 +598,6 @@ class Maps extends React.Component {
                         var cell2 = row.insertCell(1);
                         var cell3 = row.insertCell(2);
 
-                        console.log(polygon);
 
                         cell1.innerHTML = "<span>" + fieldName + "</span>";
                         cell2.innerHTML = "<span>conditions</span>";
@@ -420,25 +605,45 @@ class Maps extends React.Component {
 
                         polygon.isComplete = true;
 
+
+                        const bounds = new window.google.maps.LatLngBounds();
+                        const polygonPath = polygon.getPath();
+
+                        polygonPath.forEach((latLng) => {
+                            bounds.extend(latLng);
+                        });
+
+                        const polygonCenter = bounds.getCenter();
+
+                        row.addEventListener("click", () => {
+                            map.setCenter(polygonCenter);
+                            map.setZoom(15);
+                        });
+
                     }).catch((err) => {
                         console.log(err);
                         polygon.setMap(null);
                     });
 
 
-                    // add click listener to the rectangle
-                    polygon.addListener("click", () => {
-                        this.showData();
+
+
+                    polygon.addListener("mouseover", () => {
+                        this.highlightRow(fieldName);
                     });
+
+                    polygon.addListener("mouseout", () => {
+                        this.unhighlightRow(fieldName);
+                    });
+
+
 
                     document.getElementById("fieldName").value = "";
                     document.getElementById("cropType").value = "";
                 });
             });
 
-            polygon.addListener("click", () => {
-                this.showData();
-            });
+
 
             cancelButton.addEventListener('click', () => {
                 polygon.setMap(null);
@@ -544,7 +749,7 @@ class Maps extends React.Component {
                     const lat = (parseFloat(coordinates.north) + parseFloat(coordinates.south)) / 2;
                     const lng = (parseFloat(coordinates.east) + parseFloat(coordinates.west)) / 2;
 
-                    const marker = new window.google.maps.Marker({
+                    /*const marker = new window.google.maps.Marker({
                         position: { lat: lat, lng: lng },
                         map: map,
                         label: {
@@ -558,7 +763,7 @@ class Maps extends React.Component {
                             scale: 0,
                         },
 
-                    });
+                    });*/
 
 
                     // convert coordinates string with ; to array
@@ -577,7 +782,6 @@ class Maps extends React.Component {
                         coordinates: coordinatesString,
                         farm: this.props.farmDetails.id,
                     }).then((res) => {
-                        console.log(res);
                         var table = document.getElementById("fieldTable").getElementsByTagName('tbody')[0];
 
 
@@ -594,24 +798,32 @@ class Maps extends React.Component {
 
                         rectangle.isComplete = true;
 
+                        row.addEventListener("click", () => {
+                            map.setCenter({ lat: lat, lng: lng });
+                            map.setZoom(15);
+                        });
+
                     }).catch((err) => {
                         console.log(err);
                         rectangle.setMap(null);
                     });
 
 
-                    rectangle.addListener("click", () => {
-                        this.showData();
+                    rectangle.addListener("mouseover", () => {
+                        this.highlightRow(fieldName);
                     });
+
+                    rectangle.addListener("mouseout", () => {
+                        this.unhighlightRow(fieldName);
+                    });
+
 
                     document.getElementById("fieldName").value = "";
                     document.getElementById("cropType").value = "";
                 });
             });
 
-            rectangle.addListener("click", () => {
-                this.showData();
-            });
+
 
             cancelButton.addEventListener('click', () => {
                 document.getElementById("addFieldsHeader").classList.remove("hidden");
@@ -644,7 +856,7 @@ class Maps extends React.Component {
         document.getElementById("addFieldsHeader").classList.add("hidden");
     }
 
-   
+
 
 
     /*cancel() {
@@ -670,29 +882,13 @@ class Maps extends React.Component {
 
     }
 
-    showData() {
-        console.log("show data");
-        this.setState({ modalOpen: true });
+    showData(sensorData) {
+        // set modal open to true and send the sensor data to the modal
+        this.setState({ modalOpen: true, sensorData: sensorData });
     }
 
     highlightRow(fieldName) {
         const table = document.getElementById("fieldTable"); // Replace "your-table-id" with the actual ID of your table
-        const rows = table.getElementsByTagName("tr");
-      
-        for (let i = 0; i < rows.length; i++) {
-          const row = rows[i];
-          const firstColumnValue = row.cells[0].textContent.trim();
-      
-          if (firstColumnValue === fieldName) {
-            console.log(row);
-            row.style.backgroundColor = "#D0FFBC"; //
-            // change the color of the background of the row
-        }
-      }
-    }
-
-    unhighlightRow(fieldName) {
-        const table = document.getElementById("fieldTable"); 
         const rows = table.getElementsByTagName("tr");
 
         for (let i = 0; i < rows.length; i++) {
@@ -700,8 +896,22 @@ class Maps extends React.Component {
             const firstColumnValue = row.cells[0].textContent.trim();
 
             if (firstColumnValue === fieldName) {
-                console.log(row);
-                row.style.backgroundColor = ""; 
+                row.style.backgroundColor = "#D0FFBC"; //
+                // change the color of the background of the row
+            }
+        }
+    }
+
+    unhighlightRow(fieldName) {
+        const table = document.getElementById("fieldTable");
+        const rows = table.getElementsByTagName("tr");
+
+        for (let i = 0; i < rows.length; i++) {
+            const row = rows[i];
+            const firstColumnValue = row.cells[0].textContent.trim();
+
+            if (firstColumnValue === fieldName) {
+                row.style.backgroundColor = "";
             }
         }
     }
@@ -717,16 +927,18 @@ class Maps extends React.Component {
 
         return (
             <>
-             
+
                 <div id="map">
-                {modalOpen && (
-                        <Modal setOpenModal={(isOpen) => this.setState({ modalOpen: isOpen })} />
+                    {modalOpen && (
+                        <Modal setOpenModal={(isOpen) => this.setState({ modalOpen: isOpen })}
+                        sensorData={this.state.sensorData}
+                         />
                     )}
                 </div>
                 <div className="fieldsTableConatiner">
 
                     <h2 className="hidden" id="addFieldsHeader">Use the rectangle/polygon tool to draw the field onto map</h2>
-                   
+
                     <form id="createField" className="hidden" onSubmit={this.createField}>
                         <label htmlFor="name">Field Name</label>
                         <input required type="text" name="name" id="fieldName" placeholder="enter name" />
@@ -746,15 +958,12 @@ class Maps extends React.Component {
                             </tr>
                         </thead>
                         <tbody>
-                            
+
                         </tbody>
                     </table>
 
-                    
-                    <button onClick={this.centreToMap} id="centreToMap" className={`fieldsTableBtn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}><i className="fa-solid fa-location-crosshairs"></i></button>
-                    {this.props.user.role === 'farmer' || this.props.user.role === 'field manager' ? null :
-                        <button onClick={this.showFieldForm} id="addNewField" className={`fieldsTableBtn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}> <i className="fa-solid fa-plus"></i> Add Field</button>
-                    }
+                    <button onClick={this.centreToMap} id="centreToMap" className={`fieldsTableBtn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}><i className="fa-solid fa-location-crosshairs"></i></button>                    {this.props.user.role === 'farmer' || this.props.user.role === 'field manager' ? null :
+                    <button onClick={this.showFieldForm} id="addNewField" className={`fieldsTableBtn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}> <i className="fa-solid fa-plus"></i> Add Field</button>                    }
 
                 </div>
 
