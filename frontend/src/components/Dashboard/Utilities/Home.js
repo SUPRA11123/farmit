@@ -1,8 +1,15 @@
 import React from "react";
+import { Chart } from 'chart.js/auto';
 
 class Home extends React.Component {
 
+    constructor(props){
+        super(props)
+        this.myChart = null;
+    }
+
     componentDidMount() {
+        console.log(this.props.weatherData);
         this.populateWeather(this.props.weatherData);
     }
 
@@ -24,7 +31,58 @@ class Home extends React.Component {
         document.getElementById("wigetWind").innerHTML += " " + this.convertToKM(data.wind.speed) + " km/h";
         document.getElementById("wigetLocation").innerHTML += " " + data.name;
         document.getElementById("widgetHumidity").innerHTML += " " + data.main.humidity + "%";
+
+        this.updateChart();
     }
+
+    updateChart() {
+
+        console.log(this.props.weatherForecast);    
+        const ctx = document.getElementById('myChart').getContext('2d');
+      
+        if (this.myChart) {
+          this.myChart.destroy();
+        }
+      
+        this.myChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: null,
+            datasets: [{
+              label: 'Temperature',
+              gridLines: 'false',
+              data: this.props.weatherForecast,
+              borderColor: '#0ba837',
+              tension: 0.4,
+              backgroundColor: '#BAECB8',
+              pointStyle: 'rectRounded',
+              fill: true,
+              lineTension: 0.4,
+            }],
+          },
+          options: {
+            plugins: {
+              legend: {
+                display: false,
+              },
+            },
+            scales: {
+              y: {
+                grid: {
+                  display: true,
+                },
+                suggestedMin: 0, 
+                suggestedMax: 40,
+              },
+              x: {
+                grid: {
+                  display: false,
+                },
+              },
+            },
+          },
+        });
+      }
 
     convertToKM(speed) {
         return (speed * 3.6).toFixed(2);
@@ -53,15 +111,13 @@ class Home extends React.Component {
             <div className="homeBackground">
 
             </div>
-             <section id='fixedUtility'>
+             <section id='fixedUtility' className='fixedUtility'>
 
-                <h2>{this.getWelcomeMessage()} {this.props.user.name}</h2>
-                <p>your current dashboard for today</p>
-
-                <i id='alertBell' className="fa-regular fa-bell"></i>
+                <h2>you have no new alerts</h2>
 
             </section>
-            <div onClick={() => this.props.displayScreen("weather")} id="weatherWidget" className="Col2Card">
+        
+            <div onClick={() => this.props.displayScreen("weather")} id="weatherWidget" className={`Col2Card ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
                 <div className="weatherWigetTop">
                     <p id="wigetLocation"><i id="widgetPin"  className="fa-solid fa-location-pin"></i></p>
                     <p><i className="fa-regular fa-clock"></i>{this.displayTime()}</p>
@@ -77,9 +133,10 @@ class Home extends React.Component {
                 
                
             </div>
-            <div id='alertWidget' className="col4Card">
 
-</div>
+            <div id='alertWidget' className={`col4Card ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
+                <canvas id="myChart" height='30%' width='100px'></canvas>
+            </div>
 
             </>
 

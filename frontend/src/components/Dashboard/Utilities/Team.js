@@ -155,14 +155,14 @@ class Team extends React.Component {
             <>
 
                 <nav className="teamNav">
-                    <button onClick={() => this.changeScreen("task")} id="taskManagementBTN" className="manageBtnActive teamNavBtn">Task Management</button>
-                    <button onClick={() => this.changeScreen("team")} id="teamManagementBTN" className="teamNavBtn">Team Management</button>
+                    <button onClick={() => this.changeScreen("task")} id="taskManagementBTN" className="manageBtnActive teamNavBtn"><i className="fa-solid fa-bullseye"></i>Task Board</button>
+                    <button onClick={() => this.changeScreen("team")} id="teamManagementBTN" className="teamNavBtn"><i class="fa-solid fa-user"></i>Team Management</button>
                 </nav>
 
-                <section id="taskBoard">
+                <section id="taskBoard" className={`${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
 
                     <div className="taskColumn">
-                        <h2>To Do<button id="addNewTask" onClick={this.showAddTaskForm}><i class="fa-solid fa-plus"></i> Add Task</button></h2>
+                        <h2>To Do<button id="addNewTask" onClick={this.showAddTaskForm}><i class="fa-solid fa-plus"></i> add new task</button></h2>
 
                         <div id='toDoTasksContainer' className="taskContainer">
                             <div className="taskCard">
@@ -191,9 +191,9 @@ class Team extends React.Component {
 
                 </section>
 
-                <section id="teamContainer" className="hidden">
+                <section id="teamContainer" className={`hidden ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
 
-                    <h2>My Team <button id="addNewMember"><i className="fa-solid fa-plus"></i>Add Member</button></h2>
+                    <h2>My Team <button id="addNewMember"><i className="fa-solid fa-plus"></i>add new member</button></h2>
 
                     <table id="teamTable">
                         <thead>
@@ -237,7 +237,7 @@ class Team extends React.Component {
 
                     <button id="taskCancel" onClick={this.cancelTask}>Cancel</button>
 
-                    <input id="taskSubmit" type="submit" value="Create Task" />
+                    <input id="taskSubmit" type="submit" value="Create" />
 
                 </form>
 

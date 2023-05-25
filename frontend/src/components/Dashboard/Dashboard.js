@@ -39,12 +39,15 @@ class Dashboard extends React.Component {
         this.displaySettings = this.displaySettings.bind(this);
         this.displayDashboardScreen = this.displayDashboardScreen.bind(this);
         this.getFarmDetails = this.getFarmDetails.bind(this);
+        this.toggleAlertMenu = this.toggleAlertMenu.bind(this);
+        this.changeTheme = this.changeTheme.bind(this);
+        this.getTheme = this.getTheme.bind(this);
         this.myDivRef = React.createRef();
       
     }
 
     async componentDidMount() {
-       
+
         const token = localStorage.getItem("token");
         // decode the token 
         const base64Url = token.split('.')[1];
@@ -119,6 +122,10 @@ class Dashboard extends React.Component {
 
     displayDashboardScreen(screen){this.setState({currentDashboardScreen: screen});}
 
+    changeTheme(x){this.setState({isDarkMode: x})}
+
+    getTheme(){return this.state.isDarkMode}
+
     handleLogout(){
         localStorage.removeItem("token");
         window.location.href = "/";    
@@ -148,12 +155,18 @@ class Dashboard extends React.Component {
     }
 
     toggleMenu() {
+        localStorage.setItem("menuToggled", true);
         const navItems = document.querySelectorAll('#navList li p');
         navItems.forEach(item => { item.classList.toggle("hidden"); });
         document.getElementById('navContainer').classList.toggle('smallNav');
         document.getElementById('utilityContainer').classList.toggle('expandedUtility')
 
-      }
+    }
+
+    toggleAlertMenu(){
+        document.getElementById('alertMenu').classList.toggle('hidden');
+        document.getElementById('blurBox').classList.toggle('hidden');
+    }
       
       
       
@@ -173,7 +186,7 @@ class Dashboard extends React.Component {
         return(
             <div id='appContainer' className='screen'>
 
-                <aside id="navContainer" className='navContainer'>
+                <aside id="navContainer" className={`${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''} navContainer`}>
                     <div id='navTop' className='navTop'>
                     <img className="navLogoImg" src={require('../../resources/img/roundLogo.png')} draggable="false" alt="Agrosensor logo"/>
                     <i onClick={this.toggleMenu} id="toggleNavMenu" className="fa-solid fa-angles-left"></i>
@@ -213,15 +226,33 @@ class Dashboard extends React.Component {
                     </nav>
                 </aside>
 
-                <main ref={this.divRef} id='utilityContainer' className='utilityContainer'>
+                <main ref={this.divRef} id='utilityContainer' className={`utilityContainer ${localStorage.getItem("darkMode") === "true" ? "darkModeBG" : ''}`}>
 
                 <section id='scrollUtility'>
 
-                    <CurrentUtility scrollToMap={this.scrollToMap} displayScreen={this.displayDashboardScreen} weatherData={this.state.weatherData} weatherForecast={this.state.weatherForecast} farmDetails={this.state.farmDetails} user={this.state.user}/>
+                    <section className='alertContainer'>
+                    <i id="addAlert" className="fa-solid fa-square-plus hidden"></i>
+                    <i onClick={this.toggleAlertMenu} id='alertBell' className="fa-regular fa-bell"></i>
+                    </section>
+                   
+                    <CurrentUtility 
+                    scrollToMap={this.scrollToMap} displayScreen={this.displayDashboardScreen} 
+                    weatherData={this.state.weatherData} weatherForecast={this.state.weatherForecast} 
+                    farmDetails={this.state.farmDetails} user={this.state.user} 
+                    changeTheme={this.changeTheme} getTheme={this.getTheme}
+                    />
 
                 </section>
 
                 </main>
+
+                <section id="alertMenu" className='alertMenu hidden'>
+
+                </section>
+
+                <div id="blurBox" className='blurBox hidden'>
+
+                </div>
 
             </div>
         )

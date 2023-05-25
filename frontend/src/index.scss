@@ -59,11 +59,7 @@ body {
             width: 100%;
             height: 100%;
         }
-
     }
-
-   
-
 }
 
 #landingCard {
@@ -144,8 +140,7 @@ body {
 
         #errorMessage {
             color: $red;
-        }
-       
+        }   
     }
 }
 
@@ -173,7 +168,7 @@ body {
     height: 100%;
     width: 15%;
     background-color: #f4f4f4;
-    transition: 1s;
+    transition: width 1s;
    
     .navTop {
         position: relative;
@@ -194,6 +189,7 @@ body {
         padding: 5px;
         color: white;
         border-radius: 0 0 0 5px;
+        transition: 0.5s;
     }
 
 
@@ -246,6 +242,7 @@ body {
             background-color: $green;
             color: white;
             transition: 0.25s;
+            i {color: white;}
         }
 
         li i {
@@ -300,6 +297,8 @@ body {
 .navActive {
     color: $green;
     box-shadow: inset 5px 0px 0px 0px $green;
+
+    i {color: $green;}
 }
 
 
@@ -311,7 +310,7 @@ body {
     width: 85%;
     height: 100%;
     left: 15%;
-    transition: 1s;
+    transition: all 1s, background-color 1ms;
 }
 
 .expandedUtility {
@@ -328,7 +327,7 @@ body {
     }
   }
 
-#fixedUtility {
+.fixedUtility {
     position: absolute;
     width: 30%;
     left: 2.5%;
@@ -349,7 +348,8 @@ body {
         animation: 0.5s ease-out 0s 1 slideInFromLeft;
         color: black;
         margin: 0;
-        margin-left: 2.5%;
+        text-align: center;
+        font-weight: 400;
     }
 
     p {
@@ -360,17 +360,64 @@ body {
     }
 }
 
-
-#alertBell {
+.alertContainer {
     position: absolute;
-    right: 5%;
-    font-size: 4vh;
+    z-index: 99;
+    right: 10px;
+    width: 7.5%;
+    height: 10%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
+    i {
+        font-size: 4vh;
+        color: white;
+        background-color: $green;
+        padding: 10px;
+        border-radius: 5px;
+        padding-bottom: 10px;
+    }
+
+    i:hover {
+        cursor: pointer;
+        color: $green;
+    }
 }
 
-#alertBell:hover{
-    cursor: pointer;
+.alertMenu {
+    position: fixed;
+    z-index: 201;
+    height: 100%;
+    width: 32.5%;
+    background: $grey;
+    border-left: 2px solid black;
+    transition: 1s;
+    backdrop-filter: none;
+    -webkit-animation: slide 1s forwards;
+    animation: slide 1s forwards;
 }
+
+@-webkit-keyframes slide {
+    0% { right: -32.5%; } 
+    100% { right: 0; } 
+}
+
+@keyframes slide {
+    0% { right: -32.5%; }
+    100% { right: 0; }
+}
+
+.blurBox {
+    position: fixed;
+    z-index: 200;
+    height: 100%;
+    width: 100%;
+    backdrop-filter: blur(4px);
+    
+}
+
+
 
 #scrollUtility {
     position: absolute;
@@ -393,7 +440,8 @@ body {
     width: 100%;
     height: 30%;
     top: 0;
-    background-image: url("https://img.freepik.com/free-photo/harvested-grain-field-captured-sunny-day-with-some-clouds_181624-44956.jpg?w=1800&t=st=1684370902~exp=1684371502~hmac=cb72f01976942c7d753cb16fb4eb547d09496bfa64056cf06a7893905dc92a1f");
+    background-color: $green;
+    //background-image: url("https://img.freepik.com/free-photo/harvested-grain-field-captured-sunny-day-with-some-clouds_181624-44956.jpg?w=1800&t=st=1684370902~exp=1684371502~hmac=cb72f01976942c7d753cb16fb4eb547d09496bfa64056cf06a7893905dc92a1f");
     background-size: cover;
     background-position: 50%;
     border-radius: 15px 15px 0 0;
@@ -462,10 +510,24 @@ body {
 .lineChartContainer {
     position: absolute;
     border-radius: 5px;
-    bottom: 5%;
+    top: 25%;
     width: 100%;
-    height: 65%;
+    height: 70%;
     font-family: $font1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: $grey;
+
+    select {
+        font-size: 2.5vh;
+        font-family: $font1;
+        background-color: $grey;
+        border-radius: 5px;
+        color: #3d3d3d;
+        margin-bottom: 5px;
+    }
 
     h2 {
         font-size: 1.5vw;
@@ -473,16 +535,15 @@ body {
     }
 
     #myChart {
-        position: absolute;
-        bottom: 0;
+        
     }
 }
 
 .weatherCityContainer {
     position: relative;
-    top: 5%;
+    top: 0%;
     height: 10%;
-    width: 100%;
+    width: 75%;
     left: 0%;
     margin-bottom: 2%;
     background-color: $grey;
@@ -507,13 +568,13 @@ body {
 
 .weatheDataContainer  {
     position: absolute;
-    top: 17.5%;
+    top: 12.5%;
     width: 100%;
     display: flex;
     flex-direction: row;
 
     div {
-        width: 20%;
+        width: 25%;
         margin: 0 5px 0 5px;
         border-radius: 5px;
         border: 2px solid $grey;
@@ -526,7 +587,7 @@ body {
         }
         
         p {
-            color: $darkGrey;
+            color: #3d3d3d;
             text-align: center;
             font-weight: bold;
             font-size: 1.5vw;
@@ -536,21 +597,20 @@ body {
        
     }
     #sunsetSunrise {
-        width: 40%;
+        width: 25%;
         i {color: $darkGrey;}
     }
 }
 
 .daySelector {
-    position: absolute;
-    width: 90%;
+    position: relative;
+    width: 95%;
     list-style: none;
     display: flex;
     flex-direction: row;
     justify-content: center;
     padding-left: 0;
     gap: 25px;
-    padding: 5% 5% 2.5% 5%;
     border-radius: 15px;
 
     h2 {
@@ -560,17 +620,7 @@ body {
         top: 0;
         text-align: center;
         width: 100%;
-    }
-
-    select {
-        margin-left: 5px;
-        font-family: $font1;
-        background-color: $grey;
-        border-radius: 5px;
-        color: $darkGrey;
-    }
-
-    
+    }  
 
     li {
         width: 25%;
@@ -578,12 +628,12 @@ body {
 
     li button {
         font-family: $font1;
-        border: 2px solid $grey;
         background-color: unset;
         font-size: 1.5vw;
         border-radius: 5px;
         padding: 10px;
         color: $darkGrey;
+        border: 2px solid $darkGrey;
         width: 100%;
         span {
             color: $green;
@@ -601,17 +651,20 @@ body {
 
     .daySelectorActive {
         border: 2px solid $green;
+        color: $green;
     }
     
 }
 
 .fieldsTableConatiner {
     position: absolute;
-    width: 40%;
+    width: 37.5%;
     right: 0;
-    top: 0;
-    height: 60%;
+    top: 10%;
+    height: 80%;
     font-family: $font1;
+    border-radius: 15px;
+    border: 2px solid #D9D9D9;
 
     #createField {
         top: 0;
@@ -693,20 +746,21 @@ body {
 
 .fieldsTable {
     font-family: $font1;
-    width: 95%;
+    width: 100%;
     height: 90%;
-    margin-left: 5%;
     background-color: #F4F4F4;
     border-collapse: collapse;
     position: relative;
     top: 0;
+    border-radius: 15px;
+   
 
     th h2 {
         position: relative;
         text-align: left;
         border-radius: 25px;
-        margin: 5%;
-        font-size: 2.5vh;
+        margin: 15%;
+        font-size: 2vh;
         font-weight: bold;
     }
 
@@ -720,7 +774,7 @@ body {
     }
 
     tbody tr td span {
-        margin-left: 5%;
+        margin-left: 15%;
         font-size: 2vh;
     }
 
@@ -741,8 +795,10 @@ body {
 
 #map{
     position: relative;
-    height: 60%;
+    top: 10%;
+    height: 80%;
     width: 60%;
+    border-radius: 15px;
  }
 
  #add{
@@ -772,6 +828,14 @@ body {
 
 //TEAM STYLES
 
+.teamNav {
+    position: absolute;
+    width: 100%;
+    height: 10%;
+    display: flex;
+    align-items: center;
+}
+
 .teamNavBtn {
     font-family: $font1;
     font-size: 2.5vh;
@@ -792,8 +856,8 @@ body {
 #taskBoard {
     position: absolute;
     width: 100%;
-    height: 77.5%;
-    bottom: 5%;
+    height: 87.5%;
+    top: 10%;
     background-color: $grey;
     border-radius: 15px;
     display: flex;
@@ -815,7 +879,7 @@ body {
             font-family: $font1;
             margin: 0 0 2.5% 5%;
             padding-bottom: 2.5%;
-            color: $darkGrey;
+            color: #3d3d3d;
             border-bottom: 1px solid black;
         }
 
@@ -952,8 +1016,8 @@ body {
 #teamContainer {
     position: absolute;
     width: 100%;
-    height: 77.5%;
-    bottom: 5%;
+    height: 87.5%;
+    top: 10%;
     background-color: $grey;
     border-radius: 15px;
     display: block;
@@ -961,57 +1025,7 @@ body {
     h2 {
         font-size: 2.5vh;
         font-family: "Inter", sans-serif;
-        color: $darkGrey;
-        margin: 2.5%;
-        width: 95%;
-        padding-bottom: 2.5%;
-        border-bottom: 1px solid black;
-    }
-
-    #addNewMember {
-        position: absolute;
-        right: 2.5%;
-        color: $green;
-        cursor: pointer;
-        background-color: $grey;
-        border: 1px solid $darkGrey;
-        border-radius: 5px;
-        font-size: 2.5vh;
-    }
-
-    #addNewMember:hover {
-        background-color: $green;
-        color: white;
-    }
-
-    #teamTable {
-        position: absolute;
-        top: 15%;
-        width: 95%;
-        left: 2.5%;
-        border-radius: 5px;
-
-        thead {
-            text-align: left;
-            border-bottom: 1px solid black;
-            color: $green;
-        }
-    }
-}
-
-#teamContainer {
-    position: absolute;
-    width: 100%;
-    height: 77.5%;
-    bottom: 5%;
-    background-color: $grey;
-    border-radius: 15px;
-    display: block;
-
-    h2 {
-        font-size: 2.5vh;
-        font-family: "Inter", sans-serif;
-        color: $darkGrey;
+        color: #3d3d3d;
         margin: 2.5%;
         width: 95%;
         padding-bottom: 2.5%;
@@ -1102,8 +1116,102 @@ body {
 }
 
 .highlighted {
-    background-color: yellow; /* Customize the highlighting style as desired */
-  }
+    background-color: $blue; /* Customize the highlighting style as desired */
+}
+
+//SETTINGS STYLES
+
+.settingsContainer {
+    position: absolute;
+    top: 0;
+    z-index: 300;
+    width: 100%;
+    height: 95%;
+    background-color: $grey;
+    border-radius: 15px;
+    
+    hr {width: 90%;}
+
+    h2 { margin-left: 5%;  font-size: 2.5vh;}
+
+    p { margin-left: 5%; }
+
+}
+
+.toggle {
+	cursor: pointer;
+	display: inline-block;
+    margin-left: 5%;
+}
+
+.toggle-switch {
+	display: inline-block;
+	background: #ccc;
+	border-radius: 16px;
+	width: 58px;
+	height: 32px;
+	position: relative;
+	vertical-align: middle;
+	transition: background 0.25s;
+	&:before,
+	&:after {
+		content: "";
+	}
+	&:before {
+		display: block;
+		background: linear-gradient(to bottom, #fff 0%,#eee 100%);
+		border-radius: 50%;
+		box-shadow: 0 0 0 1px rgba(0,0,0,0.25);
+		width: 24px;
+		height: 24px;
+		position: absolute;
+		top: 4px;
+		left: 4px;
+		transition: left 0.25s;
+	}
+	.toggle:hover &:before {
+		background: linear-gradient(to bottom, #fff 0%,#fff 100%);
+		box-shadow: 0 0 0 1px rgba(0,0,0,0.5);
+	}
+	.toggle-checkbox:checked + & {
+		background: $green;
+		&:before {
+			left: 30px;
+		}
+	}
+}
+.toggle-checkbox {
+	position: absolute;
+	visibility: hidden;
+}
+.toggle-label {
+	margin-left: 5px;
+	position: relative;
+	top: 2px;
+}
+
+.darkModeBG {
+    background-color: #3d3d3d;
+}
+
+.darkMode {
+    background-color: #636363 !important;
+    color: white !important;
+
+    nav ul li, h2, h1, p, ul, button {
+        color: white !important;
+    }
+
+    img {
+        filter: brightness(0) invert(1);
+    }
+
+    tbody tr:nth-child(odd) {
+        background-color: #2a2a2a;
+    }
+
+    //{` ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}
+}
 
 // MOBILE STYLES
 
@@ -1223,7 +1331,7 @@ body {
         background-color: white;
     }
 
-    #fixedUtility {
+    .fixedUtility {
         background-color: white;
         width: 95%;
         left: 2.5%;

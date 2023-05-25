@@ -737,7 +737,7 @@ class Maps extends React.Component {
 
                     <div id="add"></div>
 
-                    <table id='fieldTable' className="fieldsTable">
+                    <table id='fieldTable' className={`fieldsTable ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
                         <thead>
                             <tr>
                                 <th><h2>Fields</h2></th>
@@ -749,10 +749,11 @@ class Maps extends React.Component {
                             
                         </tbody>
                     </table>
+
                     
-                    <button onClick={this.centreToMap} id="centreToMap" className="fieldsTableBtn"><i className="fa-solid fa-location-crosshairs"></i></button>
+                    <button onClick={this.centreToMap} id="centreToMap" className={`fieldsTableBtn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}><i className="fa-solid fa-location-crosshairs"></i></button>
                     {this.props.user.role === 'farmer' || this.props.user.role === 'field manager' ? null :
-                        <button onClick={this.showFieldForm} id="addNewField" className="fieldsTableBtn"> <i className="fa-solid fa-plus"></i> Add Field</button>
+                        <button onClick={this.showFieldForm} id="addNewField" className={`fieldsTableBtn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}> <i className="fa-solid fa-plus"></i> Add Field</button>
                     }
 
                 </div>

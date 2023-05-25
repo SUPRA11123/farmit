@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 
 class Modal extends React.Component {
 
@@ -10,7 +9,6 @@ class Modal extends React.Component {
 
   getSensorData() {
     console.log("Getting sensor data");
-
 
     fetch('/api/dashboards/uid/e83c5363-5c9e-4e1c-87ff-572530c7f0bd', {
       method: 'GET',

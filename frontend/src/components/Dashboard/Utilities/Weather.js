@@ -6,69 +6,69 @@ class Weather extends React.Component {
     constructor(props) {
         super(props);
         this.setForecast = this.setForecast.bind(this);
+        this.handleChange = this.handleChange.bind(this);
         this.state = {
             day: 0,
             forecastData: [],
-            forecastLabels: []
+            forecastLabels: [],
+            statSelector: 'temperature'
           };
         this.myChart = null;
     }
 
     async populateWeatherForecast(weatherForecast) {
-        let dailyForecasts = [];
-        const today = new Date();
-      
-        for (let i = 0; i < weatherForecast.list.length; i++) {
-          const day = new Date(
-            weatherForecast.list[i].dt_txt.slice(0, 4),
-            weatherForecast.list[i].dt_txt.slice(5, 7) - 1,
-            weatherForecast.list[i].dt_txt.slice(8, 10)
-          );
-      
-          const dayIndex = Math.floor((day - today) / (24 * 60 * 60 * 1000));
-      
-          if (!dailyForecasts[dayIndex]) {
-            dailyForecasts[dayIndex] = {
-              temperature: [],
-              labels: []
-            };
-          }
-      
-          dailyForecasts[dayIndex].temperature.push(weatherForecast.list[i].main.temp);
-          dailyForecasts[dayIndex].labels.push(this.getLabels(day) + ' @' + weatherForecast.list[i].dt_txt.slice(10, 16));
-        }
-      
-        const forecastData = dailyForecasts.map(day => day.temperature);
-        const forecastLabelsData = dailyForecasts.map(day => day.labels);
-      
-        this.setState({
-          forecastData: forecastData,
-          forecastLabels: forecastLabelsData
-        }, () => {
-          this.updateChart();
+      const dailyForecasts = [];
+      const today = new Date();
+    
+      for (let i = 0; i < 5; i++) {
+        const forecastDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + i);
+    
+        const forecastData = weatherForecast.list.filter(item => {
+          const itemDate = new Date(item.dt_txt);
+          return itemDate.getDate() === forecastDate.getDate() &&
+                 itemDate.getMonth() === forecastDate.getMonth() &&
+                 itemDate.getFullYear() === forecastDate.getFullYear();
+        });
+    
+        dailyForecasts.push({
+          temperature: forecastData.map(item => item.main.temp),
+          humidity: forecastData.map(item => item.main.humidity),
+          labels: forecastData.map(item => this.getLabels(new Date(item.dt_txt)) + ' @ ' + item.dt_txt.slice(11, 16))
         });
       }
+    
+      const forecastData = dailyForecasts.map(day => day[this.state.statSelector]);
+      const forecastLabelsData = dailyForecasts.map(day => day.labels);
+    
+      this.setState({
+        forecastData: forecastData,
+        forecastLabels: forecastLabelsData
+      }, () => {
+        this.updateChart();
+        console.log(forecastData);
+      });
+    }
+    
       
       
       updateChart() {
 
         const forecastData = this.state.forecastData;
-        const forecastLabels = this.state.forecastLabels;
-      
+        const forecastLabels = this.state.forecastLabels;      
         const ctx = document.getElementById('myChart').getContext('2d');
       
         if (this.myChart) {
-          this.myChart.destroy(); // Destroy the existing chart instance before creating a new one
+          this.myChart.destroy();
         }
       
         this.myChart = new Chart(ctx, {
           type: 'line',
           data: {
-            labels: forecastLabels[this.state.day], // Use labels based on the selected day
+            labels: forecastLabels[this.state.day],
             datasets: [{
               label: 'Temperature',
               gridLines: 'false',
-              data: forecastData[this.state.day], // Use data based on the selected day
+              data: forecastData[this.state.day],
               borderColor: '#0ba837',
               tension: 0.4,
               backgroundColor: '#BAECB8',
@@ -88,6 +88,8 @@ class Weather extends React.Component {
                 grid: {
                   display: true,
                 },
+                suggestedMin: 0, 
+                suggestedMax: 40,
               },
               x: {
                 grid: {
@@ -103,6 +105,7 @@ class Weather extends React.Component {
 
     componentDidMount() {
         this.populateWeatherForecast(this.props.weatherForecast);
+        console.log(this.props.weatherForecast);
     }
 
     convertToKM(speed){
@@ -151,6 +154,7 @@ class Weather extends React.Component {
     }
 
       setForecast(x) {
+
         const currentActiveBtn = document.querySelector('.daySelectorActive');
         if (currentActiveBtn) {
           currentActiveBtn.classList.remove('daySelectorActive');
@@ -169,8 +173,17 @@ class Weather extends React.Component {
         );
       }
       
-
-    
+      handleChange(event) {
+        const selectedValue = event.target.value;
+        this.setState(
+          {
+            statSelector: selectedValue
+          },
+          () => {
+            this.populateWeatherForecast(this.props.weatherForecast);
+          }
+        );
+      }
 
     render() {
 
@@ -179,7 +192,7 @@ class Weather extends React.Component {
 
         return (
             <>
-            <div className="weatherCityContainer">          
+            <div id="weatherCityContainer" className={`weatherCityContainer ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>          
                 <h2>{(this.props.weatherData.main.temp).toFixed(0)}°C</h2>
                 <ul>
                     <li>{weekday[today.getDay()]} @ {this.displayTime()}</li>
@@ -188,22 +201,22 @@ class Weather extends React.Component {
             </div>
 
             <div className="weatheDataContainer">
-                <div style={{marginLeft: 0}}>
+                <div style={{marginLeft: 0}} className={`${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
                     <h2>Pressure</h2>
                     <p>{this.props.weatherData.main.pressure} hpa</p>
                 </div>
             
-                <div>
+                <div className={`${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
                     <h2>Humidity</h2>
                     <p>{this.props.weatherData.main.humidity}%</p>
                 </div>
      
-                <div>
+                <div className={`${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
                     <h2>Wind</h2>
                     <p>{this.convertToKM(this.props.weatherData.wind.speed)} km/h</p>
                 </div>
 
-                <div id="sunsetSunrise">
+                <div id="sunsetSunrise" className={`${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
                     <h2>Sunrise and Sunset</h2>
                     {this.getSunriseSunset()}
                 </div>
@@ -213,20 +226,22 @@ class Weather extends React.Component {
     
             
             <div className="lineChartContainer">
-                <ul className="daySelector">
-                    <h2>
-                        Display:
-                        <select name="statSelector" id="statSelector">
-                        <option value="temperature">temperature</option>
-                        <option value="humidity">humidity</option>
-                        </select>
-                    </h2>
-                    <li><button onClick={() => this.setForecast(0)} className="daySelectorActive" id="dayBtn0">Tomorrow: <span>{Math.max.apply(Math, this.state.forecastData[0]).toFixed(0)}°C</span></button></li>
-                    <li><button onClick={() => this.setForecast(1)} id="dayBtn1">{this.getDay(2)}: <span>{Math.max.apply(Math, this.state.forecastData[1]).toFixed(0)}°C</span></button></li>
-                    <li><button onClick={() => this.setForecast(2)} id="dayBtn2">{this.getDay(3)}: <span>{Math.max.apply(Math, this.state.forecastData[2]).toFixed(0)}°C</span></button></li>
-                    <li><button onClick={() => this.setForecast(3)} id="dayBtn3">{this.getDay(4)}: <span>{Math.max.apply(Math, this.state.forecastData[3]).toFixed(0)}°C</span></button></li>
-                </ul>
-                <canvas id="myChart" height='25' width='100px'></canvas>
+        
+              <select name="statSelector" id="statSelector" onChange={this.handleChange}>
+                <option value="temperature">Temperature</option>
+                <option value="humidity">Humidity</option>
+              </select>   
+
+              <canvas id="myChart" height='30%' width='100px'></canvas>
+
+              <ul className={`daySelector ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
+                  <li><button onClick={() => this.setForecast(0)} className="daySelectorActive" id="dayBtn0">Today</button></li>
+                  <li><button onClick={() => this.setForecast(1)} id="dayBtn1">{this.getDay(1)}</button></li>
+                  <li><button onClick={() => this.setForecast(2)} id="dayBtn2">{this.getDay(2)}</button></li>
+                  <li><button onClick={() => this.setForecast(3)} id="dayBtn3">{this.getDay(3)}</button></li>
+                  <li><button onClick={() => this.setForecast(4)} id="dayBtn4">{this.getDay(4)}</button></li>
+              </ul>
+
             </div>
            
     
