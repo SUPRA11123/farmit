@@ -8,6 +8,7 @@ class Field(models.Model):
     crop_type = models.CharField(max_length=50)
     type = models.CharField(max_length=50)
     coordinates = models.CharField(max_length=500)
+    area = models.FloatField()
     farm = models.ForeignKey(Farm, on_delete=models.CASCADE, related_name='fields')
     # add manager to manage fields
     manager = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='manager', blank=True, null=True)
