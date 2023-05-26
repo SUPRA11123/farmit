@@ -956,7 +956,7 @@ class Maps extends React.Component {
                             <tr>
                                 <td colspan="3" >
                                     {this.props.user.role === 'farmer' || this.props.user.role === 'field manager' ? null :
-                                        <button  onClick={this.showFieldForm} id="addNewField" className={`fieldsTableBtn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}> <i className="fa-solid fa-plus"></i> Add Field</button>                   
+                                        <button  onClick={this.showFieldForm} id="addNewField" className={`fieldsTableBtn`}> <i className="fa-solid fa-plus"></i> Add Field</button>                   
                                     }
                                 </td>
                             </tr>
