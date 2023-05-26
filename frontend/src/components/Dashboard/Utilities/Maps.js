@@ -25,9 +25,6 @@ class Maps extends React.Component {
 
     async componentDidMount() {
 
-
-
-
         await this.sensorLocationQuery();
 
         // check if any field already exists
@@ -454,11 +451,8 @@ class Maps extends React.Component {
                 fillColor: "#0ba837",
                 fillOpacity: 0.35,
             }
-
-
-
         });
-
+       
         drawingManager.setDrawingMode(null);
 
         drawingManager.setOptions({
@@ -484,7 +478,7 @@ class Maps extends React.Component {
 
         window.google.maps.event.addListener(drawingManager, 'polygoncomplete', (polygon) => {
 
-            document.getElementById("addNewField").addEventListener("click", () => {
+            document.getElementById("cancelNewField").addEventListener("click", () => {
 
                 popup.remove();
 
@@ -537,7 +531,8 @@ class Maps extends React.Component {
                 popup.remove();
                 document.getElementById("createField").classList.remove("hidden");
 
-
+                const area = window.google.maps.geometry.spherical.computeArea(polygon.getPath());
+                console.log('Polygon Area:', area);
 
                 const formSubmitPromise = new Promise((resolve, reject) => {
                     document.getElementById("createField").addEventListener("submit", (event) => {
@@ -550,7 +545,7 @@ class Maps extends React.Component {
                     });
                 });
 
-                document.getElementById("addNewField").addEventListener("click", () => {
+                document.getElementById("cancelNewField").addEventListener("click", () => {
                     cancelFormSubmitPromise = true;
                 });
 
@@ -646,6 +641,7 @@ class Maps extends React.Component {
 
 
             cancelButton.addEventListener('click', () => {
+                document.getElementById("addFieldsHeader").classList.remove("hidden");
                 polygon.setMap(null);
                 drawingManager.setOptions({
                     drawingControl: true,
@@ -665,7 +661,7 @@ class Maps extends React.Component {
         // add event listener to drawing manager rectangle
         window.google.maps.event.addListener(drawingManager, 'rectanglecomplete', (rectangle) => {
 
-            document.getElementById("addNewField").addEventListener("click", () => {
+            document.getElementById("cancelNewField").addEventListener("click", () => {
 
                 popup.remove();
 
@@ -680,7 +676,6 @@ class Maps extends React.Component {
                 }
 
             });
-
 
             drawingManager.setOptions({
                 drawingControl: false,
@@ -732,7 +727,7 @@ class Maps extends React.Component {
                     });
                 });
 
-                document.getElementById("addNewField").addEventListener("click", () => {
+                document.getElementById("cancelNewField").addEventListener("click", () => {
                     cancelFormSubmitPromise = true;
                 });
 
@@ -796,6 +791,7 @@ class Maps extends React.Component {
                         cell2.innerHTML = "<span>conditions</span>";
                         cell3.innerHTML = "<span>" + cropType + "</span>";
 
+
                         rectangle.isComplete = true;
 
                         row.addEventListener("click", () => {
@@ -822,8 +818,6 @@ class Maps extends React.Component {
                     document.getElementById("cropType").value = "";
                 });
             });
-
-
 
             cancelButton.addEventListener('click', () => {
                 document.getElementById("addFieldsHeader").classList.remove("hidden");
@@ -852,7 +846,7 @@ class Maps extends React.Component {
         event.preventDefault();
         document.getElementById("createField").classList.add("hidden");
         document.getElementById("fieldTable").classList.remove("hidden");
-        document.getElementById("addNewField").innerHTML = "<i class='fa-solid fa-plus'></i> Add Field";
+        document.getElementById("cancelNewField").classList.add("hidden");
         document.getElementById("addFieldsHeader").classList.add("hidden");
     }
 
@@ -865,17 +859,15 @@ class Maps extends React.Component {
 
     showFieldForm() {
 
-        var createFieldBTN = document.getElementById("addNewField");
-
         document.getElementById("fieldTable").classList.toggle("hidden");
 
         // check if table is hidden
         if (document.getElementById("fieldTable").classList.contains("hidden")) {
-            createFieldBTN.innerHTML = "<i class='fa-solid fa-xmark'></i> Cancel";
+            document.getElementById('cancelNewField').classList.remove('hidden');
             document.getElementById("addFieldsHeader").classList.remove("hidden");
 
         } else {
-            createFieldBTN.innerHTML = "<i class='fa-solid fa-plus'></i> Add Field";
+            document.getElementById('cancelNewField').classList.add('hidden');
             document.getElementById("addFieldsHeader").classList.add("hidden");
             document.getElementById("createField").classList.add("hidden");
         }
@@ -927,7 +919,8 @@ class Maps extends React.Component {
 
         return (
             <>
-
+                
+                <button onClick={this.centreToMap} id="centreToMap" className={`fieldsTableBtn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}><i className="fa-solid fa-location-crosshairs"></i></button> 
                 <div id="map">
                     {modalOpen && (
                         <Modal setOpenModal={(isOpen) => this.setState({ modalOpen: isOpen })}
@@ -938,6 +931,7 @@ class Maps extends React.Component {
                 <div className="fieldsTableConatiner">
 
                     <h2 className="hidden" id="addFieldsHeader">Use the rectangle/polygon tool to draw the field onto map</h2>
+                    <button  onClick={this.showFieldForm} id="cancelNewField" className={`fieldsTableBtn hidden ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}><i class='fa-solid fa-xmark'></i> Cancel</button>                   
 
                     <form id="createField" className="hidden" onSubmit={this.createField}>
                         <label htmlFor="name">Field Name</label>
@@ -959,11 +953,17 @@ class Maps extends React.Component {
                         </thead>
                         <tbody>
 
+                            <tr>
+                                <td colspan="3" >
+                                    {this.props.user.role === 'farmer' || this.props.user.role === 'field manager' ? null :
+                                        <button  onClick={this.showFieldForm} id="addNewField" className={`fieldsTableBtn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}> <i className="fa-solid fa-plus"></i> Add Field</button>                   
+                                    }
+                                </td>
+                            </tr>
+
                         </tbody>
                     </table>
-
-                    <button onClick={this.centreToMap} id="centreToMap" className={`fieldsTableBtn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}><i className="fa-solid fa-location-crosshairs"></i></button>                    {this.props.user.role === 'farmer' || this.props.user.role === 'field manager' ? null :
-                    <button onClick={this.showFieldForm} id="addNewField" className={`fieldsTableBtn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}> <i className="fa-solid fa-plus"></i> Add Field</button>                    }
+                   
 
                 </div>
 

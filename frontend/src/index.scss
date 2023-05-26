@@ -360,6 +360,23 @@ body {
     }
 }
 
+#centreToMap {
+    position: absolute;
+    top: 2.5%;
+    font-size: 2.5vh;
+    color: $green;
+    background-color: $grey;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+#centreToMap:hover {
+    background-color: $green;
+    color: white;
+}
+
 .alertContainer {
     position: absolute;
     z-index: 99;
@@ -665,35 +682,36 @@ body {
     font-family: $font1;
     border-radius: 15px;
     border: 2px solid #D9D9D9;
+    overflow: scroll;
 
     #createField {
         top: 0;
-        left: 5%;
-        width: 95%;
-        height: 50%;
+        width: 100%;
+        height: 100%;
         background-color: $grey;
         border-radius: 25px;
         display: inline-flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
+        font-family: $font1;
 
 
         label {
-            font-size: 2vh;
+            font-size: 2.5vh;
             text-align: left;
             
         }
 
         input {
             margin: 5px;
-            font-size: 2vh;
+            font-size: 2.5vh;
         }
 
     }
 
     #loginInBtn {
-        margin: 2.5% 0 0 0;
+        margin: 5% 0 0 0;
         border: 1px solid $darkGrey;
         background-color: white;
         border-radius: 5px;
@@ -708,82 +726,92 @@ body {
     }
 
     .fieldsTableBtn {
-        border: 1px solid $darkGrey;
-        background-color: white;
+        border: none;
+        background-color: transparent;
         border-radius: 5px;
         font-size: 2.5vh;
-        width: 95%;
-        margin-top: 2.5%;
-        margin-left: 5%;
-        position: absolute;
-        width: 70%;
-        z-index: 1;
+        bottom: 2.5%;
+        width: 100%;
+        padding: 2.5% 0 2.5% 0;
+        
     }
 
     .fieldsTableBtn:hover {
         cursor: pointer;
-        background-color: $green;
-        color: white;
+        background-color: $lightBlue;
     }
 
     .fieldsTable tbody tr:hover {
-        background-color: #D0FFBC; /* Change this to the desired hover color */
-      }
+        background-color: $lightBlue; /* Change this to the desired hover color */
+    }
+
+    #cancelNewField {
+        position: absolute;
+        height: 10%;
+        bottom: 0;
+        z-index: 69;
+    }
 
     #addFieldsHeader {
         position: absolute;
-        height: 15%;
-        font-size: 2vh;
+        font-size: 2.5vh;
         z-index: 0;
-        color: $darkGrey;
-        width: 50%;
-        left: 25%;
+        color: black;
+        height: 15%;
+        width: 90%;
+        left: 5%;
+        top: 15%;
         text-align: center;
-        width: 50%;
-        left: 25%;
     }
 }
 
 .fieldsTable {
     font-family: $font1;
     width: 100%;
-    height: 90%;
     background-color: #F4F4F4;
     border-collapse: collapse;
     position: relative;
     top: 0;
-    border-radius: 15px;
-   
-
+    border-radius: 15px 15px 0 0;
+  
     th h2 {
-        position: relative;
-        text-align: left;
-        border-radius: 25px;
-        margin: 15%;
-        font-size: 2vh;
-        font-weight: bold;
+      position: relative;
+      text-align: left;
+      border-radius: 25px;
+      margin: 15%;
+      font-size: 2vh;
+      font-weight: bold;
     }
-
+  
     thead tr {
-        border-radius: 25px;
+      border-radius: 25px;
+      border-bottom: 2px solid #D9D9D9;
     }
-    
-
+  
     tbody tr:nth-child(odd) {
-        background-color: white;
+      background-color: white;
     }
+  
+  
+    tbody tr { line-height: 50px; }
 
+  
     tbody tr td span {
-        margin-left: 15%;
-        font-size: 2vh;
-    }
+      margin-left: 15%;
+      font-size: 2vh;
 
-      tbody tr:hover {
-        cursor: pointer;
-        background-color: $lightBlue;
+      i {
+        margin-left: 5%;
       }
-    
-}
+
+    }
+  
+    tbody tr:hover {
+      cursor: pointer;
+      background-color: $lightBlue;
+    }
+  }
+  
 
 #createField {
     position: absolute;
@@ -791,6 +819,7 @@ body {
     height: 70%;
     top: 25%;
     left: 0;
+   
 }
 
 #map{
@@ -804,9 +833,9 @@ body {
  #add{
  
     position: absolute;
-    top: 5%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    width: 100%;
+    text-align: center;
+
  }
 
  #div{

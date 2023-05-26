@@ -33,6 +33,7 @@ class Modal extends React.Component {
   }
 
   fetchData() {
+
     // Create a new InfluxDB instance
     const influxDB = new InfluxDB({
       url: "https://eu-central-1-1.aws.cloud2.influxdata.com",
