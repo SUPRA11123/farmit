@@ -82,7 +82,7 @@ class Maps extends React.Component {
                 cell1.innerHTML = "<span>" + field.name + "</span>";
 
                 var cell2 = row.insertCell(1);
-                cell2.innerHTML = "<span>Conditions</span>";
+                cell2.innerHTML = "<span>" + field.area + "</span>";
 
                 var cell3 = row.insertCell(2);
                 cell3.innerHTML = "<span>" + field.crop_type + "</span>";
@@ -94,9 +94,6 @@ class Maps extends React.Component {
 
                     const rectangleBounds = coordinates.map(parseFloat);
                     console.log(rectangleBounds);
-
-                    // iterate through every sensor in sensors state
-                    
 
 
                     const rectangle = new window.google.maps.Rectangle({
@@ -116,32 +113,33 @@ class Maps extends React.Component {
                     });
 
                     this.state.sensors.forEach((sensor) => {
+
                         // check if the sensor is inside the rectangle
                         if (this.isPointInsideRectangle(sensor, rectangleBounds)) {
 
 
-                        // add a little point in the rectangle in the point position
-                        const marker = new window.google.maps.Marker({
-                            position: { lat: sensor.latitude, lng: sensor.longitude },
-                            map: map,
-                            // make a dot
-                            icon: {
-                                path: window.google.maps.SymbolPath.CIRCLE,
-                                scale: 5,
-                                fillColor: "#000000",
-                                fillOpacity: 1,
-                                strokeWeight: 0,
-                                clickable: true,
-                                // add a label to the dot
-                            },
-                        });
+                            // add a little point in the rectangle in the point position
+                            const marker = new window.google.maps.Marker({
+                                position: { lat: sensor.latitude, lng: sensor.longitude },
+                                map: map,
+                                // make a dot
+                                icon: {
+                                    path: window.google.maps.SymbolPath.CIRCLE,
+                                    scale: 5,
+                                    fillColor: "#000000",
+                                    fillOpacity: 1,
+                                    strokeWeight: 0,
+                                    clickable: true,
+                                    // add a label to the dot
+                                },
+                            });
 
-                        // on click, open the modal
-                        marker.addListener("click", () => {
-                            this.showData(sensor);
-                        });
-                    }
-                });
+                            // on click, open the modal
+                            marker.addListener("click", () => {
+                                this.showData(sensor);
+                            });
+                        }
+                    });
 
 
 
@@ -155,9 +153,9 @@ class Maps extends React.Component {
 
                     rectangle.addListener("click", (event) => {
                         this.showClickedCoordinates(event.latLng);
-                      });
+                    });
 
-                   
+
 
 
 
@@ -229,33 +227,32 @@ class Maps extends React.Component {
 
                     this.state.sensors.forEach((sensor) => {
                         // check if the sensor is inside the rectangle
-                        console.log("Sensor:", sensor);
                         if (this.isPointInsidePolygon(sensor, polygonCoordinates)) {
 
                             console.log("Sensor inside polygon");
 
 
-                        // add a little point in the rectangle in the point position
-                        const marker = new window.google.maps.Marker({
-                            position: { lat: sensor.latitude, lng: sensor.longitude },
-                            map: map,
-                            // make a dot
-                            icon: {
-                                path: window.google.maps.SymbolPath.CIRCLE,
-                                scale: 5,
-                                fillColor: "#000000",
-                                fillOpacity: 1,
-                                strokeWeight: 0,
-                                clickable: true,
-                            },
-                        });
+                            // add a little point in the rectangle in the point position
+                            const marker = new window.google.maps.Marker({
+                                position: { lat: sensor.latitude, lng: sensor.longitude },
+                                map: map,
+                                // make a dot
+                                icon: {
+                                    path: window.google.maps.SymbolPath.CIRCLE,
+                                    scale: 5,
+                                    fillColor: "#000000",
+                                    fillOpacity: 1,
+                                    strokeWeight: 0,
+                                    clickable: true,
+                                },
+                            });
 
-                        // on click, open the modal
-                        marker.addListener("click", () => {
-                            this.showData(sensor);
-                        });
-                    }
-                });
+                            // on click, open the modal
+                            marker.addListener("click", () => {
+                                this.showData(sensor);
+                            });
+                        }
+                    });
 
 
                     polygon.addListener("mouseover", () => {
@@ -268,7 +265,7 @@ class Maps extends React.Component {
 
                     polygon.addListener("click", (event) => {
                         this.showClickedCoordinates(event.latLng);
-                      });
+                    });
 
 
                     const bounds = new window.google.maps.LatLngBounds();
@@ -295,7 +292,7 @@ class Maps extends React.Component {
         return new Promise((resolve, reject) => {
             const influxDB = new InfluxDB({
                 url: "https://eu-central-1-1.aws.cloud2.influxdata.com",
-                token: "m6MJWTKk2p2bCoq1hqmsyt44relL7JCGpu-NbPh5iMPDODLf9ALAeXdbfY77iXr3T-eY7GkbU1BKhf6hMzT4eA==",
+                token: "WWs7Muam9CP-Y65yjsLgz9VVuzS9mfuwWmlFgJJjiLTKjPUdZGXdTpfQtG0ULZ5a2iy8z54rfbS5nPtUb6qWKg==",
             });
 
             const queryApi = influxDB.getQueryApi("FarmIT");
@@ -313,7 +310,7 @@ class Maps extends React.Component {
               ) and
               exists r._value
             )
-      |> last()
+            |> last()
           `;
 
             const sensors = {}; // Object to store sensor data
@@ -324,16 +321,13 @@ class Maps extends React.Component {
 
                     const { _field, _value, topic } = sensorData;
 
-                    // Extract the sensor ID from the topic. its the 4th part of the topic
+                    // Extract the sensor ID from the topic. It's the 4th part of the topic
                     const sensorId = topic.split("/")[3];
 
-                    console.log(sensorId);
-
-
                     if (_field === "locations_user_latitude") {
-                        sensors[sensorId] = { ...sensors[sensorId], latitude: _value };
+                        sensors[sensorId] = { ...sensors[sensorId], latitude: _value, sensorId };
                     } else if (_field === "locations_user_longitude") {
-                        sensors[sensorId] = { ...sensors[sensorId], longitude: _value };
+                        sensors[sensorId] = { ...sensors[sensorId], longitude: _value, sensorId };
                     }
                 },
                 error: (error) => {
@@ -343,9 +337,9 @@ class Maps extends React.Component {
                 },
                 complete: () => {
                     console.log("\nFinished SUCCESS");
-                   // set the sensor id and the location in the state
-                   console.log(sensors);
-                    this.setState({ sensors: Object.values(sensors) });
+                    // Set the sensor data in the state
+                    const sensorArray = Object.values(sensors);
+                    this.setState({ sensors: sensorArray });
                     resolve();
                 },
             });
@@ -531,7 +525,8 @@ class Maps extends React.Component {
                 popup.remove();
                 document.getElementById("createField").classList.remove("hidden");
 
-                const area = window.google.maps.geometry.spherical.computeArea(polygon.getPath());
+                const area = window.google.maps.geometry.spherical.computeArea(polygon.getPath()).toFixed(2);
+
                 console.log('Polygon Area:', area);
 
                 const formSubmitPromise = new Promise((resolve, reject) => {
@@ -583,6 +578,7 @@ class Maps extends React.Component {
                         crop_type: cropType,
                         type: "polygon",
                         coordinates: coordinates,
+                        area: area,
                         farm: this.props.farmDetails.id,
                     }).then((res) => {
                         var table = document.getElementById("fieldTable").getElementsByTagName('tbody')[0];
@@ -595,7 +591,7 @@ class Maps extends React.Component {
 
 
                         cell1.innerHTML = "<span>" + fieldName + "</span>";
-                        cell2.innerHTML = "<span>conditions</span>";
+                        cell2.innerHTML = "<span>" + area + "</span>";
                         cell3.innerHTML = "<span>" + cropType + "</span>";
 
                         polygon.isComplete = true;
@@ -716,6 +712,11 @@ class Maps extends React.Component {
                 document.getElementById("createField").classList.remove("hidden");
 
 
+                // get the area of the rectangle
+                const area = window.google.maps.geometry.spherical.computeArea(rectangle.getBounds()).toFixed(2);
+
+                console.log('Rectangle Area:', area);
+
                 const formSubmitPromise = new Promise((resolve, reject) => {
                     document.getElementById("createField").addEventListener("submit", (event) => {
                         event.preventDefault();
@@ -775,6 +776,7 @@ class Maps extends React.Component {
                         crop_type: cropType,
                         type: "rectangle",
                         coordinates: coordinatesString,
+                        area: area,
                         farm: this.props.farmDetails.id,
                     }).then((res) => {
                         var table = document.getElementById("fieldTable").getElementsByTagName('tbody')[0];
@@ -788,7 +790,7 @@ class Maps extends React.Component {
 
 
                         cell1.innerHTML = "<span>" + fieldName + "</span>";
-                        cell2.innerHTML = "<span>conditions</span>";
+                        cell2.innerHTML = "<span>" + area + "</span>";
                         cell3.innerHTML = "<span>" + cropType + "</span>";
 
 
@@ -947,7 +949,7 @@ class Maps extends React.Component {
                         <thead>
                             <tr>
                                 <th><h2>Fields</h2></th>
-                                <th><h2>Condition</h2></th>
+                                <th><h2>Land Area (m2)</h2></th>
                                 <th><h2>Crop</h2></th>
                             </tr>
                         </thead>
