@@ -18,6 +18,7 @@ from django.contrib import admin
 from user import views
 from farm import views as farm_views
 from field import views as field_views
+from task import views as task_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,4 +35,5 @@ urlpatterns = [
     path('getfarmbyfieldmanager/<int:id>/', farm_views.getFarmByFieldManager),
     path('getfieldsbymanager/<int:id>/', field_views.getFieldsByManager),
     path('getteam/<int:id>/', views.getTeam),
+    path('createtask/', task_views.create_task),
 ]

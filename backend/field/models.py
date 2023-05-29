@@ -15,3 +15,6 @@ class Field(models.Model):
 
     class Meta:
         unique_together = ('name', 'farm')
+
+    def __str__(self):
+        return self.name

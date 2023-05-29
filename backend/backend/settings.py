@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'user',
     'farm',
     'field',
+    'task',
     'rest_framework',
     'corsheaders'
 ]
