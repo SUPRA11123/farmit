@@ -8,7 +8,7 @@ class User(models.Model):
     name = models.CharField(max_length=50)
     email = models.EmailField(max_length=50, unique=True)
     password = models.CharField(max_length=50)
-    role = models.CharField(max_length=20)
+    role = models.CharField(max_length=20, default='owner')
         # allow farm to have multiple users with role 'farmer' 
 
 

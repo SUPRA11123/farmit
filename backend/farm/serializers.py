@@ -5,4 +5,4 @@ from .models import Farm
 class FarmSerializer(serializers.ModelSerializer):
     class Meta:
         model = Farm
-        fields = ('id', 'name', 'country', 'latitude', 'longitude', 'owner', 'farmers')
+        fields = ('id', 'name', 'country', 'latitude', 'longitude', 'owner', 'farmers', 'fieldmanagers')

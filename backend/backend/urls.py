@@ -33,4 +33,5 @@ urlpatterns = [
     path('addfieldmanager/<int:id>/', field_views.add_field_manager),
     path('getfarmbyfieldmanager/<int:id>/', farm_views.getFarmByFieldManager),
     path('getfieldsbymanager/<int:id>/', field_views.getFieldsByManager),
+    path('getteam/<int:id>/', views.getTeam),
 ]
