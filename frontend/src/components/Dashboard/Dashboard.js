@@ -194,9 +194,10 @@ class Dashboard extends React.Component {
                     <nav id='navList'>
                         <ul>
                             <li onClick={() => this.setState({currentDashboardScreen: "dashboard"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "dashboard" ? "navActive": ""}><p>Dashboard</p><i className="fa-solid fa-table-cells-large"></i></li>
-                            <li onClick={() => this.setState({currentDashboardScreen: "maps"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "maps" ? "navActive": ""}><p>My Fields</p><i className="fa-regular fa-map"></i></li>
+                            <li onClick={() => this.setState({currentDashboardScreen: "maps"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "maps" ? "navActive": ""}><p>Fields</p><i className="fa-regular fa-map"></i></li>
+                            <li onClick={() => this.setState({currentDashboardScreen: "tasks"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "tasks" ? "navActive": ""}><p>Tasks</p><i className="fa-solid fa-bullseye"></i></li>
                             {this.state.user.role === 'owner' && (                           
-                            <li onClick={() => this.setState({currentDashboardScreen: "team"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "team" ? "navActive": ""}><p>Tasks</p><i className="fa-solid fa-people-group"></i></li>
+                            <li onClick={() => this.setState({currentDashboardScreen: "team"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "team" ? "navActive": ""}><p>Team</p><i className="fa-solid fa-people-group"></i></li>
                             )}
                             <li onClick={() => this.setState({currentDashboardScreen: "weather"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "weather" ? "navActive": ""}><p>Weather</p><i className="fa-solid fa-cloud-sun"></i></li>
                             <li onClick={() => this.setState({currentDashboardScreen: "predictions"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "predictions" ? "navActive": ""}><p>Predictions</p><i className="fa-solid fa-bullhorn"></i></li>

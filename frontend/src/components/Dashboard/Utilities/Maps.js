@@ -82,10 +82,13 @@ class Maps extends React.Component {
                 cell1.innerHTML = "<span>" + field.name + "</span>";
 
                 var cell2 = row.insertCell(1);
-                cell2.innerHTML = "<span>" + field.area + "</span>";
+                cell2.innerHTML = "<span>" + field.area + " m<sup>2 </span>";
 
                 var cell3 = row.insertCell(2);
                 cell3.innerHTML = "<span>" + field.crop_type + "</span>";
+
+                var cell4 = row.insertCell(3);
+                cell4.innerHTML = '<i class="fa-solid fa-ellipsis-vertical"></i>';
 
 
                 if (field.type === "rectangle") {
@@ -154,11 +157,6 @@ class Maps extends React.Component {
                     rectangle.addListener("click", (event) => {
                         this.showClickedCoordinates(event.latLng);
                     });
-
-
-
-
-
 
                     const lat = (parseFloat(coordinates[0]) + parseFloat(coordinates[2])) / 2;
                     const lng = (parseFloat(coordinates[1]) + parseFloat(coordinates[3])) / 2;
@@ -616,9 +614,6 @@ class Maps extends React.Component {
                         polygon.setMap(null);
                     });
 
-
-
-
                     polygon.addListener("mouseover", () => {
                         this.highlightRow(fieldName);
                     });
@@ -626,8 +621,6 @@ class Maps extends React.Component {
                     polygon.addListener("mouseout", () => {
                         this.unhighlightRow(fieldName);
                     });
-
-
 
                     document.getElementById("fieldName").value = "";
                     document.getElementById("cropType").value = "";
@@ -910,11 +903,6 @@ class Maps extends React.Component {
         }
     }
 
-
-
-
-
-
     render() {
 
         const { modalOpen } = this.state;
@@ -949,14 +937,14 @@ class Maps extends React.Component {
                         <thead>
                             <tr>
                                 <th><h2>Field</h2></th>
-                                <th><h2>Land Area (m2)</h2></th>
+                                <th><h2>Land Area</h2></th>
                                 <th><h2>Crop</h2></th>
                             </tr>
                         </thead>
                         <tbody>
 
                             <tr>
-                                <td colspan="3" >
+                                <td colspan="4" >
                                     {this.props.user.role === 'farmer' || this.props.user.role === 'field manager' ? null :
                                         <button  onClick={this.showFieldForm} id="addNewField" className={`fieldsTableBtn`}> <i className="fa-solid fa-plus"></i> Add Field</button>                   
                                     }
