@@ -3,7 +3,7 @@ import React from "react";
 class Tasks extends React.Component {
 
     constructor(props) {
-        
+
         super(props);
 
         this.state = {
@@ -22,6 +22,12 @@ class Tasks extends React.Component {
         document.getElementById("addTask").reset();
         document.getElementById("taskBoard").classList.add('hidden');
         document.getElementById("addTask").classList.remove('hidden');
+    }
+
+    cancelTask() {
+        document.getElementById("addTask").reset();
+        document.getElementById("taskBoard").classList.remove('hidden');
+        document.getElementById("addTask").classList.add('hidden');
     }
 
     render() {

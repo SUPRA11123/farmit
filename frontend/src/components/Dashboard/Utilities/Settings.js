@@ -64,23 +64,12 @@ class Settings extends React.Component {
         return (
             <>
             <section id="settingsContainer" className={`settingsContainer ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
-                
-                <div className="myProfileContainer">
+               
                 <h2>My Profile</h2>
                 <hr></hr>
                 <p>Name: {this.props.user.name}</p>
                 <p>Farm: {this.props.farmDetails.name}</p>
                 <p>Email: {this.props.user.email}</p>
-                </div>
-
-                <div className="myProfileContainer">
-                <h2>My Farm</h2>
-                <hr></hr>
-                <p>Name: {this.props.user.name}</p>
-                <p>Farm: {this.props.farmDetails.name}</p>
-                <p>Email: {this.props.user.email}</p>
-                </div>
-          
 
                 <h2>General</h2>
                 <hr></hr>
