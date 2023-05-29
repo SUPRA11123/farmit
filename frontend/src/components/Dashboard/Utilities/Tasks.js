@@ -147,8 +147,8 @@ class Tasks extends React.Component {
                     <input type="text" id="task" name="task" />
 
                     <label htmlFor="taskAsignee">Assignee</label>
-                    <select id="taskAsignee" name="taskAsignee" className="form-control">
-                        <option value="" selected disabled>Select a team member</option>
+                    <select defaultValue="" id="taskAsignee" name="taskAsignee" className="form-control">
+                        <option value="" disabled>Select a team member</option>
                         {this.state.team.map(member => (
                            <option key={member.id} value={member.id}>{member.name}</option>
                         ))}
@@ -157,7 +157,7 @@ class Tasks extends React.Component {
                  
 
                     <label htmlFor="taskField">Field</label>
-                    <select id="fields" name="fields" className="form-control">
+                    <select defaultValue="" id="fields" name="fields" className="form-control">
                         <option value="" selected disabled>Select a field</option>
                         {this.state.fields.map(field => (
                             <option key={field.id} value={field.id}>{field.name}</option>
