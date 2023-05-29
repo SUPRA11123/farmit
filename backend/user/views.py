@@ -1,9 +1,13 @@
 from django.http import JsonResponse
+
 from .serializers import UserSerializer
 from .models import User
 from rest_framework.decorators import api_view
 from django.contrib.auth.hashers import check_password
 import jwt, datetime
+from farm.models import Farm
+
+
 
 @api_view(['POST'])
 def signup(request):
@@ -65,3 +69,19 @@ def getUserById(request, id):
         serializer = UserSerializer(user)
         return JsonResponse(serializer.data)
     return JsonResponse({'message': 'User not found'}, status=200)
+
+@api_view(['GET'])
+def getTeam(request, id):
+    # get all users of the farm
+    try:
+        farm = Farm.objects.get(id=id)
+        farmers = farm.farmers.all()
+        fieldManagers = farm.fieldmanagers.all()
+        users = farmers | fieldManagers
+        serializer = UserSerializer(users, many=True)
+        return JsonResponse(serializer.data, safe=False)
+    except Farm.DoesNotExist:
+        return JsonResponse({'message': 'Farm not found'}, status=400)
+
+
+

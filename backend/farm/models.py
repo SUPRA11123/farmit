@@ -9,7 +9,7 @@ class Farm(models.Model):
     longitude = models.FloatField()
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='farms')
     farmers = models.ManyToManyField(User, related_name='farmers', blank=True)
-
+    fieldmanagers= models.ManyToManyField(User, related_name='fieldmanagers', blank=True)
 
     def __str__(self):
         return self.name
