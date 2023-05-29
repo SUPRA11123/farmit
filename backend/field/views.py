@@ -44,6 +44,11 @@ def add_field_manager(request, id):
         print(user)
         field.manager = user
         field.save()
+
+        farm = field.farm
+        # add the field manager to the farm
+        farm.fieldmanagers.add(user)
+        farm.save()
         return JsonResponse({'message': 'Field manager added to the field successfully'}, status=200)
     
 @api_view(['GET'])
@@ -55,6 +60,17 @@ def getFieldsByManager(request, id):
         return JsonResponse(serializer.data, safe=False)
     except Field.DoesNotExist:
         return JsonResponse({'message': 'Field not found'}, status=400)
+
+@api_view(['GET'])
+def getFieldById(request, id):
+    # get field by id
+    try:
+        field = Field.objects.get(id=id)
+        serializer = FieldSerializer(field)
+        return JsonResponse(serializer.data, safe=False)
+    except Field.DoesNotExist:
+        return JsonResponse({'message': 'Field not found'}, status=400)
+    
 
     
     

@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from .models import Task
 from .serializers import TaskSerializer
 from rest_framework.decorators import api_view
+from farm.models import Farm
 
 
 @api_view(['GET'])
@@ -36,5 +37,22 @@ def delete_task(request, task_id):
     task = get_object_or_404(Task, id=task_id)
     task.delete()
     return JsonResponse({'message': 'Task deleted successfully'}, status=204)
+
+@api_view(['GET'])
+def get_tasks_by_farm(request, id):
+    farm = Farm.objects.get(id=id)
+    farmers = farm.farmers.all()
+    fieldmanagers = farm.fieldmanagers.all()
+    users = farmers | fieldmanagers
+    
+    # Get the tasks which have one of the users assigned as the farmer
+    tasks = Task.objects.filter(farmer__in=users)
+    serializer = TaskSerializer(tasks, many=True)
+    return JsonResponse(serializer.data, safe=False)
+
+ 
+ 
+
+
 
 
