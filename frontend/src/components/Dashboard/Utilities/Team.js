@@ -162,11 +162,14 @@ class Team extends React.Component {
                 <section id="taskBoard" className={`${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
 
                     <div className="taskColumn">
-                        <h2>To Do<button id="addNewTask" onClick={this.showAddTaskForm}><i class="fa-solid fa-plus"></i> add new task</button></h2>
+                        <h2>To Do<button id="addNewTask" onClick={this.showAddTaskForm}><i class="fa-solid fa-plus"></i></button></h2>
 
                         <div id='toDoTasksContainer' className="taskContainer">
                             <div className="taskCard">
-                                <h3>task</h3>
+                                <h3>Go to the shops</h3>
+                                <p>Pickup the banana</p>
+                                <span><i className="fa-regular fa-user"></i>Tiago Afonso</span>
+                                <i className="fa-solid fa-ellipsis-vertical taskSettings"></i>
                             </div>
                         </div>
                       

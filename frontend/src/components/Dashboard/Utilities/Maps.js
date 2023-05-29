@@ -525,7 +525,7 @@ class Maps extends React.Component {
                 popup.remove();
                 document.getElementById("createField").classList.remove("hidden");
 
-                const area = window.google.maps.geometry.spherical.computeArea(polygon.getPath()).toFixed(2);
+                const area = window.google.maps.geometry.spherical.computeArea(polygon.getPath()).toFixed(0);
 
                 console.log('Polygon Area:', area);
 
@@ -713,7 +713,7 @@ class Maps extends React.Component {
 
 
                 // get the area of the rectangle
-                const area = window.google.maps.geometry.spherical.computeArea(rectangle.getBounds()).toFixed(2);
+                const area = window.google.maps.geometry.spherical.computeArea(rectangle.getBounds()).toFixed(0);
 
                 console.log('Rectangle Area:', area);
 
@@ -790,7 +790,7 @@ class Maps extends React.Component {
 
 
                         cell1.innerHTML = "<span>" + fieldName + "</span>";
-                        cell2.innerHTML = "<span>" + area + "</span>";
+                        cell2.innerHTML = "<span>" + area + "</span> m2";
                         cell3.innerHTML = "<span>" + cropType + "</span>";
 
 
@@ -948,7 +948,7 @@ class Maps extends React.Component {
                     <table id='fieldTable' className={`fieldsTable ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
                         <thead>
                             <tr>
-                                <th><h2>Fields</h2></th>
+                                <th><h2>Field</h2></th>
                                 <th><h2>Land Area (m2)</h2></th>
                                 <th><h2>Crop</h2></th>
                             </tr>
