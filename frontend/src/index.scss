@@ -941,15 +941,18 @@ body {
             background-color: #D9D9D9;
             border-radius: 15px;
             margin: 5px;
+            border-top: 5px solid #D9D9D9;
         }
 
         .taskCard {
             position: relative;
-            height: 20%;
+            height: auto;
             width: 95%;
             margin: 2.5%;
             border-radius: 5px;
             background-color: white;
+            padding-bottom: 5%;
+            overflow: scroll;
 
             h3 {
                 padding-top: 5%;
@@ -959,6 +962,7 @@ body {
 
             span {
                 margin: 10px;
+                padding-bottom: 2.5%;
                 font-size: 1.75vh;
                 color: $darkGrey;
                 i{margin-right: 5px;}

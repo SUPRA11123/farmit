@@ -22,6 +22,8 @@ class Tasks extends React.Component {
         };
 
         this.createTask = this.createTask.bind(this);
+        this.showTasks = this.showTasks.bind(this);
+        this.getMember = this.getMember.bind(this);
 
     }
 
@@ -29,33 +31,42 @@ class Tasks extends React.Component {
 
         this.setMinDeadline();
 
-        axios.get("http://localhost:8000/gettasksbyfarm/" + this.props.farmDetails.id + "/")
+        axios.get("http://localhost:8000/getteam/" + this.props.farmDetails.id + "/")
             .then(response => {
-                const tasks = response.data;
-                this.setState({ tasks });
+
+                const team = response.data;
+                this.setState({ team: team });
+                this.getTasks();
+
             })
             .catch(error => {
                 console.log(error);
             });
-
 
         axios.get("http://localhost:8000/getfieldsbyid/" + this.props.farmDetails.id + "/")
             .then(response => {
                 const fields = response.data;
-                this.setState({ fields });
+                this.setState({ fields: fields });
+                
             })
             .catch(error => {
                 console.log(error);
-            });
+            });        
+    }
 
-        axios.get("http://localhost:8000/getteam/" + this.props.farmDetails.id + "/")
-            .then(response => {
-                const team = response.data;
-                this.setState({ team });
-            })
-            .catch(error => {
-                console.log(error);
-            });
+    getTasks() {
+
+        axios.get("http://localhost:8000/gettasksbyfarm/" + this.props.farmDetails.id + "/")
+        .then(response => {
+            const tasks = response.data;
+            this.setState({ tasks: tasks });
+            this.showTasks(tasks);
+            
+        })
+        .catch(error => {
+            console.log(error);
+        });
+
     }
 
 
@@ -71,7 +82,59 @@ class Tasks extends React.Component {
         document.getElementById("addTask").classList.add('hidden');
     }
 
+    async showTasks(tasks) {
+
+        const toDo = document.getElementById('toDoTasksContainer');
+        toDo.innerHTML = '';
+
+        if(tasks.length > 0) {
+            
+            tasks.forEach((task) => {
+
+                const div = document.createElement('div');
+                div.classList.add('taskCard');
+
+                const taskTitle = document.createElement('h3');
+                taskTitle.textContent = task.title; 
+
+                const taskDescription = document.createElement('p');
+                taskDescription.textContent = task.description; 
+
+                const taskMember = document.createElement('span');
+                const member = this.getMember(task.farmer);
+                taskMember.textContent = member ? member.name : "Unknown Member";
+
+                const taskSettings = document.createElement('i');
+                taskSettings.classList.add('fa-solid', 'fa-ellipsis-vertical', 'taskSettings');
+
+                div.appendChild(taskTitle);
+                div.appendChild(taskDescription);
+                div.appendChild(taskMember);
+                div.appendChild(taskSettings);
+
+               if(task.status = 'To do') {
+                toDo.appendChild(div);
+               } else if (task.status = 'In progress') {
+                document.getElementById('inProgressTasksContainer').appendChild(div);
+               } else{
+                document.getElementById('completedTasksContainer').appendChild(div);
+               }
+
+
+            });
+
+        }
+
+    }
+
+    getMember(id) {
+        const team = this.state.team;
+        const member = team.find(member => member.id === id);
+        return member;
+      }
+
     async createTask(event) {
+
         event.preventDefault();
 
         console.log("creating task");
@@ -94,6 +157,7 @@ class Tasks extends React.Component {
         }).then(response => {
             console.log(response);
             // show the tasks table
+            this.getTasks();
             document.getElementById("taskBoard").classList.remove('hidden');
             document.getElementById("addTask").classList.add('hidden');
 
@@ -119,12 +183,7 @@ class Tasks extends React.Component {
                         <h2>To Do<button id="addNewTask" onClick={this.showAddTaskForm}><i class="fa-solid fa-plus"></i></button></h2>
 
                         <div id='toDoTasksContainer' className="taskContainer">
-                            <div className="taskCard">
-                                <h3>Go to the shops</h3>
-                                <p>Pickup the banana</p>
-                                <span><i className="fa-regular fa-user"></i>Tiago Afonso</span>
-                                <i className="fa-solid fa-ellipsis-vertical taskSettings"></i>
-                            </div>
+                            
                         </div>
 
                     </div>
