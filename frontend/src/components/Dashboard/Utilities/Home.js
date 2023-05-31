@@ -6,6 +6,14 @@ class Home extends React.Component {
     constructor(props){
         super(props)
         this.myChart = null;
+
+        this.state = {
+          day: 0,
+          forecastData: [],
+          forecastLabels: [],
+          statSelector: 'temperature'
+        };
+
     }
 
     componentDidMount() {
@@ -32,12 +40,49 @@ class Home extends React.Component {
         document.getElementById("wigetLocation").innerHTML += " " + data.name;
         document.getElementById("widgetHumidity").innerHTML += " " + data.main.humidity + "%";
 
-        this.updateChart();
+        const dailyForecasts = [];
+        const today = new Date();
+        const weatherForecast = this.props.weatherForecast;
+
+        for (let i = 0; i < 5; i++) {
+          const forecastDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + i);
+      
+          const forecastData = weatherForecast.list.filter(item => {
+            const itemDate = new Date(item.dt_txt);
+            return itemDate.getDate() === forecastDate.getDate() &&
+                   itemDate.getMonth() === forecastDate.getMonth() &&
+                   itemDate.getFullYear() === forecastDate.getFullYear();
+          });
+      
+          dailyForecasts.push({
+            temperature: forecastData.map(item => item.main.temp),
+            humidity: forecastData.map(item => item.main.humidity),
+            labels: forecastData.map(item => this.getLabels(new Date(item.dt_txt)) + ' @ ' + item.dt_txt.slice(11, 16))
+          });
+        }
+
+        const forecastData = dailyForecasts.map(day => day[this.state.statSelector]);
+        const forecastLabelsData = dailyForecasts.map(day => day.labels);
+
+        this.setState({
+          forecastData: forecastData,
+          forecastLabels: forecastLabelsData
+        }, () => {
+          this.updateChart();
+          console.log(forecastData);
+        });
     }
+
+    getLabels(day) {
+
+      let weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+      return weekday[day.getDay()];
+  }
 
     updateChart() {
 
-        console.log(this.props.weatherForecast);    
+        const forecastData = this.state.forecastData;
+        const forecastLabels = this.state.forecastLabels;   
         const ctx = document.getElementById('myChart').getContext('2d');
       
         if (this.myChart) {
@@ -47,11 +92,11 @@ class Home extends React.Component {
         this.myChart = new Chart(ctx, {
           type: 'line',
           data: {
-            labels: null,
+            labels: forecastLabels[0],
             datasets: [{
               label: 'Temperature',
               gridLines: 'false',
-              data: this.props.weatherForecast,
+              data: forecastData[0],
               borderColor: '#0ba837',
               tension: 0.4,
               backgroundColor: '#BAECB8',
@@ -111,12 +156,7 @@ class Home extends React.Component {
             <div className="homeBackground">
 
             </div>
-             <section id='fixedUtility' className='fixedUtility'>
-
-                <h2>you have no new alerts</h2>
-
-            </section>
-        
+            
             <div onClick={() => this.props.displayScreen("weather")} id="weatherWidget" className={`Col2Card ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
                 <div className="weatherWigetTop">
                     <p id="wigetLocation"><i id="widgetPin"  className="fa-solid fa-location-pin"></i></p>

@@ -88,7 +88,6 @@ class Dashboard extends React.Component {
     }
 
     getFarmDetails(token) {
-        //hehe
 
         if(token.role === "field manager"){
         return axios
@@ -143,11 +142,7 @@ class Dashboard extends React.Component {
         });
     }
 
-    expandMobileNav() {
-
-        document.getElementById("navListMobile").classList.toggle('hidden');
-
-    }
+    expandMobileNav() {document.getElementById("navListMobile").classList.toggle('hidden');}
 
     handleMobileClick() {
         if (window.innerWidth < 600) {
@@ -169,9 +164,6 @@ class Dashboard extends React.Component {
         document.getElementById('blurBox').classList.toggle('hidden');
     }
       
-      
-      
- 
     render() {
 
 

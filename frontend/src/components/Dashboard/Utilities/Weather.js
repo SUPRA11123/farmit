@@ -149,7 +149,6 @@ class Weather extends React.Component {
     getLabels(day) {
 
         let weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-       
         return weekday[day.getDay()];
     }
 

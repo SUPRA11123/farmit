@@ -327,38 +327,6 @@ body {
     }
   }
 
-.fixedUtility {
-    position: absolute;
-    width: 30%;
-    left: 2.5%;
-    top: 15%;
-    height: 10%;
-    color: $darkGrey;
-    background-color: rgba( 244, 244, 244, 0.61);
-    backdrop-filter: blur(5px);
-    font-family: $font1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    border-bottom: 1px solid black;
-    border-radius: 15px 15px 0 0;
-
-    h2 {
-        font-size: 2.5vh;
-        animation: 0.5s ease-out 0s 1 slideInFromLeft;
-        color: black;
-        margin: 0;
-        text-align: center;
-        font-weight: 400;
-    }
-
-    p {
-        font-size: 2vh;
-        margin: 0;
-        margin-left: 2.5%;
-        color: black;
-    }
-}
 
 #centreToMap {
     position: absolute;
@@ -390,7 +358,7 @@ body {
     align-items: center;
 
     i {
-        font-size: 4vh;
+        font-size: 3vh;
         color: white;
         background-color: $green;
         padding: 10px;
@@ -400,7 +368,7 @@ body {
 
     i:hover {
         cursor: pointer;
-        color: $green;
+        color: $lightGreen;
     }
 }
 
@@ -486,7 +454,7 @@ body {
     width: 30%;
     height: 30%;
     background-color: $grey;
-    border-radius: 0 0 15px 15px;
+    border-radius: 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1225,6 +1193,52 @@ body {
 
 .highlighted {
     background-color: $blue; /* Customize the highlighting style as desired */
+}
+
+//PREDICTIONS STYLES
+
+.imagePreview {
+    position: absolute;
+    left: 0;
+    height: 95%;
+    width: 50%;
+    border: 2px solid $grey;
+    border-radius: 15px;
+    overflow-y: scroll;
+
+    h2 {
+        font-size: 2.5vh;
+        font-family: $font1;
+        width: 100%;
+        text-align: center;
+    }
+
+    img {
+        width: 80%;
+        margin-left: 10%;
+    }
+
+}
+
+.imageUpload {
+    position: absolute;
+    top: 25%;
+    right: 0;
+    height: 50%;
+    width: 47.5%;
+    background-color: $grey;
+    border-radius: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    h2 {
+        font-size: 2.5vh;
+        font-family: $font1;
+        width: 100%;
+        text-align: center;
+    }
 }
 
 //SETTINGS STYLES
