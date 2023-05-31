@@ -169,6 +169,7 @@ body {
     width: 15%;
     background-color: #f4f4f4;
     transition: width 1s;
+    z-index: 200;
    
     .navTop {
         position: relative;
@@ -491,6 +492,14 @@ body {
     top: 25%;
     border-radius: 15px;
     background-color: $grey;
+
+    p {
+        margin: 0;
+        width: 100%;
+        text-align: center;
+        margin-top: 10px;
+        color: $darkGrey;
+    }
 }
 
 
@@ -933,7 +942,7 @@ body {
                 padding-bottom: 2.5%;
                 font-size: 1.75vh;
                 color: $darkGrey;
-                i{margin-right: 5px;}
+                
             }
 
             p {
@@ -956,36 +965,86 @@ body {
     }
 }
 
+.overlayDarken {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 110%;
+    width: 110%;
+    z-index: 1;
+    background: rgba(0,0,0,0.2);
+    backdrop-filter: blur(2px);
+}
+
 #addTask {
     position: absolute;
-    width: 100%;
-    height: 75%;
+    z-index: 100;
+    width: 50%;
+    height: fit-content;
     top: 10%;
+    left: 25%;
     border-radius: 15px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    background-color: $grey;
+    background-color: white;
+    backdrop-filter: none;
     color: $darkGrey;
+    border: 2px solid $darkGrey;
+    padding-bottom: 2.5%;
+
+    hr {
+        margin: 0;
+        width: 100%;
+        height: 2px;
+        border: none;
+        background-color: $darkGrey;
+    }
 
     h2 {
-        color: $green;
+        i{color: $green; margin-right: 10px;}
+        color: black;
         font-size: 2.5vh;
+        width: 100%;
+        text-align: center;
+        #taskCancel {
+            position: absolute;
+            right: 2.5%;
+            color: black;
+            cursor: pointer;
+        }
     }
 
     input, select, button {
-        width: 30%;
+        width: 60%;
+        font-family: $font1;
+     
     }
 
     button {
         margin: 25px;
+        font-size: 2.5vh;
     }
 
     label {
+        font-size: 2vh;
         margin: 5px;
-        width: 30%;
+        margin-top: 2.5%;
+        width: 60%;
         text-align: left;
+    }
+
+    #taskSubmit {
+        background-color: $green;
+        color: white;
+        border: none;
+        width: auto;
+        padding: 5px;
+        font-size: 2vh;
+        border-radius: 5px;
+        margin-top: 2.5%;
+        cursor: pointer;
     }
 }
 
@@ -1121,12 +1180,25 @@ body {
         width: 95%;
         left: 2.5%;
         border-radius: 5px;
+        border-collapse: collapse;
 
         thead {
             text-align: left;
             border-bottom: 1px solid black;
             color: $green;
+            font-size: 2.5vh;
         }
+
+        tbody tr td {
+            font-size: 2vh;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: white;
+          }
+        
+        
+        tbody tr { line-height: 50px; }
     }
 }
 
