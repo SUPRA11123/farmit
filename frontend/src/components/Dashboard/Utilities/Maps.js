@@ -127,7 +127,7 @@ class Maps extends React.Component {
                                 map: map,
                                 // make a dot
                                 icon: {
-                                    path: window.google.maps.SymbolPath.CIRCLE,
+                                    path: window.google.maps.SymbolPath.CIRCLE, //ADD COOL SENSOR HERE
                                     scale: 5,
                                     fillColor: "#000000",
                                     fillOpacity: 1,
