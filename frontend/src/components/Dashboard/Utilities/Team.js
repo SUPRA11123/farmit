@@ -177,7 +177,7 @@ class Team extends React.Component {
             <>
                 <section id="teamContainer" className={`${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
 
-                  <button id="addNewMember" onClick={this.showTeamForm}><i className="fa-solid fa-plus"></i>add new member</button>
+                    <h2>My Team <button id="addNewMember" onClick={this.showTeamForm}><i className="fa-solid fa-plus"></i>add new member</button></h2>
 
                     <table id="teamTable">
                         <thead>

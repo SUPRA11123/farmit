@@ -72,13 +72,13 @@ class Tasks extends React.Component {
 
     showAddTaskForm() {
         document.getElementById("addTask").reset();
-        document.getElementById("taskOverlay").classList.remove('hidden');
+        document.getElementById("taskBoard").classList.add('hidden');
         document.getElementById("addTask").classList.remove('hidden');
     }
 
     cancelTask() {
         document.getElementById("addTask").reset();
-        document.getElementById("taskOverlay").classList.add('hidden');
+        document.getElementById("taskBoard").classList.remove('hidden');
         document.getElementById("addTask").classList.add('hidden');
     }
 
@@ -95,14 +95,14 @@ class Tasks extends React.Component {
                 div.classList.add('taskCard');
 
                 const taskTitle = document.createElement('h3');
-                taskTitle.innerHTML = task.title; 
+                taskTitle.textContent = task.title; 
 
                 const taskDescription = document.createElement('p');
                 taskDescription.textContent = task.description; 
 
                 const taskMember = document.createElement('span');
                 const member = this.getMember(task.farmer);
-                taskMember.innerHTML = "<i class='fa-regular fa-user'></i> " + member.name;
+                taskMember.textContent = member ? member.name : "Unknown Member";
 
                 const taskSettings = document.createElement('i');
                 taskSettings.classList.add('fa-solid', 'fa-ellipsis-vertical', 'taskSettings');
@@ -134,8 +134,6 @@ class Tasks extends React.Component {
       }
 
     async createTask(event) {
-
-        document.getElementById("taskOverlay").classList.add('hidden');
 
         event.preventDefault();
 
@@ -181,8 +179,6 @@ class Tasks extends React.Component {
             <>
                 <section id="taskBoard" className={`${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
 
-                    <div id='taskOverlay' className="overlayDarken hidden"></div>
-
                     <div className="taskColumn">
                         <h2>To Do<button id="addNewTask" onClick={this.showAddTaskForm}><i class="fa-solid fa-plus"></i></button></h2>
 
@@ -212,8 +208,7 @@ class Tasks extends React.Component {
 
 
                 <form id="addTask" className="hidden" onSubmit={this.createTask}>
-                    <h2><i className="fa-solid fa-bullseye"></i>Create new task <i className="fa-solid fa-xmark" id="taskCancel" onClick={this.cancelTask}></i></h2>
-                    <hr></hr>
+                    <h2>Add a new task</h2>
                     <label htmlFor="task">Task</label>
                     <input required type="text" id="task" name="task" />
 
@@ -246,8 +241,8 @@ class Tasks extends React.Component {
                     <label htmlFor="taskDeadline">Deadline</label>
                     <input type="datetime-local" id="taskDeadline" name="taskDeadline" />
 
+                    <button id="taskCancel" onClick={this.cancelTask}>Cancel</button>
                     <input id="taskSubmit" type="submit" value="Create" />
-
                 </form>
 
             </>

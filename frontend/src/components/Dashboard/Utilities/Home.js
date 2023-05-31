@@ -30,105 +30,105 @@ class Home extends React.Component {
     }
 
     populateWeather(data) {
-      var iconcode = data.weather[0].icon;
-      var iconurl = "http://openweathermap.org/img/w/" + iconcode + ".png";
-      document.getElementById("widgetWeatherIcon").src = iconurl;
-    
-      document.getElementById("wigetWeather").innerHTML = (data.main.temp).toFixed(0) + "°C";
-      document.getElementById("wigetClouds").innerHTML = data.weather[0].description;
-      document.getElementById("wigetWind").innerHTML += " " + this.convertToKM(data.wind.speed) + " km/h";
-      document.getElementById("wigetLocation").innerHTML += " " + data.name;
-      document.getElementById("widgetHumidity").innerHTML += " " + data.main.humidity + "%";
-    
-      const dailyForecasts = [];
-      const today = new Date();
-      const weatherForecast = this.props.weatherForecast;
-      const allTemperatures = [];
-    
-      for (let i = 0; i < 5; i++) {
-        const forecastDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + i);
-    
-        const forecastData = weatherForecast.list.filter(item => {
-          const itemDate = new Date(item.dt_txt);
-          return itemDate.getDate() === forecastDate.getDate() &&
-                 itemDate.getMonth() === forecastDate.getMonth() &&
-                 itemDate.getFullYear() === forecastDate.getFullYear();
+        var iconcode = data.weather[0].icon;
+        var iconurl = "http://openweathermap.org/img/w/" + iconcode + ".png";
+        document.getElementById("widgetWeatherIcon").src = iconurl;
+
+        document.getElementById("wigetWeather").innerHTML = (data.main.temp).toFixed(0) + "°C";
+        document.getElementById("wigetClouds").innerHTML = data.weather[0].description;
+        document.getElementById("wigetWind").innerHTML += " " + this.convertToKM(data.wind.speed) + " km/h";
+        document.getElementById("wigetLocation").innerHTML += " " + data.name;
+        document.getElementById("widgetHumidity").innerHTML += " " + data.main.humidity + "%";
+
+        const dailyForecasts = [];
+        const today = new Date();
+        const weatherForecast = this.props.weatherForecast;
+
+        for (let i = 0; i < 5; i++) {
+          const forecastDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + i);
+      
+          const forecastData = weatherForecast.list.filter(item => {
+            const itemDate = new Date(item.dt_txt);
+            return itemDate.getDate() === forecastDate.getDate() &&
+                   itemDate.getMonth() === forecastDate.getMonth() &&
+                   itemDate.getFullYear() === forecastDate.getFullYear();
+          });
+      
+          dailyForecasts.push({
+            temperature: forecastData.map(item => item.main.temp),
+            humidity: forecastData.map(item => item.main.humidity),
+            labels: forecastData.map(item => this.getLabels(new Date(item.dt_txt)) + ' @ ' + item.dt_txt.slice(11, 16))
+          });
+        }
+
+        const forecastData = dailyForecasts.map(day => day[this.state.statSelector]);
+        const forecastLabelsData = dailyForecasts.map(day => day.labels);
+
+        this.setState({
+          forecastData: forecastData,
+          forecastLabels: forecastLabelsData
+        }, () => {
+          this.updateChart();
+          console.log(forecastData);
         });
-    
-        const temperatures = forecastData.map(item => item.main.temp);
-        allTemperatures.push(...temperatures);
-    
-        dailyForecasts.push({
-          temperature: temperatures,
-          humidity: forecastData.map(item => item.main.humidity),
-          labels: forecastData.map(item => this.getLabels(new Date(item.dt_txt)) + '@' + item.dt_txt.slice(11, 16))
-        });
-      }
-    
-      const forecastLabelsData = dailyForecasts.map(day => day.labels);
-    
-      this.setState({
-        forecastData: allTemperatures,
-        forecastLabels: forecastLabelsData
-      }, () => {
-        this.updateChart();
-        console.log(this.state.forecastData);
-      });
     }
-    
+
     getLabels(day) {
-      let weekday = ["Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat"];
+
+      let weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
       return weekday[day.getDay()];
-    }
-    
+  }
+
     updateChart() {
-      const forecastData = this.state.forecastData;
-      const forecastLabels = this.state.forecastLabels;
-      const ctx = document.getElementById('myChart').getContext('2d');
-    
-      if (this.myChart) {
-        this.myChart.destroy();
-      }
-    
-      this.myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: forecastLabels.flat(), // Set labels here
-          datasets: [{
-            label: 'Temperature',
-            data: forecastData, // Use forecastData directly
-            borderColor: '#0ba837',
-            tension: 0,
-            backgroundColor: '#BAECB8',
-            pointStyle: 'rectRounded',
-            fill: true,
-            lineTension: 0.4,
-          }],
-        },
-        options: {
-          plugins: {
-            legend: {
-              display: false,
-            },
+
+        const forecastData = this.state.forecastData;
+        const forecastLabels = this.state.forecastLabels;   
+        const ctx = document.getElementById('myChart').getContext('2d');
+      
+        if (this.myChart) {
+          this.myChart.destroy();
+        }
+      
+        this.myChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: forecastLabels[0],
+            datasets: [{
+              label: 'Temperature',
+              gridLines: 'false',
+              data: forecastData[0],
+              borderColor: '#0ba837',
+              tension: 0.4,
+              backgroundColor: '#BAECB8',
+              pointStyle: 'rectRounded',
+              fill: true,
+              lineTension: 0.4,
+            }],
           },
-          scales: {
-            y: {
-              grid: {
-                display: true,
-              },
-              suggestedMin: 0,
-              suggestedMax: 40,
-            },
-            x: {
-              grid: {
+          options: {
+            plugins: {
+              legend: {
                 display: false,
               },
             },
+            scales: {
+              y: {
+                grid: {
+                  display: true,
+                },
+                suggestedMin: 0, 
+                suggestedMax: 40,
+              },
+              x: {
+                grid: {
+                  display: false,
+                },
+              },
+            },
           },
-        },
-      });
-    }
-    
+        });
+      }
+
     convertToKM(speed) {
         return (speed * 3.6).toFixed(2);
     }
@@ -175,8 +175,7 @@ class Home extends React.Component {
             </div>
 
             <div id='alertWidget' className={`col4Card ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
-              <p>5 Day Weather Forecast</p>
-              <canvas id="myChart" height='30%' width='100px'></canvas>
+                <canvas id="myChart" height='30%' width='100px'></canvas>
             </div>
 
             </>
