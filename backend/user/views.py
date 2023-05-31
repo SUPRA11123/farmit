@@ -11,15 +11,13 @@ from farm.models import Farm
 
 @api_view(['POST'])
 def signup(request):
-            serializer = UserSerializer(data=request.data)
-            print(request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return JsonResponse(serializer.data)
-            else:
-                return JsonResponse({'message': 'User already exists'}, status=200)
-            
-            # add a message to the response
+    serializer = UserSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return JsonResponse(serializer.data)
+    else:
+        errors = serializer.errors
+        return JsonResponse({'message': 'Validation failed', 'errors': errors}, status=400)
 
 
 @api_view(['POST'])
@@ -78,6 +76,8 @@ def getTeam(request, id):
         farmers = farm.farmers.all()
         fieldManagers = farm.fieldmanagers.all()
         users = farmers | fieldManagers
+        # add owner to the list
+        users = users | User.objects.filter(id=farm.owner.id)
         serializer = UserSerializer(users, many=True)
         return JsonResponse(serializer.data, safe=False)
     except Farm.DoesNotExist:
