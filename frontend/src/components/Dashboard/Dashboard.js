@@ -161,7 +161,9 @@ class Dashboard extends React.Component {
 
     toggleAlertMenu(){
         document.getElementById('alertMenu').classList.toggle('hidden');
+        document.getElementById('alertMenu').classList.toggle('alertMenuAnimation');
         document.getElementById('alertOverlay').classList.toggle('hidden');
+        document.getElementById('alertOverlay').classList.toggle('overlayDarkenAnimation');
     }
       
     render() {
