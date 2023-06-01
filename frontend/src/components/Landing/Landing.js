@@ -37,6 +37,34 @@ class Landing extends React.Component {
       }
     };
   }
+  
+  componentDidMount() {
+    window.addEventListener('beforeunload', this.handleUnload);
+    window.addEventListener('unload', this.handleUnload);
+  }
+  
+  componentWillUnmount() {
+    window.removeEventListener('beforeunload', this.handleUnload);
+    window.removeEventListener('unload', this.handleUnload);
+  }
+  
+  handleUnload = async () => {
+    const farmInfoForm = document.getElementById('farmInfo');
+    if (farmInfoForm && !farmInfoForm.classList.contains('hidden')) {
+      const email = document.getElementById('createEmail').value;
+      if (email) {
+        await this.deleteUser(email);
+      }
+    }
+  };
+  deleteUser = async (email) => {
+    try {
+      await axios.delete(URL + "deleteuser/" + email + '/');
+      console.log('User deleted successfully');
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   handleNext(event) {
 
@@ -69,7 +97,10 @@ class Landing extends React.Component {
         document.getElementById("farmInfo").classList.remove("hidden");
       }
     }).catch(error => {
+
+      // print the error but dont show the password
       console.log(error);
+
     });
   }
 
@@ -299,8 +330,6 @@ class Landing extends React.Component {
             <span id="mapPrompt" className='hidden'>Please click on the map to set a marker for your farm</span>
 
             <input id="farmNext" type="submit" value="Next" />
-
-            <p><span onClick={this.toLogin}>Login to a account</span></p>
 
           </form>
 

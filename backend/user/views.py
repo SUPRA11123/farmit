@@ -84,4 +84,22 @@ def getTeam(request, id):
         return JsonResponse({'message': 'Farm not found'}, status=400)
 
 
+@api_view(['DELETE'])
+def deleteUser(request, email):
+    if User.objects.filter(email=email).exists():
+        user = User.objects.get(email=email)
+        user.delete()
+        return JsonResponse({'message': 'User deleted'}, status=200)
+    return JsonResponse({'message': 'User not found'}, status=200)
 
+@api_view(['DELETE'])
+def deleteAccount(request):
+    password = request.data['password']
+    email = request.data['email']
+    if User.objects.filter(email=email).exists():
+        user = User.objects.get(email=email)
+        if check_password(password, user.password):
+            user.delete()
+            return JsonResponse({'message': 'User deleted'}, status=200)
+        return JsonResponse({'message': 'Invalid credentials'}, status=401)
+     

@@ -13,12 +13,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path
+from django.urls import include, path
 from django.contrib import admin
 from user import views
 from farm import views as farm_views
 from field import views as field_views
 from task import views as task_views
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -37,5 +38,7 @@ urlpatterns = [
     path('getteam/<int:id>/', views.getTeam),
     path('createtask/', task_views.create_task),
     path('getfieldbyid/<int:id>/', field_views.getFieldById),
-    path('gettasksbyfarm/<int:id>/', task_views.get_tasks_by_farm)
-]
+    path('gettasksbyfarm/<int:id>/', task_views.get_tasks_by_farm),
+    path('deleteuser/<str:email>/', views.deleteUser),
+    path('deleteaccount/', views.deleteAccount)
+    ]
