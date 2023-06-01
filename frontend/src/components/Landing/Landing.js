@@ -46,6 +46,13 @@ class Landing extends React.Component {
     var email = document.getElementById("createEmail").value;
     var password = document.getElementById("createPwd").value;
 
+    var confirmPassword = document.getElementById("confirmPwd").value;
+
+    if (password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+
     // get name and email from form
     axios.post(URL + 'signup/', {
       name: name,
@@ -126,7 +133,7 @@ class Landing extends React.Component {
 
   checkAccountComplete() {
 
-    if (document.getElementById("createName").value && document.getElementById("createEmail").value && document.getElementById("createPwd").value) {
+    if (document.getElementById("createName").value && document.getElementById("createEmail").value && document.getElementById("createPwd").value && document.getElementById("confirmPwd").value) {
       document.getElementById("accountNext").classList.add("submitActive");
     } else {
       document.getElementById("accountNext").classList.remove("submitActive");
@@ -137,6 +144,7 @@ class Landing extends React.Component {
     } else {
       document.getElementById("loginInBtn").classList.remove("submitActive");
     }
+
 
   }
 
@@ -268,9 +276,9 @@ class Landing extends React.Component {
             <label htmlFor="pwd">Password</label><br />
             <input onChange={this.checkAccountComplete} required type="password" id="createPwd" name="pwd" /><br />
 
-            {/* <label htmlFor="confrimPwd">Confrim Password</label><br />
-            <input onChange={this.checkAccountComplete} required type="password" id="confrimPwd" name="confirmPwd" /><br />
-            */}
+            <label htmlFor="confirmPwd">Confirm Password</label><br />
+            <input onChange={this.checkAccountComplete} required type="password" id="confirmPwd" name="confirmPwd" /><br />
+            
             
             <input id="accountNext" type="submit" value="Next" />
 
