@@ -1084,7 +1084,7 @@ body {
     align-items: center;
     background-color: white;
     color: $darkGrey;
-    z-index: 200;
+    z-index: 202;
     border: 2px solid $darkGrey;
 
     h2 {
@@ -1135,6 +1135,11 @@ body {
         margin-top: 10%;
         cursor: pointer;
     }
+
+}
+
+#teamOverlay {
+    z-index: 199;
 }
 
 .modalBackground {
