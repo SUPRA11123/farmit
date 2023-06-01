@@ -183,7 +183,7 @@ class Tasks extends React.Component {
 
                     <div id='taskOverlay' className="overlayDarken hidden"></div>
 
-                    <div className="taskColumn">
+                    <div className={`taskColumn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
                         <h2>To Do<button id="addNewTask" onClick={this.showAddTaskForm}><i class="fa-solid fa-plus"></i></button></h2>
 
                         <div id='toDoTasksContainer' className="taskContainer">

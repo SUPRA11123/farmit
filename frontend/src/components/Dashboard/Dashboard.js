@@ -161,7 +161,7 @@ class Dashboard extends React.Component {
 
     toggleAlertMenu(){
         document.getElementById('alertMenu').classList.toggle('hidden');
-        document.getElementById('blurBox').classList.toggle('hidden');
+        document.getElementById('alertOverlay').classList.toggle('hidden');
     }
       
     render() {
@@ -244,9 +244,7 @@ class Dashboard extends React.Component {
 
                 </section>
 
-                <div id="blurBox" className='blurBox hidden'>
-
-                </div>
+                <div id='alertOverlay' className="overlayDarken hidden"></div>
 
             </div>
         )

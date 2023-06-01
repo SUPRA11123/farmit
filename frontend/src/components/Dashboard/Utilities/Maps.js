@@ -870,12 +870,13 @@ class Maps extends React.Component {
     }
 
     showData(sensorData) {
-        // set modal open to true and send the sensor data to the modal
+       
         this.setState({ modalOpen: true, sensorData: sensorData });
     }
 
     highlightRow(fieldName) {
-        const table = document.getElementById("fieldTable"); // Replace "your-table-id" with the actual ID of your table
+
+        const table = document.getElementById("fieldTable");
         const rows = table.getElementsByTagName("tr");
 
         for (let i = 0; i < rows.length; i++) {
@@ -883,8 +884,7 @@ class Maps extends React.Component {
             const firstColumnValue = row.cells[0].textContent.trim();
 
             if (firstColumnValue === fieldName) {
-                row.style.backgroundColor = "#D0FFBC"; //
-                // change the color of the background of the row
+                row.style.backgroundColor = "#0ba837"; 
             }
         }
     }
@@ -953,8 +953,6 @@ class Maps extends React.Component {
 
                         </tbody>
                     </table>
-                   
-
                 </div>
 
             </>

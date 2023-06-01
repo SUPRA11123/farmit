@@ -233,7 +233,7 @@ body {
         }
 
         li p {
-            font-size: 2.5vh;
+            font-size: 2vh;
             margin-left: 10%;
            
         }
@@ -360,8 +360,8 @@ body {
 
     i {
         font-size: 3vh;
-        color: white;
-        background-color: $green;
+        color: $darkGrey;
+        background-color: white;
         padding: 10px;
         border-radius: 5px;
         padding-bottom: 10px;
@@ -369,21 +369,21 @@ body {
 
     i:hover {
         cursor: pointer;
-        color: $lightGreen;
+        color: $green;
     }
 }
 
 .alertMenu {
     position: fixed;
-    z-index: 201;
-    height: 100%;
-    width: 32.5%;
-    background: $grey;
-    border-left: 2px solid black;
-    transition: 1s;
+    z-index: 3;
+    height: 60%;
+    width: 30%;
+    right: 2%;
+    top: 2.5%;
+    background: white;
+    border: 2px solid $darkGrey;
+    border-radius: 15px;
     backdrop-filter: none;
-    -webkit-animation: slide 1s forwards;
-    animation: slide 1s forwards;
 }
 
 @-webkit-keyframes slide {
@@ -651,6 +651,9 @@ body {
     }
     
 }
+.fieldsTableConatiner::-webkit-scrollbar{
+    display: none;
+  }
 
 .fieldsTableConatiner {
     position: absolute;
@@ -662,6 +665,8 @@ body {
     border-radius: 15px;
     border: 2px solid #D9D9D9;
     overflow-y: scroll;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;
 
     #createField {
         top: 0;
@@ -717,11 +722,11 @@ body {
 
     .fieldsTableBtn:hover {
         cursor: pointer;
-        background-color: #D0FFBC;
+        background-color: $green;
     }
 
     .fieldsTable tbody tr:hover {
-        background-color: #D0FFBC; /* Change this to the desired hover color */
+        background-color: $green /* Change this to the desired hover color */
     }
 
     #cancelNewField {
@@ -780,6 +785,11 @@ body {
       margin-left: 15%;
       font-size: 2vh;
     }
+
+    tbody tr:hover {
+        background-color: $green;
+        color: white;
+      }
 
     i {
        font-size: 2.5vh;
@@ -872,6 +882,7 @@ body {
     border-radius: 15px;
     display: flex;
     flex-direction: row;
+  
 
     .taskColumn:hover > h2 {
         color: $green;
@@ -965,6 +976,8 @@ body {
     }
 }
 
+#taskOverlay{z-index: 199;}
+
 .overlayDarken {
     position: fixed;
     top: 0;
@@ -978,7 +991,7 @@ body {
 
 #addTask {
     position: absolute;
-    z-index: 100;
+    z-index: 300;
     width: 50%;
     height: fit-content;
     top: 10%;

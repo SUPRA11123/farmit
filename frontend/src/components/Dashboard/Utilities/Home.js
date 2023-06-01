@@ -89,7 +89,7 @@ class Home extends React.Component {
       if (this.myChart) {
         this.myChart.destroy();
       }
-    
+      
       this.myChart = new Chart(ctx, {
         type: 'line',
         data: {
@@ -123,10 +123,14 @@ class Home extends React.Component {
               grid: {
                 display: false,
               },
+              ticks: {
+                maxRotation: 0, // Set the maximum rotation angle to 0
+                minRotation: 0, // Set the minimum rotation angle to 0
+              },
             },
           },
         },
-      });
+      });      
     }
     
     convertToKM(speed) {
