@@ -159,12 +159,18 @@ class Dashboard extends React.Component {
 
     }
 
-    toggleAlertMenu(){
+    toggleAlertMenu() {
         document.getElementById('alertMenu').classList.toggle('hidden');
         document.getElementById('alertMenu').classList.toggle('alertMenuAnimation');
+        const alertBell = document.getElementById('alertBell');
+        alertBell.classList.toggle('fa-bell');
+        alertBell.classList.toggle('fa-xmark');
+        alertBell.classList.toggle('fa-regular');
+        alertBell.classList.toggle('fa-solid');
         document.getElementById('alertOverlay').classList.toggle('hidden');
         document.getElementById('alertOverlay').classList.toggle('overlayDarkenAnimation');
-    }
+      }
+      
       
     render() {
 
