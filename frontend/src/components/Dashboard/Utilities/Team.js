@@ -62,6 +62,8 @@ class Team extends React.Component {
     handleSubmit(event) {
         event.preventDefault();
 
+        document.getElementById("teamOverlay").classList.add('hidden');
+
         // set state of the field selected on the fields dropdown
 
         // get password and confirm password from form
