@@ -169,6 +169,8 @@ class Dashboard extends React.Component {
         alertBell.classList.toggle('fa-solid');
         document.getElementById('alertOverlay').classList.toggle('hidden');
         document.getElementById('alertOverlay').classList.toggle('overlayDarkenAnimation');
+        document.getElementById('openSettings').classList.toggle('hidden');
+  
       }
       
       
@@ -231,10 +233,11 @@ class Dashboard extends React.Component {
                 <main ref={this.divRef} id='utilityContainer' className={`utilityContainer ${localStorage.getItem("darkMode") === "true" ? "darkModeBG" : ''}`}>
 
                 <section id='scrollUtility'>
-
+                
                     <section className='alertContainer'>
-                    <i id="addAlert" className="fa-solid fa-square-plus hidden"></i>
-                    <i onClick={this.toggleAlertMenu} id='alertBell' className="fa-regular fa-bell"></i>
+                    <i id="openSettings" className={`fa-solid fa-gear ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}></i>
+                    <i onClick={this.toggleAlertMenu} id='alertBell' className={`fa-regular fa-bell ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}></i>
+         
                     </section>
                    
                     <CurrentUtility 
@@ -248,7 +251,9 @@ class Dashboard extends React.Component {
 
                 </main>
 
-                <section id="alertMenu" className='alertMenu hidden'>
+                
+
+                <section id="alertMenu" className={`alertMenu hidden ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
 
                 </section>
 

@@ -224,9 +224,9 @@ class Weather extends React.Component {
 
     
             
-            <div className="lineChartContainer">
+            <div className={`lineChartContainer ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
         
-              <select name="statSelector" id="statSelector" onChange={this.handleChange}>
+              <select name="statSelector" id="statSelector" className={`${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`} onChange={this.handleChange}>
                 <option value="temperature">Temperature</option>
                 <option value="humidity">Humidity</option>
               </select>   

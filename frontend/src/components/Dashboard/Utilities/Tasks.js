@@ -179,14 +179,14 @@ class Tasks extends React.Component {
     render() {
         return (
             <>
-                <section id="taskBoard" className={`${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
+                <section id="taskBoard" className={`${localStorage.getItem("darkMode") === "true" ? "darkModeBG" : ''}`}>
 
                     <div id='taskOverlay' className="overlayDarken hidden"></div>
 
-                    <div className={`taskColumn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
+                    <div className={`taskColumn ${localStorage.getItem("darkMode") === "true" ? "darkModeBG" : ''}`}>
                         <h2>To Do<button id="addNewTask" onClick={this.showAddTaskForm}><i class="fa-solid fa-plus"></i></button></h2>
 
-                        <div id='toDoTasksContainer' className="taskContainer">
+                        <div id='toDoTasksContainer' className={`taskContainer ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
                             
                         </div>
 
@@ -195,7 +195,7 @@ class Tasks extends React.Component {
                     <div className="taskColumn">
                         <h2>In Progress</h2>
 
-                        <div id='inProgressTasksContainer' className="taskContainer">
+                        <div id='inProgressTasksContainer' className={`taskContainer ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
 
                         </div>
                     </div>
@@ -203,7 +203,7 @@ class Tasks extends React.Component {
                     <div className="taskColumn">
                         <h2>Completed</h2>
 
-                        <div id='completedTasksContainer' className="taskContainer">
+                        <div id='completedTasksContainer' className={`taskContainer ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
 
                         </div>
                     </div>

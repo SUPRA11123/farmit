@@ -380,8 +380,7 @@ body {
     width: 30%;
     right: 2%;
     top: 2.5%;
-    background: white;
-    border: 2px solid $darkGrey;
+    background: $grey;
     border-radius: 15px;
     backdrop-filter: none;
 }
@@ -934,7 +933,6 @@ body {
             background-color: #D9D9D9;
             border-radius: 15px;
             margin: 5px;
-            border-top: 5px solid #D9D9D9;
         }
 
         .taskCard {
@@ -1467,9 +1465,15 @@ body {
 
 .darkModeBG {
     background-color: #3d3d3d;
+    h2 {color: white !important;}
 }
 
 .darkMode {
+
+    .taskCard {
+        background-color: #3d3d3d !important;
+    }
+    
     background-color: #636363 !important;
     color: white !important;
 
