@@ -42,65 +42,51 @@ class Modal extends React.Component {
 
     const queryApi = influxDB.getQueryApi("FarmIT");
 
-    const temperatureQuery = `
-      from(bucket: "test")
-      |> range(start: -5m) 
-      |> filter(fn: (r) =>
-        r._measurement == "mqtt_consumer" and
-        r._field == "decoded_payload_temperature" and
-        r.topic == "v3/farmit@ttn/devices/${this.props.sensorData.sensorId}/up" and
-        exists r._value
-      )
-    `;
+    const query = `
+    from(bucket: "test")
+    |> range(start: -30m) 
+    |> filter(fn: (r) => r["_measurement"] == "mqtt_consumer")
+    |> filter(fn: (r) => r["_field"] == "decoded_payload_temperature" or r["_field"] == "decoded_payload_humidity")
+    |> filter(fn: (r) => r["topic"] == "v3/farmit@ttn/devices/${this.props.sensorData.sensorId}/up")
+  `;
+  
 
-    const humidityQuery = `
-      from(bucket: "test")
-      |> range(start: -5m)
-      |> filter(fn: (r) =>
-        r._measurement == "mqtt_consumer" and
-        r._field == "decoded_payload_humidity" and
-        r.topic == "v3/farmit@ttn/devices/${this.props.sensorData.sensorId}/up" and
-        exists r._value
-      )
-    `;
+    const data = []; // Initialize an empty array to store the data
 
-    const fetchTemperatureData = queryApi.queryRows(temperatureQuery, {
+    const fetchData = queryApi.queryRows(query, {
       next: (row, tableMeta) => {
-        this.setState((prevState) => {
-          const temperatureData = [...prevState.temperatureData, { ...row }];
-          const temperatureValues = temperatureData.map((row) => row["5"]);
-          return { temperatureData, temperatureValues };
-        });
+        // Extract the relevant data from the row
+        const time = row["4"];
+        console.log(time);
+        const field = row["6"];
+        console.log(field);
+        const value = row["5"];
+        console.log(value);
+
+
+  
+        // Create a new data object
+        const newData = { time, [field]: value };
+  
+        // Push the new data object into the data array
+        data.push(newData);
       },
       error: (error) => {
-        console.error("Error occurred during temperature query:", error);
+        console.error("Error occurred during query:", error);
       },
       complete: () => {
-        this.updateChart();
+        console.log("Query completed");
+        console.log(data); // Check the fetched data in the console
+  
+        this.updateChart(data);
       },
     });
-
-    const fetchHumidityData = queryApi.queryRows(humidityQuery, {
-      next: (row, tableMeta) => {
-        this.setState((prevState) => {
-          const humidityData = [...prevState.humidityData, { ...row }];
-          const humidityValues = humidityData.map((row) => row["5"]);
-          return { humidityData, humidityValues };
-        });
-      },
-      error: (error) => {
-        console.error("Error occurred during humidity query:", error);
-      },
-      complete: () => {
-        this.updateChart();
-      },
+  
+    Promise.all([fetchData]).catch((error) => {
+      console.error("Error occurred during queries:", error);
     });
-
-    Promise.all([fetchTemperatureData, fetchHumidityData])
-      .catch((error) => {
-        console.error("Error occurred during queries:", error);
-      });
   }
+
 
   exportDataToCSV = () => {
     // Show the date inputs
@@ -198,96 +184,104 @@ class Modal extends React.Component {
  
 
 
-  updateChart() {
-    const { humidityData, temperatureData } = this.state;
-    const chartRef = this.chartRef.current;
-
-    if (chartRef) {
-      const chartContext = chartRef.getContext("2d");
-
-      // Extract the timestamps and values from humidityData
-      const humidityTimestamps = humidityData.map((row) => {
-        const utcTimestamp = row["4"];
-        const localTimestamp = new Date(utcTimestamp).toLocaleTimeString();
-        return localTimestamp;
+  updateChart(data) {
+    if (data.length === 0) {
+      return; // No new data, exit the function
+    }
+  
+    console.log(data);
+  
+    // populate the graph with humidity and temperature data
+    const humidityData = data.filter((row) => row["decoded_payload_humidity"]);
+    const temperatureData = data.filter((row) => row["decoded_payload_temperature"]);
+  
+    this.setState({ humidityData, temperatureData });
+  
+    console.log(humidityData);
+    console.log(temperatureData);
+  
+    // store the time values in an array and don't repeat them, also transform into local time
+    const uniqueTime = new Set(data.map((row) => row.time));
+    const time = [...uniqueTime].map((time) => new Date(time).toLocaleTimeString());
+  
+    console.log(time);
+  
+    if (!this.myChart) {
+      const chartRef = this.chartRef.current;
+      const myChartRef = chartRef.getContext("2d");
+  
+      this.myChart = new Chart(myChartRef, {
+        type: "line",
+        data: {
+          labels: time,
+          datasets: [
+            {
+              label: "Temperature (ºC)",
+              data: temperatureData.map((row) => row.decoded_payload_temperature),
+              borderColor: "#FF0000",
+              fill: false,
+            },
+            {
+              label: "Humidity (%)",
+              data: humidityData.map((row) => row.decoded_payload_humidity),
+              borderColor: "#0000FF",
+              fill: false,
+            },
+          ],
+        },
+        options: {
+          plugins: {
+            legend: {
+              display: true, // Display the legend
+            },
+          },
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100,
+              title: {
+                display: true,
+                text: "Value",
+              },
+            },
+            x: {
+              title: {
+                display: true,
+                text: "Time",
+              },
+            },
+          },
+          animation: {
+            duration: 500, // Animation duration in milliseconds
+          },
+        },
       });
-
-      const humidityValues = humidityData.map((row) => row["5"]);
-      const temperatureValues = temperatureData.map((row) => row["5"]);
-
-      // Check if both temperature and humidity data have the same length
-      if (humidityValues.length !== temperatureValues.length) {
-        return;
+    } else {
+      const latestTime = new Date([...uniqueTime][uniqueTime.size - 1]).toLocaleTimeString();
+      const latestTemperature = temperatureData[temperatureData.length - 1].decoded_payload_temperature;
+      const latestHumidity = humidityData[humidityData.length - 1].decoded_payload_humidity;
+  
+      if (!this.myChart.data.labels.includes(latestTime)) {
+        // Add new data point to the chart
+        this.myChart.data.labels.push(latestTime);
+        this.myChart.data.datasets[0].data.push(latestTemperature);
+        this.myChart.data.datasets[1].data.push(latestHumidity);
+  
+        // Remove the oldest data point if the chart exceeds a certain number of points
+        const maxDataPoints = 50; // Adjust as needed
+        if (this.myChart.data.labels.length > maxDataPoints) {
+          this.myChart.data.labels.shift();
+          this.myChart.data.datasets[0].data.shift();
+          this.myChart.data.datasets[1].data.shift();
+        }
+  
+        this.myChart.update();
       }
-
-
-      if (!this.chart) {
-
-        // Create a new chart if it doesn't exist
-        this.chart = new Chart(chartContext, {
-          type: "line",
-          data: {
-            labels: [],
-            datasets: [
-              {
-                data: [],
-                borderColor: "blue",
-                fill: false,
-                label: "Humidity (%)",
-              },
-              {
-                data: [],
-                borderColor: "red",
-                fill: false,
-                label: "Temperature (ºC)",
-              },
-            ],
-          },
-          options: {
-            plugins: {
-              legend: {
-                display: true, // Display the legend
-              },
-            },
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-              y: {
-                beginAtZero: true,
-                max: 100,
-                title: {
-                  display: true,
-                  text: "Value",
-                },
-              },
-              x: {
-                title: {
-                  display: true,
-                  text: "Time",
-                },
-              },
-            },
-            animation: {
-              duration: 500, // Animation duration in milliseconds
-            },
-          },
-        });
-      }
-
-      // Calculate the range of data points to show
-      const maxDataPoints = 10; // Maximum number of data points to show
-      const startIdx = Math.max(humidityTimestamps.length - maxDataPoints, 0);
-      const endIdx = humidityTimestamps.length - 1;
-
-      // Update the chart with the new data
-      this.chart.data.labels = humidityTimestamps.slice(startIdx, endIdx + 1);
-      this.chart.data.datasets[0].data = humidityValues.slice(startIdx, endIdx + 1);
-      this.chart.data.datasets[1].data = temperatureValues.slice(startIdx, endIdx + 1);
-      this.chart.update();
     }
   }
-
-
+  x
 
 
   render() {
@@ -305,7 +299,7 @@ class Modal extends React.Component {
             <h5>Field data</h5>
           </div>
           <div className="title2">
-            <h1>Real-Time Temperature and Humidity Values From Sensor {this.props.sensorData.sensorId}</h1>
+            <h1>Real-Time Temperature and Humidity Values From Sensor<br></br> {this.props.sensorData.sensorId}</h1>
           </div>
           <div className="body">
             <div>

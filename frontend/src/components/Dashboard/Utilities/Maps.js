@@ -127,7 +127,7 @@ class Maps extends React.Component {
                                 map: map,
                                 // make a dot
                                 icon: {
-                                    path: window.google.maps.SymbolPath.CIRCLE, //ADD COOL SENSOR HERE
+                                    path: window.google.maps.SymbolPath.CIRCLE,
                                     scale: 5,
                                     fillColor: "#000000",
                                     fillOpacity: 1,
@@ -586,11 +586,13 @@ class Maps extends React.Component {
                         var cell1 = row.insertCell(0);
                         var cell2 = row.insertCell(1);
                         var cell3 = row.insertCell(2);
-
+                        var cell4 = row.insertCell(3);
 
                         cell1.innerHTML = "<span>" + fieldName + "</span>";
-                        cell2.innerHTML = "<span>" + area + "</span>";
+                        cell2.innerHTML = "<span>" + area + "</span> m<sup>2";
                         cell3.innerHTML = "<span>" + cropType + "</span>";
+                        cell4.innerHTML = '<i class="fa-solid fa-ellipsis-vertical"></i>';
+
 
                         polygon.isComplete = true;
 
@@ -780,11 +782,13 @@ class Maps extends React.Component {
                         var cell1 = row.insertCell(0);
                         var cell2 = row.insertCell(1);
                         var cell3 = row.insertCell(2);
+                        var cell4 = row.insertCell(3);
 
 
                         cell1.innerHTML = "<span>" + fieldName + "</span>";
-                        cell2.innerHTML = "<span>" + area + "</span> m2";
+                        cell2.innerHTML = "<span>" + area + "</span> m<sup>2";
                         cell3.innerHTML = "<span>" + cropType + "</span>";
+                        cell4.innerHTML = '<i class="fa-solid fa-ellipsis-vertical"></i>';
 
 
                         rectangle.isComplete = true;
