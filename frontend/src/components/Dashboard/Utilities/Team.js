@@ -153,13 +153,13 @@ class Team extends React.Component {
 
     showTeamForm() {
         document.getElementById("addTeamMember").reset();
-        document.getElementById("teamContainer").classList.add('hidden');
+        document.getElementById("teamOverlay").classList.remove('hidden');
         document.getElementById("addTeamMember").classList.remove('hidden');
     }
 
     cancelMember() {
         document.getElementById("addTeamMember").reset();
-        document.getElementById("teamContainer").classList.remove('hidden');
+        document.getElementById("teamOverlay").classList.add('hidden');
         document.getElementById("addTeamMember").classList.add('hidden');
     }
 
@@ -177,7 +177,7 @@ class Team extends React.Component {
             <>
                 <section id="teamContainer" className={`${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
 
-                  <button id="addNewMember" onClick={this.showTeamForm}><i className="fa-solid fa-plus"></i>add new member</button>
+                  
 
                     <table id="teamTable">
                         <thead>
@@ -185,50 +185,55 @@ class Team extends React.Component {
                             <th>Role</th>
                             <th>Email</th>
                             <th>Field</th>
+                            <th><button id="addNewMember" onClick={this.showTeamForm}><i className="fa-solid fa-plus"></i></button></th>
                         </thead>
                         <tbody>
-            {this.state.team.map(member => (
-                console.log(member),
-              <tr key={member.id}>
-                <td>{member.name}</td>
-                <td>{member.role}</td>
-                <td>{member.email}</td>
-                <td>{member.field}</td>
-              </tr>
-            ))}
-          </tbody>
+                            {this.state.team.map(member => (
+                                console.log(member),
+                            <tr key={member.id} colspan="5">
+                                <td>{member.name}</td>
+                                <td>{member.role}</td>
+                                <td>{member.email}</td>
+                                <td>{member.field}</td>
+                                <td><i className="fa-solid fa-ellipsis-vertical"></i></td>
+                            </tr>
+                            ))}
+                        </tbody>
                     </table>
 
 
                 </section>
 
                 <form id="addTeamMember" className="form hidden" onSubmit={this.handleSubmit}>
-                    <div className="form-group">
+                            
+                    <h2><i className="fa-solid fa-people-group"></i>Add new member <i className="fa-solid fa-xmark" id="teamCancel" onClick={this.cancelMember}></i></h2>
+                    <hr></hr>
+
+                
                         <label htmlFor="name">Name</label>
                         <input required type="text" id="name" name="name" className="form-control" placeholder="Name" />
-                    </div>
-                    <div className="form-group">
+         
+       
                         <label htmlFor="email">Email</label>
                         <input required type="text" id="email" name="email" className="form-control" placeholder="Email" />
-                    </div>
-                    <div className="form-group">
+          
+
                         <label htmlFor="password">Password</label>
                         <input required type="password" id="password" name="password" className="form-control" placeholder="Password" />
-                    </div>
-                    <div className="form-group">
+      
+
                         <label htmlFor="confirmPassword">Confirm Password</label>
                         <input required type="password" id="confirmPassword" name="confirmPassword" className="form-control" placeholder="Confirm Password" />
-                    </div>
-                    <div className="form-group">
+    
                         <label htmlFor="role">Role</label>
                         <select id="role" name="role" className="form-control" onChange={this.handleRoleChange}>
                             <option value="" selected disabled>Select the role you want</option>
                             <option value="field manager">field manager</option>
                             <option value="farmer">farmer</option>
                         </select>
-                    </div>
+           
                     {role === 'field manager' && (
-                        <div className="form-group">
+                        <>
                             <label htmlFor="fields">Fields</label>
                             <select id="fields" name="fields" className="form-control" onChange={this.handleFieldChange}>
                                 <option value="" selected disabled>Select a field</option>
@@ -236,18 +241,18 @@ class Team extends React.Component {
                                     <option key={field.id} value={field.id}>{field.name}</option>
                                 ))}
                             </select>
-                        </div>
+                        </>
                     )}
                     {this.state.passwordMatchError && (
                         <p style={{ color: "red" }}>Passwords do not match</p>
                     )}
 
-                    <br />
-                    <button id="memberCancel" onClick={this.cancelMember}>Cancel</button>
-                    <button type="submit">Create User</button>
-
+                    <button id='addMember' type="submit">Create User</button>
 
                 </form>
+
+                <div id='teamOverlay' className="overlayDarken hidden"></div>
+
             </>
         )
     }
