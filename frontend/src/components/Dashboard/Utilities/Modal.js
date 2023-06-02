@@ -44,7 +44,7 @@ class Modal extends React.Component {
 
     const query = `
     from(bucket: "test")
-    |> range(start: -30m) 
+    |> range(start: -20m) 
     |> filter(fn: (r) => r["_measurement"] == "mqtt_consumer")
     |> filter(fn: (r) => r["_field"] == "decoded_payload_temperature" or r["_field"] == "decoded_payload_humidity")
     |> filter(fn: (r) => r["topic"] == "v3/farmit@ttn/devices/${this.props.sensorData.sensorId}/up")
@@ -270,7 +270,7 @@ class Modal extends React.Component {
         this.myChart.data.datasets[1].data.push(latestHumidity);
   
         // Remove the oldest data point if the chart exceeds a certain number of points
-        const maxDataPoints = 50; // Adjust as needed
+        const maxDataPoints = 20; // Adjust as needed
         if (this.myChart.data.labels.length > maxDataPoints) {
           this.myChart.data.labels.shift();
           this.myChart.data.datasets[0].data.shift();
@@ -281,8 +281,6 @@ class Modal extends React.Component {
       }
     }
   }
-  x
-
 
   render() {
     const { setOpenModal } = this.props;
@@ -299,7 +297,7 @@ class Modal extends React.Component {
             <h5>Field data</h5>
           </div>
           <div className="title2">
-            <h1>Real-Time Temperature and Humidity Values From Sensor<br></br> {this.props.sensorData.sensorId}</h1>
+            <h1>Real-Time Temperature and Humidity Values From Sensor {this.props.sensorData.sensorId}</h1>
           </div>
           <div className="body">
             <div>

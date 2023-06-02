@@ -62,21 +62,19 @@ class Settings extends React.Component {
 
     deleteAccount() {
 
-        console.log(this.props.user.email);
-        const confirmed = window.prompt("To confirm account deletion, please type your password.");
+      
+        console.log("Delete account clicked");
+       // get password from document get id
+       const password = document.getElementById('settingsPassword').value;
 
+       console.log(password);
 
-        if (confirmed) {
-
-            // User clicked "OK"
-            // print what he wrote in the prompt
-            console.log("Account deletion confirmed:", confirmed);
 
             axios
                 .delete("http://localhost:8000/deleteaccount/", {
                     data: {
                         email: this.props.user.email,
-                        password: confirmed,
+                        password: password,
                     },
                 })
                 .then((response) => {
@@ -88,20 +86,32 @@ class Settings extends React.Component {
                 .catch((error) => {
                     console.log(error);
                 });
-
-        } else {
-            // User clicked "Cancel" or closed the dialog
-            console.log("Account deletion cancelled.");
-        }
     }
 
     showDeleteForm() {
-        document.getElementById('confrimDelete').classList.remove('hidden');
+        document.getElementById('confirmDelete').classList.remove('hidden');
+        document.getElementById('settingsOverlay').classList.remove('hidden');
+    }
+
+    showChangePasswordForm() {
+        document.getElementById('changePassword').classList.remove('hidden');
         document.getElementById('settingsOverlay').classList.remove('hidden');
     }
 
     cancelDelete(){
-        document.getElementById('confrimDelete').classList.add('hidden');
+        document.getElementById('confirmDelete').classList.add('hidden');
+        document.getElementById('settingsOverlay').classList.add('hidden');
+    }
+
+
+    changePassword() {
+        
+       console.log("Change password clicked");
+
+    }
+
+    cancelChangePassword(){
+        document.getElementById('changePassword').classList.add('hidden');
         document.getElementById('settingsOverlay').classList.add('hidden');
     }
 
@@ -127,15 +137,29 @@ class Settings extends React.Component {
                         <div className="toggle-switch"></div>
                     </label>
                     <button className="delete-btn" onClick={this.showDeleteForm}>Delete Account</button>
+                    <button className="change-password-btn" onClick={this.showChangePasswordForm}>
+                        Change Password
+                    </button>
                 </section>
 
-                <form id='confrimDelete' className="confrimDelete hidden" onSubmit={this.deleteAccount}>
+                <form id='confirmDelete' className="confirmDelete hidden" onSubmit={this.deleteAccount}>
                     <i className="fa-solid fa-xmark" id="deleteAccountCancel" onClick={this.cancelDelete}></i>
                     <h2>Delete Account</h2>
                     <label>To delete your Agrosensor account, you are required to enter your password:</label><br/>
                     <input required type="password" id="settingsPassword" name="password" placeholder="Password" /><br/>
                     <button id='deleteAccount' type="submit">Delete Account</button>
 
+                </form>
+
+                <form id='changePassword' className="changePassword hidden" onSubmit={this.changePassword}>
+                    <i className="fa-solid fa-xmark" id="changePasswordCancel" onClick={this.cancelChangePassword}></i>
+                    <h2>Change Password</h2>
+                    <label>To change your Agrosensor account password, you are required to enter your current password.</label><br/><br/>
+                    <label>Your new password must have, at least, <span class="underline">8</span> characters, including <span class="underline">1</span> <strong>uppercase</strong> letter, <span class="underline">1</span> <strong>lowercase</strong> letter and <span class="underline">1</span> <strong>digit</strong>.</label>
+                    <input required type="password" id="settingsPassword" name="password" placeholder="Current Password" /><br/>
+                    <input required type="password" id="settingsPassword" name="password" placeholder="New Password" /><br/>
+                    <input required type="password" id="settingsPassword" name="password" placeholder="Confirm New Password" /><br/>
+                    <button id='changePassword' type="submit">Change Password</button>
                 </form>
 
                 <div id='settingsOverlay' className="overlayDarken hidden"></div>
