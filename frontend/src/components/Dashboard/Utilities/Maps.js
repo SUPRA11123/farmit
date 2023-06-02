@@ -120,18 +120,28 @@ class Maps extends React.Component {
                         // check if the sensor is inside the rectangle
                         if (this.isPointInsideRectangle(sensor, rectangleBounds)) {
 
+                            const markerIcon = {
+                                path: window.google.maps.SymbolPath.CIRCLE,
+                                fillColor: 'white',
+                                fillOpacity: 1,
+                                strokeColor: 'green',
+                                strokeWeight: 2,
+                                scale: 15,
+                              };
 
                             // add a little point in the rectangle in the point position
                             const marker = new window.google.maps.Marker({
                                 position: { lat: sensor.latitude, lng: sensor.longitude },
                                 map: map,
+                                icon: markerIcon,
                                 // make a dot
                                 label: {
                                     fontFamily: 'Fontawesome',
                                     text: '\uf1eb',
-                                    color: 'white',
+                                    color: 'green',
                                     clickable: true,
-                    
+                                    background: 'white',
+                            
                                 },
                             });
 
@@ -229,17 +239,29 @@ class Maps extends React.Component {
 
 
                             // add a little point in the rectangle in the point position
+                          
+                            const markerIcon = {
+                                path: window.google.maps.SymbolPath.CIRCLE,
+                                fillColor: 'white',
+                                fillOpacity: 1,
+                                strokeColor: 'green',
+                                strokeWeight: 2,
+                                scale: 15,
+                              };
+
+                            // add a little point in the rectangle in the point position
                             const marker = new window.google.maps.Marker({
                                 position: { lat: sensor.latitude, lng: sensor.longitude },
                                 map: map,
+                                icon: markerIcon,
                                 // make a dot
-                               
                                 label: {
                                     fontFamily: 'Fontawesome',
-                                    text: '\uf015',
-                                    color: 'white',
+                                    text: '\uf1eb',
+                                    color: 'green',
                                     clickable: true,
-                    
+                                    background: 'white',
+                            
                                 },
                             });
 

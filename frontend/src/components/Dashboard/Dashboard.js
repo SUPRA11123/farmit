@@ -191,7 +191,7 @@ class Dashboard extends React.Component {
 
                 <aside id="navContainer" className={`${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''} navContainer`}>
                     <div id='navTop' className='navTop'>
-                    <img className="navLogoImg" src={require('../../resources/img/roundLogo.png')} draggable="false" alt="Agrosensor logo"/>
+                    <img className="navLogoImg" onClick={() => this.setState({currentDashboardScreen: "dashboard"})} src={require('../../resources/img/roundLogo.png')} draggable="false" alt="Agrosensor logo"/>
                     <i onClick={this.toggleMenu} id="toggleNavMenu" className="fa-solid fa-angles-left"></i>
                     </div>
                     <nav id='navList'>
@@ -236,7 +236,11 @@ class Dashboard extends React.Component {
                 
                     <section className='alertContainer'>
                     <i id="openSettings" onClick={() => this.setState({currentDashboardScreen: "settings"})} className={`fa-solid fa-gear ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}></i>
-                    <i onClick={this.toggleAlertMenu} id='alertBell' className={`fa-regular fa-bell ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}></i>
+                    <div class="notification-container">
+                        <i onClick={this.toggleAlertMenu} id='alertBell' className={`fa-regular fa-bell ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}></i>
+                        <span class="notification">2</span>
+                    </div>
+                    
          
                     </section>
                    

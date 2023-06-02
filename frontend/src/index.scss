@@ -278,6 +278,7 @@ body {
 
 .navLogoImg {
     width: 40%;
+    cursor: pointer;
 }
 
 .smallNav {
@@ -348,6 +349,28 @@ body {
     color: white;
 }
 
+.notification-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .notification {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: $red;
+    color: white;
+    border-radius: 50%;
+    height: 20px;
+    width: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid white;
+  }
+
 .alertContainer {
     position: absolute;
     z-index: 99;
@@ -355,16 +378,16 @@ body {
     width: 7.5%;
     height: 10%;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
 
     i {
         font-size: 3vh;
-        color: $darkGrey;
-        background-color: white;
-        padding: 10px;
+        color: $darkGrey;       
         border-radius: 5px;
-        padding-bottom: 10px;
+        padding: 5px;
+        background-color: $grey !important;
+        border: 1px solid #D9D9D9;
     }
 
     i:hover {
@@ -432,7 +455,7 @@ body {
     width: 100%;
     height: 30%;
     top: 0;
-    background-color: $darkGrey;
+    background-color: $green;
     //background-image: url("https://img.freepik.com/free-photo/harvested-grain-field-captured-sunny-day-with-some-clouds_181624-44956.jpg?w=1800&t=st=1684370902~exp=1684371502~hmac=cb72f01976942c7d753cb16fb4eb547d09496bfa64056cf06a7893905dc92a1f");
     background-size: cover;
     background-position: 50%;
@@ -1169,18 +1192,15 @@ body {
 }
 
 .modalBackground {
-    z-index: 2;
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
     height: 100%;
     backdrop-filter: blur(4px); /* Apply a blur effect to the background */
   }
 
   .modalContainer {
-    width: 500px;
-    height: 500px;
+    height: 50%;
     border-radius: 12px;
     background-color: white;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
@@ -1188,10 +1208,9 @@ body {
     flex-direction: column;
     padding: 25px;
     position: fixed;
-    top: 50%;
+    top: 55%;
     left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 2; /* Set a higher z-index to ensure the modal appears above the blurred background */
+    z-index: 4000; /* Set a higher z-index to ensure the modal appears above the blurred background */
   }
 
   .modalContainer .title {
@@ -1248,9 +1267,7 @@ body {
     cursor: pointer;
     margin: 0;
     padding: 5px;
-    
-
-  
+    border-radius: 5px;
   }
 
 #teamContainer {
@@ -1329,7 +1346,7 @@ body {
 }
 
 .modalBackground {
-    z-index: 2;
+    z-index: 2000;
     position: fixed;
     top: 0;
     left: 0;
