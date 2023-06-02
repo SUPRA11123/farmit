@@ -235,7 +235,7 @@ class Dashboard extends React.Component {
                 <section id='scrollUtility'>
                 
                     <section className='alertContainer'>
-                    <i id="openSettings" className={`fa-solid fa-gear ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}></i>
+                    <i id="openSettings" onClick={() => this.setState({currentDashboardScreen: "settings"})} className={`fa-solid fa-gear ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}></i>
                     <i onClick={this.toggleAlertMenu} id='alertBell' className={`fa-regular fa-bell ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}></i>
          
                     </section>
@@ -246,6 +246,7 @@ class Dashboard extends React.Component {
                     farmDetails={this.state.farmDetails} user={this.state.user} 
                     changeTheme={this.changeTheme} getTheme={this.getTheme}
                     />
+
 
                 </section>
 

@@ -248,6 +248,7 @@ body {
 
         li i {
             margin: 5% 15% 5% 5%;
+            font-size: 3vh;
         }
 
     }
@@ -284,7 +285,6 @@ body {
     width: 5%;
 
     img {transition-delay: 0.5;}
-    nav ul li i { font-size: 2.5vh;}
     #toggleNavMenu {transform: rotate(180deg);border-radius: 0 5px 0 0;}
 }
 
@@ -661,7 +661,7 @@ body {
 
 .fieldsTableConatiner {
     position: absolute;
-    width: 42.5%;
+    width: 45%;
     right: 0;
     top: 10%;
     height: 85%;
@@ -669,6 +669,7 @@ body {
     border-radius: 15px;
     border: 2px solid #D9D9D9;
     overflow-y: scroll;
+    overflow-x: visible;
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;
 
@@ -730,7 +731,7 @@ body {
     }
 
     .fieldsTable tbody tr:hover {
-        background-color: $green /* Change this to the desired hover color */
+        background-color: $lightGreen /* Change this to the desired hover color */
     }
 
     #cancelNewField {
@@ -782,7 +783,12 @@ body {
     }
   
   
-    tbody tr { line-height: 50px; }
+    tbody tr { 
+        line-height: 50px; 
+        td:last-child {
+            width: 50px;
+          }
+    }
 
   
     tbody tr td span {
@@ -792,7 +798,7 @@ body {
 
     tbody tr:hover {
         background-color: $green;
-        color: white;
+       
       }
 
     i {
@@ -822,7 +828,7 @@ body {
     position: relative;
     top: 10%;
     height: 85%;
-    width: 55%;
+    width: 52.5%;
     border-radius: 15px;
  }
 
@@ -882,7 +888,7 @@ body {
     position: absolute;
     width: 100%;
     height: 87.5%;
-    top: 10%;
+    top: 5%;
     border-radius: 15px;
     display: flex;
     flex-direction: row;
@@ -892,10 +898,15 @@ body {
         color: $green;
     }
 
+    .taskContainer::-webkit-scrollbar{
+        display: none;
+      }
+
     .taskColumn {
+        
         position: relative;
         width: 33%;
-        height: 92.5%;
+        height: 100%;
         border-radius: 15px;
         margin-right: 10px;
 
@@ -926,6 +937,7 @@ body {
         }
 
         .taskContainer {
+            scrollbar-width: none;
             position: absolute;
             width: 100%;
             height: 100%;
@@ -933,17 +945,23 @@ body {
             background-color: #D9D9D9;
             border-radius: 15px;
             margin: 5px;
+            border: 1px solid $darkGrey;
         }
+
+        .taskCard::-webkit-scrollbar{
+            display: none;
+          }
 
         .taskCard {
             position: relative;
             height: auto;
-            width: 95%;
-            margin: 2.5%;
+            width: 90%;
+            margin: 5%;
             border-radius: 5px;
             background-color: white;
             padding-bottom: 5%;
-            overflow: scroll;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            
 
             h3 {
                 padding-top: 5%;
@@ -1084,7 +1102,6 @@ body {
     position: absolute;
     width: 50%;
     height: fit-content;
-    top: 10%;
     left: 25%;
     border-radius: 15px;
     display: flex;
@@ -1208,6 +1225,33 @@ body {
   }
 
 
+  .delete-container .delete-button {
+    display: none;
+  }
+  
+  .delete-container:hover .delete-button {
+    display:inline-flex;
+    
+  }
+
+  .delete-container:hover :not(.delete-button) {
+    display: none;
+  }
+
+  .delete-button {
+    align-items: center;
+    justify-content: center;
+    border: none;
+    z-index: 300;
+    background: $red;
+    color: white;
+    cursor: pointer;
+    margin: 0;
+    padding: 5px;
+    
+
+  
+  }
 
 #teamContainer {
     position: absolute;
@@ -1229,7 +1273,9 @@ body {
         border-bottom: 1px solid black;
     }
 
+
     #addNewMember {
+
    
         right: 2.5%;
         color: $green;
@@ -1261,9 +1307,16 @@ body {
             th {padding-left: 5%; padding-bottom: 2.5%;}
         }
 
+        tbody tr:hover {
+            background-color: $lightGreen !important;
+        }
+        tbody tr td:last-child {
+            width: 50px; /* Adjust the width as needed */
+          }
         tbody tr td {
             font-size: 2vh;
             padding-left: 5%;
+            width: 50px;
         }
 
         tbody tr:nth-child(odd) {
@@ -1350,6 +1403,7 @@ body {
     border: 2px solid $grey;
     border-radius: 15px;
     overflow-y: scroll;
+    scrollbar-width: none;
 
     h2 {
         font-size: 2.5vh;
@@ -1427,6 +1481,35 @@ body {
       }
 
 }
+.confrimDelete {
+    position: absolute;
+    z-index: 302;
+    width: 40%;
+    left: 20%;
+    padding: 5%;
+    border-radius: 15px;
+    background-color: $grey;
+
+    h2 {
+        margin-top: 0;
+    }
+
+    #deleteAccountCancel {
+        position: absolute;
+        right: 5%;
+        top: 5%;
+        font-size: 2.5vh;
+        cursor: pointer;
+    }
+
+    input {
+        margin: 5% 0 5% 0;
+    }
+  }
+
+  #settingsOverlay {
+    z-index: 301;
+  }
 
 .toggle {
 	cursor: pointer;
@@ -1503,9 +1586,19 @@ body {
         filter: brightness(0) invert(1);
     }
 
-    tbody tr:nth-child(odd) {
-        background-color: #2a2a2a;
+    thead {
+        background-color: unset !important;
     }
+
+    tbody tr:nth-child(odd) {
+        background-color: #2a2a2a !important;
+    }
+
+    tbody tr:hover {
+        background-color: $lightGreen !important;
+        color: black;
+    }
+
 
     //{` ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}
 }

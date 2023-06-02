@@ -88,7 +88,7 @@ class Maps extends React.Component {
                 cell3.innerHTML = "<span>" + field.crop_type + "</span>";
 
                 var cell4 = row.insertCell(3);
-                cell4.innerHTML = '<i class="fa-solid fa-ellipsis-vertical"></i>';
+                cell4.innerHTML = '<div class="delete-container"><i class="fa-solid fa-ellipsis-vertical"></i><button class="delete-button">Delete</button></div>';
 
 
                 if (field.type === "rectangle") {
@@ -126,14 +126,12 @@ class Maps extends React.Component {
                                 position: { lat: sensor.latitude, lng: sensor.longitude },
                                 map: map,
                                 // make a dot
-                                icon: {
-                                    path: window.google.maps.SymbolPath.CIRCLE,
-                                    scale: 5,
-                                    fillColor: "#000000",
-                                    fillOpacity: 1,
-                                    strokeWeight: 0,
+                                label: {
+                                    fontFamily: 'Fontawesome',
+                                    text: '\uf1eb',
+                                    color: 'white',
                                     clickable: true,
-                                    // add a label to the dot
+                    
                                 },
                             });
 
@@ -235,13 +233,13 @@ class Maps extends React.Component {
                                 position: { lat: sensor.latitude, lng: sensor.longitude },
                                 map: map,
                                 // make a dot
-                                icon: {
-                                    path: window.google.maps.SymbolPath.CIRCLE,
-                                    scale: 5,
-                                    fillColor: "#000000",
-                                    fillOpacity: 1,
-                                    strokeWeight: 0,
+                               
+                                label: {
+                                    fontFamily: 'Fontawesome',
+                                    text: '\uf015',
+                                    color: 'white',
                                     clickable: true,
+                    
                                 },
                             });
 
@@ -788,7 +786,7 @@ class Maps extends React.Component {
                         cell1.innerHTML = "<span>" + fieldName + "</span>";
                         cell2.innerHTML = "<span>" + area + "</span> m<sup>2";
                         cell3.innerHTML = "<span>" + cropType + "</span>";
-                        cell4.innerHTML = '<i class="fa-solid fa-ellipsis-vertical"></i>';
+                        cell4.innerHTML = '<i className="fa-solid fa-ellipsis-vertical"></i>';
 
 
                         rectangle.isComplete = true;
@@ -925,7 +923,7 @@ class Maps extends React.Component {
                 <div className="fieldsTableConatiner">
 
                     <h2 className="hidden" id="addFieldsHeader">Use the rectangle/polygon tool to draw the field onto map</h2>
-                    <button  onClick={this.showFieldForm} id="cancelNewField" className={`fieldsTableBtn hidden ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}><i class='fa-solid fa-xmark'></i> Cancel</button>                   
+                    <button  onClick={this.showFieldForm} id="cancelNewField" className={`fieldsTableBtn hidden ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}><i className='fa-solid fa-xmark'></i> Cancel</button>                   
 
                     <form id="createField" className="hidden" onSubmit={this.createField}>
                         <label htmlFor="name">Field Name</label>
@@ -948,8 +946,12 @@ class Maps extends React.Component {
                         <tbody>
 
                             <tr>
-                                <td colspan="4" >
+                                <td colSpan={4}>
+
+
                                     {this.props.user.role === 'farmer' || this.props.user.role === 'field manager' ? null :
+
+                                        
                                         <button  onClick={this.showFieldForm} id="addNewField" className={`fieldsTableBtn`}> <i className="fa-solid fa-plus"></i> Add Field</button>                   
                                     }
                                 </td>

@@ -197,7 +197,12 @@ class Team extends React.Component {
                                 <td>{member.role}</td>
                                 <td>{member.email}</td>
                                 <td>{member.field}</td>
-                                <td><i className="fa-solid fa-ellipsis-vertical"></i></td>
+                                <td>
+                                    <div className="delete-container">
+                                        <i className="fa-solid fa-ellipsis-vertical"></i>
+                                        <button className="delete-button">Delete</button>
+                                    </div>
+                                </td>
                             </tr>
                             ))}
                         </tbody>
@@ -206,7 +211,7 @@ class Team extends React.Component {
 
                 </section>
 
-                <form id="addTeamMember" className="form hidden" onSubmit={this.handleSubmit}>
+                <form id="addTeamMember" className={`hidden ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`} onSubmit={this.handleSubmit}>
                             
                     <h2><i className="fa-solid fa-people-group"></i>Add new member <i className="fa-solid fa-xmark" id="teamCancel" onClick={this.cancelMember}></i></h2>
                     <hr></hr>

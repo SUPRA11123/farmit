@@ -95,6 +95,16 @@ class Settings extends React.Component {
         }
     }
 
+    showDeleteForm() {
+        document.getElementById('confrimDelete').classList.remove('hidden');
+        document.getElementById('settingsOverlay').classList.remove('hidden');
+    }
+
+    cancelDelete(){
+        document.getElementById('confrimDelete').classList.add('hidden');
+        document.getElementById('settingsOverlay').classList.add('hidden');
+    }
+
 
 
     render() {
@@ -116,8 +126,19 @@ class Settings extends React.Component {
                         <input id="themeSelector" onChange={this.changeTheme} className="toggle-checkbox" type="checkbox" />
                         <div className="toggle-switch"></div>
                     </label>
-                    <button className="delete-btn" onClick={this.deleteAccount}>Delete Account</button>
+                    <button className="delete-btn" onClick={this.showDeleteForm}>Delete Account</button>
                 </section>
+
+                <form id='confrimDelete' className="confrimDelete hidden" onSubmit={this.deleteAccount}>
+                    <i className="fa-solid fa-xmark" id="deleteAccountCancel" onClick={this.cancelDelete}></i>
+                    <h2>Delete Account</h2>
+                    <label>To delete your Agrosensor account, you are required to enter your password:</label><br/>
+                    <input required type="password" id="settingsPassword" name="password" placeholder="Password" /><br/>
+                    <button id='deleteAccount' type="submit">Delete Account</button>
+
+                </form>
+
+                <div id='settingsOverlay' className="overlayDarken hidden"></div>
 
             </>
 

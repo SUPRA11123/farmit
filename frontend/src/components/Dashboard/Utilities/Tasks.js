@@ -107,10 +107,14 @@ class Tasks extends React.Component {
                 const taskSettings = document.createElement('i');
                 taskSettings.classList.add('fa-solid', 'fa-ellipsis-vertical', 'taskSettings');
 
+                const taskSettings2 = document.createElement("span");
+                taskSettings2.classList.add('taskSettings')
+                taskSettings2.innerHTML = '<div class="delete-container"><i class="fa-solid fa-ellipsis-vertical"></i><button class="delete-button">Delete</button></div>';
+
                 div.appendChild(taskTitle);
                 div.appendChild(taskDescription);
                 div.appendChild(taskMember);
-                div.appendChild(taskSettings);
+                div.appendChild(taskSettings2);
 
                if(task.status = 'To do') {
                 toDo.appendChild(div);
@@ -211,7 +215,7 @@ class Tasks extends React.Component {
                 </section>
 
 
-                <form id="addTask" className="hidden" onSubmit={this.createTask}>
+                <form id="addTask" className={`hidden ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`} onSubmit={this.createTask}>
                     <h2><i className="fa-solid fa-bullseye"></i>Create new task <i className="fa-solid fa-xmark" id="taskCancel" onClick={this.cancelTask}></i></h2>
                     <hr></hr>
                     <label htmlFor="task">Task</label>
