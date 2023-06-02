@@ -20,6 +20,7 @@ class Modal extends React.Component {
   }
 
   componentDidMount() {
+    
 
     this.fetchData(); // Fetch data initially
 
@@ -57,11 +58,8 @@ class Modal extends React.Component {
       next: (row, tableMeta) => {
         // Extract the relevant data from the row
         const time = row["4"];
-        console.log(time);
         const field = row["6"];
-        console.log(field);
         const value = row["5"];
-        console.log(value);
 
 
   
@@ -76,7 +74,6 @@ class Modal extends React.Component {
       },
       complete: () => {
         console.log("Query completed");
-        console.log(data); // Check the fetched data in the console
   
         this.updateChart(data);
       },
@@ -105,7 +102,6 @@ class Modal extends React.Component {
     const { startDate, endDate } = this.state;
     // Perform the CSV export with the selected start and end dates
 
-    console.log("Exporting CSV data from", startDate, "to", endDate);
 
     // get data from influxdb
     const influxDB = new InfluxDB({
@@ -145,7 +141,6 @@ class Modal extends React.Component {
     },
     complete: () => {
       console.log("Query completed");
-      console.log(data);
   
       // Sort the data array by time in ascending order
       data.sort((a, b) => new Date(a.time) - new Date(b.time));
@@ -189,7 +184,6 @@ class Modal extends React.Component {
       return; // No new data, exit the function
     }
   
-    console.log(data);
   
     // populate the graph with humidity and temperature data
     const humidityData = data.filter((row) => row["decoded_payload_humidity"]);
@@ -197,14 +191,12 @@ class Modal extends React.Component {
   
     this.setState({ humidityData, temperatureData });
   
-    console.log(humidityData);
-    console.log(temperatureData);
+
   
     // store the time values in an array and don't repeat them, also transform into local time
     const uniqueTime = new Set(data.map((row) => row.time));
     const time = [...uniqueTime].map((time) => new Date(time).toLocaleTimeString());
   
-    console.log(time);
   
     if (!this.myChart) {
       const chartRef = this.chartRef.current;

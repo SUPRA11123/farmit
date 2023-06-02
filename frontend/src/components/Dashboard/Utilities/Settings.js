@@ -7,6 +7,7 @@ class Settings extends React.Component {
         super(props);
         this.changeTheme = this.changeTheme.bind(this);
         this.deleteAccount = this.deleteAccount.bind(this);
+        this.changePassword = this.changePassword.bind(this);
     }
 
     componentDidMount() {
@@ -60,32 +61,32 @@ class Settings extends React.Component {
         //document.getElementById('navContainer').classList.remove('darkMode');
     }
 
-    deleteAccount() {
+    deleteAccount(event) {
 
-      
-        console.log("Delete account clicked");
-       // get password from document get id
-       const password = document.getElementById('settingsPassword').value;
+        event.preventDefault();
 
-       console.log(password);
+        // get password from document get id
+        const password = document.getElementById('settingsPassword').value;
+
+        console.log(password);
 
 
-            axios
-                .delete("http://localhost:8000/deleteaccount/", {
-                    data: {
-                        email: this.props.user.email,
-                        password: password,
-                    },
-                })
-                .then((response) => {
-                    console.log(response);
-                    localStorage.removeItem("token");
-                    localStorage.removeItem("darkMode");
-                    window.location.reload();
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+        axios
+            .delete("http://localhost:8000/deleteaccount/", {
+                data: {
+                    email: this.props.user.email,
+                    password: password,
+                },
+            })
+            .then((response) => {
+                console.log(response);
+                localStorage.removeItem("token");
+                localStorage.removeItem("darkMode");
+                window.location.reload();
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
     showDeleteForm() {
@@ -98,19 +99,49 @@ class Settings extends React.Component {
         document.getElementById('settingsOverlay').classList.remove('hidden');
     }
 
-    cancelDelete(){
+    cancelDelete() {
         document.getElementById('confirmDelete').classList.add('hidden');
         document.getElementById('settingsOverlay').classList.add('hidden');
     }
 
 
-    changePassword() {
-        
-       console.log("Change password clicked");
+    changePassword(event) {
+        event.preventDefault();
+    
+        console.log("Change password clicked");
+    
+        const password = document.getElementById('currentPassword').value;
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmPassword = document.getElementById('confirmNewPassword').value;
+    
+        console.log(password);
+        console.log(newPassword);
+        console.log(confirmPassword);
+    
+        // if new password and confirm password are the same, send request to backend
+        if (newPassword === confirmPassword) {
+            axios.put("http://localhost:8000/changepassword/", {
+                email: this.props.user.email,
+                currentPassword: password,
+                newPassword: newPassword,
+            })
+            .then((response) => {
+                console.log(response);
+                // close the form
+                document.getElementById('changePassword').classList.add('hidden');
+                document.getElementById('settingsOverlay').classList.add('hidden');
 
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        } else {
+            alert("New passwords do not match");
+        }
     }
+    
 
-    cancelChangePassword(){
+    cancelChangePassword() {
         document.getElementById('changePassword').classList.add('hidden');
         document.getElementById('settingsOverlay').classList.add('hidden');
     }
@@ -145,8 +176,8 @@ class Settings extends React.Component {
                 <form id='confirmDelete' className="confirmDelete hidden" onSubmit={this.deleteAccount}>
                     <i className="fa-solid fa-xmark" id="deleteAccountCancel" onClick={this.cancelDelete}></i>
                     <h2>Delete Account</h2>
-                    <label>To delete your Agrosensor account, you are required to enter your password:</label><br/>
-                    <input required type="password" id="settingsPassword" name="password" placeholder="Password" /><br/>
+                    <label>To delete your Agrosensor account, you are required to enter your password:</label><br />
+                    <input required type="password" id="settingsPassword" name="password" placeholder="Password" /><br />
                     <button id='deleteAccount' type="submit">Delete Account</button>
 
                 </form>
@@ -154,11 +185,14 @@ class Settings extends React.Component {
                 <form id='changePassword' className="changePassword hidden" onSubmit={this.changePassword}>
                     <i className="fa-solid fa-xmark" id="changePasswordCancel" onClick={this.cancelChangePassword}></i>
                     <h2>Change Password</h2>
-                    <label>To change your Agrosensor account password, you are required to enter your current password.</label><br/><br/>
-                    <label>Your new password must have, at least, <span class="underline">8</span> characters, including <span class="underline">1</span> <strong>uppercase</strong> letter, <span class="underline">1</span> <strong>lowercase</strong> letter and <span class="underline">1</span> <strong>digit</strong>.</label>
-                    <input required type="password" id="settingsPassword" name="password" placeholder="Current Password" /><br/>
-                    <input required type="password" id="settingsPassword" name="password" placeholder="New Password" /><br/>
-                    <input required type="password" id="settingsPassword" name="password" placeholder="Confirm New Password" /><br/>
+                    <label>To change your Agrosensor account password, you are required to enter your current password.</label><br /><br />
+                    <label>Your new password must have, at least, <span class="underline">8</span> characters, </label>
+                    <label>including <span class="underline">1</span> <strong>uppercase</strong> letter, <span class="underline">1</span></label>
+                    <label> <strong>lowercase</strong> letter and <span class="underline">1</span> <strong>digit</strong>.</label>
+                    <label> (Max 50 chars!)</label>
+                    <input required type="password" id="currentPassword" name="password" placeholder="Current Password" /><br />
+                    <input required type="password" id="newPassword" name="password" placeholder="New Password" /><br />
+                    <input required type="password" id="confirmNewPassword" name="password" placeholder="Confirm New Password" /><br />
                     <button id='changePassword' type="submit">Change Password</button>
                 </form>
 
