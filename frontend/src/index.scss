@@ -751,10 +751,11 @@ body {
     .fieldsTableBtn:hover {
         cursor: pointer;
         background-color: $green;
+        color: white;
     }
 
     .fieldsTable tbody tr:hover {
-        background-color: $lightGreen /* Change this to the desired hover color */
+        background-color: $green /* Change this to the desired hover color */
     }
 
     #cancelNewField {
@@ -821,6 +822,7 @@ body {
 
     tbody tr:hover {
         background-color: $green;
+        color: white;
        
       }
 
@@ -968,7 +970,6 @@ body {
             background-color: #D9D9D9;
             border-radius: 15px;
             margin: 5px;
-            border: 1px solid $darkGrey;
         }
 
         .taskCard::-webkit-scrollbar{
@@ -1305,7 +1306,7 @@ body {
     }
 
     #addNewMember:hover {
-        color: $lightGreen;
+        color: $green;
         cursor: pointer;
     }
 
@@ -1325,7 +1326,7 @@ body {
         }
 
         tbody tr:hover {
-            background-color: $lightGreen !important;
+            background-color: $green !important;
         }
         tbody tr td:last-child {
             width: 50px; /* Adjust the width as needed */
@@ -1412,12 +1413,13 @@ body {
 
 //PREDICTIONS STYLES
 
-.imagePreview {
+.imageInput {
     position: absolute;
     left: 0;
-    height: 95%;
-    width: 50%;
-    border: 2px solid $grey;
+    top: 10%;
+    height: 70%;
+    width: 47.5%;
+    border: 2px solid #D9D9D9;
     border-radius: 15px;
     overflow-y: scroll;
     scrollbar-width: none;
@@ -1430,24 +1432,20 @@ body {
     }
 
     img {
-        width: 80%;
+        width: 20%;
         margin-left: 10%;
     }
 
 }
 
-.imageUpload {
+.imageOutput {
     position: absolute;
-    top: 25%;
+    top: 10%;
     right: 0;
-    height: 50%;
+    height: 70%;
     width: 47.5%;
-    background-color: $grey;
+    border: 2px solid #D9D9D9;
     border-radius: 25px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
 
     h2 {
         font-size: 2.5vh;
@@ -1455,6 +1453,65 @@ body {
         width: 100%;
         text-align: center;
     }
+}
+
+.predictionsBtns {
+    position: absolute;
+    width: 100%;
+    height: 10%;
+    bottom: 5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    #uploadImgs {
+        position: absolute;
+        left: 0;
+        cursor: pointer;
+        font-size: 2.5vh;
+        font-family: $font1;
+        border: none;
+        background-color: $grey;
+        color: black;
+        border-radius: 5px;
+        padding: 10px 20px;
+
+        input[type="file"] {
+            display: none;
+        }
+
+    }
+
+    #uploadImgs:hover {
+        color: $green;
+    }
+
+    #processImgs {
+
+        cursor: pointer;
+        font-size: 2.5vh;
+        font-family: $font1;
+        border: none;
+        background-color: $green;
+        color: white;
+        border-radius: 5px;
+        padding: 10px 20px;
+
+    }
+
+    #downloadImgs {
+        position: absolute;
+        right: 0;
+        cursor: pointer;
+        font-size: 2.5vh;
+        font-family: $font1;
+        border: none;
+        background-color: $grey;
+        color: black;
+        border-radius: 5px;
+        padding: 10px 20px;
+    }
+    
 }
 
 //SETTINGS STYLES
@@ -1608,12 +1665,12 @@ body {
     }
 
     tbody tr:nth-child(odd) {
-        background-color: #2a2a2a !important;
+        background-color: #2a2a2a ;
     }
 
     tbody tr:hover {
-        background-color: $lightGreen !important;
-        color: black;
+        background-color: $green;
+        color: white;
     }
 
 

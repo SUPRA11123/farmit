@@ -170,6 +170,7 @@ class Dashboard extends React.Component {
         document.getElementById('alertOverlay').classList.toggle('hidden');
         document.getElementById('alertOverlay').classList.toggle('overlayDarkenAnimation');
         document.getElementById('openSettings').classList.toggle('hidden');
+        document.getElementById('notification').classList.toggle('hidden');
   
       }
       
@@ -203,7 +204,7 @@ class Dashboard extends React.Component {
                             <li onClick={() => this.setState({currentDashboardScreen: "team"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "team" ? "navActive": ""}><p>Team</p><i className="fa-solid fa-people-group"></i></li>
                             )}
                             <li onClick={() => this.setState({currentDashboardScreen: "weather"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "weather" ? "navActive": ""}><p>Weather</p><i className="fa-solid fa-cloud-sun"></i></li>
-                            <li onClick={() => this.setState({currentDashboardScreen: "predictions"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "predictions" ? "navActive": ""}><p>Predictions</p><i className="fa-solid fa-bullhorn"></i></li>
+                            <li onClick={() => this.setState({currentDashboardScreen: "predictions"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "predictions" ? "navActive": ""}><p>Fruit Predictions</p><i className="fa-solid fa-leaf"></i></li>
                             <li onClick={() => this.setState({currentDashboardScreen: "settings"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "settings" ? "navActive": ""}><p>Settings</p><i className="fa-solid fa-gear"></i></li>
                             <li id='logout' onClick={this.handleLogout}><p>Logout</p><i className="fa-solid fa-arrow-right-from-bracket"></i></li>
                         </ul>
@@ -238,7 +239,7 @@ class Dashboard extends React.Component {
                     <i id="openSettings" onClick={() => this.setState({currentDashboardScreen: "settings"})} className={`fa-solid fa-gear ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}></i>
                     <div class="notification-container">
                         <i onClick={this.toggleAlertMenu} id='alertBell' className={`fa-regular fa-bell ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}></i>
-                        <span class="notification">2</span>
+                        <span id='notification' class="notification">2</span>
                     </div>
                     
          

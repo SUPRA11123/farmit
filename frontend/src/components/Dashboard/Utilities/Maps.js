@@ -358,6 +358,7 @@ class Maps extends React.Component {
                     // Set the sensor data in the state
                     const sensorArray = Object.values(sensors);
                     this.setState({ sensors: sensorArray });
+                    console.log(sensorArray)
                     resolve();
                 },
             });
@@ -949,9 +950,9 @@ class Maps extends React.Component {
 
                     <form id="createField" className="hidden" onSubmit={this.createField}>
                         <label htmlFor="name">Field Name</label>
-                        <input required type="text" name="name" id="fieldName" placeholder="enter name" />
+                        <input autocomplete="off" required type="text" name="name" id="fieldName" placeholder="enter name" />
                         <label htmlFor="name">Crop</label>
-                        <input required type="text" name="crop_type" id="cropType" placeholder="select type" />
+                        <input autocomplete="off" required type="text" name="crop_type" id="cropType" placeholder="select type" />
                         <input id="loginInBtn" type="submit" value="Create Field" />
                     </form>
 

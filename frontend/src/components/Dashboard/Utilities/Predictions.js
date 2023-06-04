@@ -37,7 +37,7 @@ class Predictions extends React.Component {
   processImages() {
 
     //Process the images here
-    
+
   }
 
   render() {
@@ -46,20 +46,34 @@ class Predictions extends React.Component {
 
     return (
       <>
-        <section className='imageUpload'>
-          <h2>Upload images</h2>
-            <input type="file" multiple onChange={this.handleFileUpload} />
-          {hasUploadedImages && (
-            <button onClick={this.processImages}>Predict fruit and count</button>
-          )}
-        </section>
-        <section className='imagePreview'>
-          <h2>Image preview</h2>
+        
+       
+        <section className='imageInput'>
+          <h2>Input</h2>
           {previewImages.length > 0 && (
             previewImages.map((previewImage, index) => (
               <img key={index} src={previewImage} alt={`Preview of uploaded image ${index}`} />
             ))
           )}
+        </section>
+
+        <section className='imageOutput'>
+          <h2>Output</h2>
+          
+         
+        </section>
+
+        <section className='predictionsBtns'>
+
+        <label id='uploadImgs'>
+            <input type="file" multiple onChange={this.handleFileUpload}/>
+            <i className="fa-solid fa-cloud-arrow-up"></i> Upload Images
+        </label>
+
+       {/*{hasUploadedImages && (  )}*/} 
+        <button id='processImgs' onClick={this.processImages}>Process Images</button>
+         
+        <button id='downloadImgs'>Download Images <i className="fa-solid fa-cloud-arrow-down"></i></button>
         </section>
       </>
     );
