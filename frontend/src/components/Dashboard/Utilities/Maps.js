@@ -27,6 +27,7 @@ class Maps extends React.Component {
 
         await this.sensorLocationQuery();
 
+      
         // check if any field already exists
         var fields;
         const role = this.props.user.role;
@@ -96,7 +97,6 @@ class Maps extends React.Component {
                     const coordinates = field.coordinates.split(";");
 
                     const rectangleBounds = coordinates.map(parseFloat);
-                    console.log(rectangleBounds);
 
 
                     const rectangle = new window.google.maps.Rectangle({
@@ -117,8 +117,11 @@ class Maps extends React.Component {
 
                     this.state.sensors.forEach((sensor) => {
 
+
+
                         // check if the sensor is inside the rectangle
                         if (this.isPointInsideRectangle(sensor, rectangleBounds)) {
+
 
                             const markerIcon = {
                                 path: window.google.maps.SymbolPath.CIRCLE,
@@ -229,13 +232,11 @@ class Maps extends React.Component {
                         return { lat: parseFloat(lat), lng: parseFloat(lng) };
                     });
 
-                    console.log("Polygon Coordinates:", polygonCoordinates);
 
                     this.state.sensors.forEach((sensor) => {
                         // check if the sensor is inside the rectangle
                         if (this.isPointInsidePolygon(sensor, polygonCoordinates)) {
 
-                            console.log("Sensor inside polygon");
 
 
                             // add a little point in the rectangle in the point position
@@ -321,8 +322,8 @@ class Maps extends React.Component {
             |> filter(fn: (r) =>
               r._measurement == "mqtt_consumer" and
               (
-                r._field == "temperature" or
-                r._field == "humidity" or
+                r._field == "decoded_payload_temperature" or
+                r._field == "decoded_payload_humidity" or
                 r._field == "locations_user_latitude" or
                 r._field == "locations_user_longitude"
               ) and
@@ -337,6 +338,7 @@ class Maps extends React.Component {
                 next: (row, tableMeta) => {
                     const sensorData = tableMeta.toObject(row);
 
+
                     const { _field, _value, topic } = sensorData;
 
                     // Extract the sensor ID from the topic. It's the 4th part of the topic
@@ -346,6 +348,10 @@ class Maps extends React.Component {
                         sensors[sensorId] = { ...sensors[sensorId], latitude: _value, sensorId };
                     } else if (_field === "locations_user_longitude") {
                         sensors[sensorId] = { ...sensors[sensorId], longitude: _value, sensorId };
+                    } else if (_field === "decoded_payload_temperature") {
+                        sensors[sensorId] = { ...sensors[sensorId], temperature: _value, sensorId };
+                    } else if (_field === "decoded_payload_humidity") {
+                        sensors[sensorId] = { ...sensors[sensorId], humidity: _value, sensorId };
                     }
                 },
                 error: (error) => {
@@ -546,7 +552,6 @@ class Maps extends React.Component {
 
                 const area = window.google.maps.geometry.spherical.computeArea(polygon.getPath()).toFixed(0);
 
-                console.log('Polygon Area:', area);
 
                 const formSubmitPromise = new Promise((resolve, reject) => {
                     document.getElementById("createField").addEventListener("submit", (event) => {
@@ -731,7 +736,6 @@ class Maps extends React.Component {
                 // get the area of the rectangle
                 const area = window.google.maps.geometry.spherical.computeArea(rectangle.getBounds()).toFixed(0);
 
-                console.log('Rectangle Area:', area);
 
                 const formSubmitPromise = new Promise((resolve, reject) => {
                     document.getElementById("createField").addEventListener("submit", (event) => {

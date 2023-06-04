@@ -40,5 +40,6 @@ urlpatterns = [
     path('getfieldbyid/<int:id>/', field_views.getFieldById),
     path('gettasksbyfarm/<int:id>/', task_views.get_tasks_by_farm),
     path('deleteuser/<str:email>/', views.deleteUser),
-    path('deleteaccount/', views.deleteAccount)
+    path('deleteaccount/', views.deleteAccount),
+    path('changepassword/', views.changePassword),
     ]

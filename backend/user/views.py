@@ -102,4 +102,23 @@ def deleteAccount(request):
             user.delete()
             return JsonResponse({'message': 'User deleted'}, status=200)
         return JsonResponse({'message': 'Invalid credentials'}, status=401)
-     
+    
+@api_view(['PUT'])
+def changePassword(request):
+    # i want to send the current password and the new one
+    # check if the current password is correct
+    # if it is, change it to the new one
+    # if not, return error
+    email = request.data['email']
+    currentPassword = request.data['currentPassword']
+    newPassword = request.data['newPassword']
+    if User.objects.filter(email=email).exists():
+        user = User.objects.get(email=email)
+        if check_password(currentPassword, user.password):
+            user.password = newPassword
+            user.set_password(newPassword)
+            user.save()
+            return JsonResponse({'message': 'Password changed'}, status=200)
+        return JsonResponse({'message': 'Invalid credentials'}, status=401)
+    
+  

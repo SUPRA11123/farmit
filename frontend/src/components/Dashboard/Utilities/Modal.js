@@ -20,6 +20,7 @@ class Modal extends React.Component {
   }
 
   componentDidMount() {
+    
 
     this.fetchData(); // Fetch data initially
 
@@ -44,7 +45,7 @@ class Modal extends React.Component {
 
     const query = `
     from(bucket: "test")
-    |> range(start: -30m) 
+    |> range(start: -20m) 
     |> filter(fn: (r) => r["_measurement"] == "mqtt_consumer")
     |> filter(fn: (r) => r["_field"] == "decoded_payload_temperature" or r["_field"] == "decoded_payload_humidity")
     |> filter(fn: (r) => r["topic"] == "v3/farmit@ttn/devices/${this.props.sensorData.sensorId}/up")
@@ -57,11 +58,8 @@ class Modal extends React.Component {
       next: (row, tableMeta) => {
         // Extract the relevant data from the row
         const time = row["4"];
-        console.log(time);
         const field = row["6"];
-        console.log(field);
         const value = row["5"];
-        console.log(value);
 
 
   
@@ -76,7 +74,6 @@ class Modal extends React.Component {
       },
       complete: () => {
         console.log("Query completed");
-        console.log(data); // Check the fetched data in the console
   
         this.updateChart(data);
       },
@@ -105,7 +102,6 @@ class Modal extends React.Component {
     const { startDate, endDate } = this.state;
     // Perform the CSV export with the selected start and end dates
 
-    console.log("Exporting CSV data from", startDate, "to", endDate);
 
     // get data from influxdb
     const influxDB = new InfluxDB({
@@ -145,7 +141,6 @@ class Modal extends React.Component {
     },
     complete: () => {
       console.log("Query completed");
-      console.log(data);
   
       // Sort the data array by time in ascending order
       data.sort((a, b) => new Date(a.time) - new Date(b.time));
@@ -189,7 +184,6 @@ class Modal extends React.Component {
       return; // No new data, exit the function
     }
   
-    console.log(data);
   
     // populate the graph with humidity and temperature data
     const humidityData = data.filter((row) => row["decoded_payload_humidity"]);
@@ -197,14 +191,12 @@ class Modal extends React.Component {
   
     this.setState({ humidityData, temperatureData });
   
-    console.log(humidityData);
-    console.log(temperatureData);
+
   
     // store the time values in an array and don't repeat them, also transform into local time
     const uniqueTime = new Set(data.map((row) => row.time));
     const time = [...uniqueTime].map((time) => new Date(time).toLocaleTimeString());
   
-    console.log(time);
   
     if (!this.myChart) {
       const chartRef = this.chartRef.current;
@@ -270,7 +262,7 @@ class Modal extends React.Component {
         this.myChart.data.datasets[1].data.push(latestHumidity);
   
         // Remove the oldest data point if the chart exceeds a certain number of points
-        const maxDataPoints = 50; // Adjust as needed
+        const maxDataPoints = 20; // Adjust as needed
         if (this.myChart.data.labels.length > maxDataPoints) {
           this.myChart.data.labels.shift();
           this.myChart.data.datasets[0].data.shift();
@@ -281,8 +273,6 @@ class Modal extends React.Component {
       }
     }
   }
-  x
-
 
   render() {
     const { setOpenModal } = this.props;
@@ -299,7 +289,7 @@ class Modal extends React.Component {
             <h5>Field data</h5>
           </div>
           <div className="title2">
-            <h1>Real-Time Temperature and Humidity Values From Sensor<br></br> {this.props.sensorData.sensorId}</h1>
+            <h1>Real-Time Temperature and Humidity Values From Sensor {this.props.sensorData.sensorId}</h1>
           </div>
           <div className="body">
             <div>
