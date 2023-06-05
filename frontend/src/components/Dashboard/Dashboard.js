@@ -171,7 +171,11 @@ class Dashboard extends React.Component {
         document.getElementById('alertOverlay').classList.toggle('overlayDarkenAnimation');
         document.getElementById('openSettings').classList.toggle('hidden');
         document.getElementById('notification').classList.toggle('hidden');
-  
+        document.getElementById('addNewAlert').classList.toggle('alertCardAnimation');
+        const alertCards = document.getElementById("alertsContainer").querySelectorAll("div");
+        alertCards.forEach((card) => {
+          card.classList.toggle('alertCardAnimation');
+        });
       }
       
       
@@ -239,7 +243,7 @@ class Dashboard extends React.Component {
                     <i id="openSettings" onClick={() => this.setState({currentDashboardScreen: "settings"})} className={`fa-solid fa-gear ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}></i>
                     <div class="notification-container">
                         <i onClick={this.toggleAlertMenu} id='alertBell' className={`fa-regular fa-bell ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}></i>
-                        <span id='notification' class="notification">2</span>
+                        <span id='notification' class="notification">5</span>
                     </div>
                     
          
@@ -260,6 +264,52 @@ class Dashboard extends React.Component {
                 
 
                 <section id="alertMenu" className={`alertMenu hidden ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
+
+                    <h2>Alerts</h2>
+
+                    <div id="alertsContainer" className='alertsContainer'>
+
+                        <div className='alertCard'>
+
+                        <i class="fa-solid fa-wifi"></i>
+                        <h2>Low soil moisture detected in Field A. Irrigation recommended within the next 24 hours to maintain optimal soil moisture levels.</h2>
+
+                        </div>
+
+                        <div className='alertCard'>
+
+                        <i class="fa-solid fa-bullseye"></i>
+                        <h2>At 4:25PM, Tiago completed the task: "Pick fruits"</h2>
+
+                        </div>
+
+                        <div className='alertCard'>
+
+                        <i class="fa-solid fa-cloud-sun"></i>
+                        <h2>The temperature could reach over 27°C on tuesday</h2>
+
+                        </div>
+
+                        <div className='alertCard'>
+
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <h2>Low soil moisture detected in Field A. Irrigation recommended within the next 24 hours to maintain optimal soil moisture levels.</h2>
+
+                        </div>
+                        <div className='alertCard'>
+
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <h2>Low soil moisture detected in Field A. Irrigation recommended within the next 24 hours to maintain optimal soil moisture levels.</h2>
+
+                        </div>
+
+                        
+
+                        <button id='clearAllAlerts'><i className="fa-solid fa-trash"></i> Clear All</button>
+
+                    </div>
+
+                    <button id='addNewAlert'>Add new Alert</button>
 
                 </section>
 

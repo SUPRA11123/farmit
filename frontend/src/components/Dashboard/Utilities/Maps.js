@@ -914,6 +914,7 @@ class Maps extends React.Component {
 
             if (firstColumnValue === fieldName) {
                 row.style.backgroundColor = "#0ba837"; 
+                row.style.color = 'white';
             }
         }
     }
@@ -928,6 +929,7 @@ class Maps extends React.Component {
 
             if (firstColumnValue === fieldName) {
                 row.style.backgroundColor = "";
+                row.style.color = '';
             }
         }
     }

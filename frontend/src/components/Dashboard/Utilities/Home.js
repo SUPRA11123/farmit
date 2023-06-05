@@ -1,5 +1,6 @@
 import React from "react";
 import { Chart } from 'chart.js/auto';
+import axios from "axios";
 
 class Home extends React.Component {
 
@@ -11,15 +12,47 @@ class Home extends React.Component {
           day: 0,
           forecastData: [],
           forecastLabels: [],
-          statSelector: 'temperature'
+          statSelector: 'temperature',
+          sensor_latitude: null,
+          sensor_longitude: null,
         };
-
     }
 
     componentDidMount() {
-        console.log(this.props.weatherData);
+
         this.populateWeather(this.props.weatherData);
+
+        const map = new window.google.maps.Map(document.getElementById("homeMap"), {
+          mapTypeId: "satellite",
+          center: { lat: this.props.farmDetails.latitude, lng: this.props.farmDetails.longitude },
+          zoom: 14,
+          streetViewControl: false,
+          mapTypeControl: false,
+          fullscreenControl: false,
+          draggable: false,
+        });
+
+        map.addListener('click', (event) => {
+          this.props.displayScreen("maps");
+        });
+
+        const marker = new window.google.maps.Marker({
+          position: { lat: this.props.farmDetails.latitude, lng: this.props.farmDetails.longitude },
+          map: map,
+          label: {
+              fontFamily: 'Fontawesome',
+              text: '\uf015',
+              color: 'white',
+
+          },
+
+      });
+
+ 
+
     }
+
+  
 
     displayTime() {
         var x = new Date();
@@ -84,19 +117,22 @@ class Home extends React.Component {
     updateChart() {
       const forecastData = this.state.forecastData;
       const forecastLabels = this.state.forecastLabels;
-      const ctx = document.getElementById('myChart').getContext('2d');
+      const ctx = document.getElementById('homeChart').getContext('2d');
     
       if (this.myChart) {
         this.myChart.destroy();
       }
+
+      const darkMode = localStorage.getItem("darkMode") === "true";
+      const labelColor = darkMode ? '#ffffff' : '#8D8D8D';
       
       this.myChart = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: forecastLabels.flat(), // Set labels here
+          labels: forecastLabels.flat(), 
           datasets: [{
             label: 'Temperature',
-            data: forecastData, // Use forecastData directly
+            data: forecastData, 
             borderColor: '#0ba837',
             tension: 0,
             backgroundColor: '#BAECB8',
@@ -118,14 +154,21 @@ class Home extends React.Component {
               },
               suggestedMin: 0,
               suggestedMax: 40,
+              ticks: {
+                callback: function (value) {
+                  return value + '°C';
+                },
+                color: labelColor, 
+              },
             },
             x: {
               grid: {
                 display: false,
               },
               ticks: {
-                maxRotation: 0, // Set the maximum rotation angle to 0
-                minRotation: 0, // Set the minimum rotation angle to 0
+                maxRotation: 0,
+                minRotation: 0,
+                color: labelColor, 
               },
             },
           },
@@ -148,8 +191,25 @@ class Home extends React.Component {
         } else {
         return "Good evening,";
         }
+    }
 
-        //<img id='homeBackground' src="https://img.freepik.com/free-photo/harvested-grain-field-captured-sunny-day-with-some-clouds_181624-44956.jpg?w=1800&t=st=1684370902~exp=1684371502~hmac=cb72f01976942c7d753cb16fb4eb547d09496bfa64056cf06a7893905dc92a1f" draggable="false" alt="Agrosensor logo" />
+    getCurrentDayAndDate() {
+      const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      const currentDate = new Date();
+      const dayOfWeek = daysOfWeek[currentDate.getDay()];
+      const date = currentDate.getDate();
+      const month = months[currentDate.getMonth()];
+
+      function getOrdinalSuffix(date) {
+        const suffixes = ['th', 'st', 'nd', 'rd'];
+        const suffixIndex = date % 10 < 4 ? date % 10 : 0;
+        return suffixes[suffixIndex];
+      }
+    
+      const ordinalSuffix = getOrdinalSuffix(date);
+      
+      return dayOfWeek + ', ' + date + ordinalSuffix + ' ' + month;
     }
 
     
@@ -158,7 +218,8 @@ class Home extends React.Component {
         return (
             <>
             <div className="homeBackground">
-
+              <h1>Agrosensor</h1>
+              <p className={`${localStorage.getItem("darkMode") === "true" ? "darkModeBG" : ''}`}>{this.props.farmDetails.name} - {this.getCurrentDayAndDate()}</p>
             </div>
             
             <div onClick={() => this.props.displayScreen("weather")} id="weatherWidget" className={`Col2Card ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
@@ -178,9 +239,13 @@ class Home extends React.Component {
                
             </div>
 
-            <div id='alertWidget' className={`col4Card ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
+            <div id='alertWidget' onClick={() => this.props.displayScreen("weather")} className={`col4Card ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
               <p>5 Day Weather Forecast</p>
-              <canvas id="myChart" height='30%' width='100px'></canvas>
+              <canvas id="homeChart" height='25%' width='100px'></canvas>
+            </div>
+
+            <div className={`${localStorage.getItem("darkMode") === "true" ? "darkModeBG" : ''}`} id="homeMap">
+                   
             </div>
 
             </>

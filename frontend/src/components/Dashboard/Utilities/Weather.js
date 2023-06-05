@@ -60,13 +60,16 @@ class Weather extends React.Component {
         if (this.myChart) {
           this.myChart.destroy();
         }
+
+        const darkMode = localStorage.getItem("darkMode") === "true";
+        const labelColor = darkMode ? '#ffffff' : '#8D8D8D';
       
         this.myChart = new Chart(ctx, {
           type: 'line',
           data: {
             labels: forecastLabels[this.state.day],
             datasets: [{
-              label: 'Temperature',
+              label: this.state.statSelector,
               gridLines: 'false',
               data: forecastData[this.state.day],
               borderColor: '#0ba837',
@@ -90,10 +93,24 @@ class Weather extends React.Component {
                 },
                 suggestedMin: 0, 
                 suggestedMax: 40,
+                ticks: {
+                  callback: function (value) {
+                    if (this.state.statSelector === "humidity") {
+                      return value + '%';
+                    } else {
+                      return value + '°C';
+                    }
+                  }.bind(this),
+                },
               },
               x: {
                 grid: {
                   display: false,
+                },
+                ticks: {
+                  maxRotation: 0,
+                  minRotation: 0,
+                  color: labelColor, 
                 },
               },
             },
