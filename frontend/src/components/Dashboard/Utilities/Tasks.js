@@ -187,27 +187,27 @@ class Tasks extends React.Component {
 
                     <div id='taskOverlay' className="overlayDarken hidden"></div>
 
-                    <div className={`taskColumn ${localStorage.getItem("darkMode") === "true" ? "darkModeBG" : ''}`}>
-                        <h2>To Do<button id="addNewTask" onClick={this.showAddTaskForm}><i class="fa-solid fa-plus"></i></button></h2>
+                    <div className={`taskColumn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
+                        <h2 className="taskColumnHeader">To Do<button id="addNewTask" onClick={this.showAddTaskForm}><i class="fa-solid fa-plus"></i></button></h2>
 
-                        <div id='toDoTasksContainer' className={`taskContainer ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
+                        <div id='toDoTasksContainer' className='taskContainer'>
                             
                         </div>
 
                     </div>
 
-                    <div className="taskColumn">
-                        <h2>In Progress</h2>
+                    <div className={`taskColumn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
+                        <h2 className="taskColumnHeader">In Progress</h2>
 
-                        <div id='inProgressTasksContainer' className={`taskContainer ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
+                        <div id='inProgressTasksContainer' className='taskContainer'>
 
                         </div>
                     </div>
 
-                    <div className="taskColumn">
-                        <h2>Completed</h2>
+                    <div className={`taskColumn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
+                        <h2 className="taskColumnHeader">Completed</h2>
 
-                        <div id='completedTasksContainer' className={`taskContainer ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
+                        <div id='completedTasksContainer' className='taskContainer'>
 
                         </div>
                     </div>

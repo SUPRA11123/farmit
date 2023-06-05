@@ -210,7 +210,6 @@ class Dashboard extends React.Component {
                             <li onClick={() => this.setState({currentDashboardScreen: "weather"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "weather" ? "navActive": ""}><p>Weather</p><i className="fa-solid fa-cloud-sun"></i></li>
                             <li onClick={() => this.setState({currentDashboardScreen: "predictions"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "predictions" ? "navActive": ""}><p>Fruit Predictions</p><i className="fa-solid fa-leaf"></i></li>
                             <li onClick={() => this.setState({currentDashboardScreen: "settings"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "settings" ? "navActive": ""}><p>Settings</p><i className="fa-solid fa-gear"></i></li>
-                            <li id='logout' onClick={this.handleLogout}><p>Logout</p><i className="fa-solid fa-arrow-right-from-bracket"></i></li>
                         </ul>
                     </nav>
                 </aside>
@@ -254,6 +253,7 @@ class Dashboard extends React.Component {
                     weatherData={this.state.weatherData} weatherForecast={this.state.weatherForecast} 
                     farmDetails={this.state.farmDetails} user={this.state.user} 
                     changeTheme={this.changeTheme} getTheme={this.getTheme}
+                    logout={this.handleLogout}
                     />
 
 

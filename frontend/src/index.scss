@@ -227,7 +227,7 @@ body {
             align-items: center;
             justify-content: right;
             flex-direction: row;
-            padding: 2.5% 0 2.5% 0;
+            padding: 5% 0 5% 0;
             white-space:nowrap;
 
         }
@@ -284,6 +284,11 @@ body {
 .smallNav {
 
     width: 5%;
+
+    img {
+        transition: 1s;
+        width: 60%;
+    }
 
     img {transition-delay: 0.5;}
     #toggleNavMenu {transform: rotate(180deg);border-radius: 0 5px 0 0;}
@@ -404,7 +409,7 @@ body {
 
 .alertMenu {
     position: fixed;
-    z-index: 3;
+    z-index: 5;
     height: 70%;
     width: 30%;
     right: 2%;
@@ -952,7 +957,7 @@ body {
       text-align: left;
       border-radius: 25px;
       margin: 15%;
-      font-size: 2vh;
+      font-size: 2.5vh;
       font-weight: bold;
     }
   
@@ -1072,8 +1077,8 @@ body {
 #taskBoard {
     position: absolute;
     width: 100%;
-    height: 87.5%;
-    top: 5%;
+    height: 90%;
+    top: 10%;
     border-radius: 15px;
     display: flex;
     flex-direction: row;
@@ -1092,23 +1097,30 @@ body {
         position: relative;
         width: 33%;
         height: 100%;
-        border-radius: 15px;
+        border-radius: 15px 15px 0 0;
         margin-right: 10px;
+        margin-top: 0;
+        background-color: #D9D9D9;
 
         h2 {
-            width: 90%;
+            position: absolute;
+            width: 100%;
             font-size: 2.5vh;
             font-family: $font1;
-            font-weight: normal;
+            font-weight: bold;
             color: #3d3d3d;
             margin: 0;
-            margin-left: 5%;
+            z-index: 5;
+            padding: 2.5% 0 2.5% 0;
+            background-color: $grey;
+            border-radius: 15px 15px 0 0;
+            text-align: center;
         }
 
         #addNewTask {
             position: absolute;
             font-size: 2.5vh;
-            right: 0%;
+            right: 5%;
             color: white;
             cursor: pointer;
             background-color: $green;
@@ -1125,11 +1137,17 @@ body {
             scrollbar-width: none;
             position: absolute;
             width: 100%;
-            height: 100%;
+            height: 95%;
+            top: 5%;
             overflow-y: scroll;
-            background-color: #D9D9D9;
             border-radius: 15px;
             margin: 5px;
+            margin-top: 0;
+        }
+
+        .taskContainer:first-child {
+            margin-top: 10%;
+            background-color: red;
         }
 
         .taskCard::-webkit-scrollbar{
@@ -1476,6 +1494,7 @@ body {
         width: 100%;
         border-radius: 5px;
         border-collapse: collapse;
+        font-family: $font1;
 
         thead {
             text-align: left;
@@ -1743,43 +1762,58 @@ body {
     
     hr {width: 90%;}
 
-    h2 { margin-left: 5%;  font-size: 2.5vh;}
+    h2 { margin-top: 5%; margin-left: 5%;  font-size: 2.5vh;}
 
     p { margin-left: 5%; }
 
-    .delete-btn {
-        background-color: #ff4136;
-        color: #fff;
+    .settingsBtn {
+        color: black;
         border: none;
         border-radius: 5px;
         padding: 10px 20px;
-        font-size: 16px;
+        font-size: 2vh;
         cursor: pointer;
-        position: absolute;
-        bottom: 2%;
-        left: 5%;
-      }
-      
-      .delete-btn:hover {
-        background-color: #d30f0a;
-      }
+        background-color: #D9D9D9;
+        margin-left: 5%;
+        margin-top: 10px;
+    }
 
-      .change-password-btn{
-        background-color: $green;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-        position: absolute;
-        bottom: 2%;
-        right: 5%;
-      }
-
-    
+    .settingsBtn:hover {
+        color: $red;
+    }
 
 }
+
+.confirmLogout {
+    position: absolute;
+    z-index: 302;
+    width: 40%;
+    left: 20%;
+    padding: 5%;
+    border-radius: 15px;
+    background-color: $grey;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    h2 {
+        margin-top: 0;
+     
+    }
+
+    button {
+        background-color: $red;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 2vh;
+        cursor: pointer;
+    }
+
+}
+
 .confirmDelete {
     position: absolute;
     z-index: 302;
@@ -1791,14 +1825,8 @@ body {
 
     h2 {
         margin-top: 0;
-    }
-
-    #deleteAccountCancel {
-        position: absolute;
-        right: 5%;
-        top: 5%;
-        font-size: 2.5vh;
-        cursor: pointer;
+        width: 100%;
+        text-align: center;
     }
 
     input {
@@ -1824,9 +1852,9 @@ body {
         background-color: #ff4136;
         color: #fff;
         border: none;
-        border-radius: 50px;
+        border-radius: 5px;
         padding: 10px 20px;
-        font-size: 16px;
+        font-size: 2vh;
         cursor: pointer;
         // place it on the middle of the screen
         position: absolute;
@@ -1836,6 +1864,13 @@ body {
     }
 }
 
+.cancelSettingsAction {
+    position: absolute;
+    right: 5%;
+    top: 5%;
+    font-size: 3vh;
+    cursor: pointer;
+}
 
 .changePassword{
     position: absolute;
@@ -1850,13 +1885,6 @@ body {
         margin-top: 0;
     }
 
-    #changePasswordCancel {
-        position: absolute;
-        right: 5%;
-        top: 5%;
-        font-size: 2.5vh;
-        cursor: pointer;
-    }
 
     input {
         margin: 5% 0 5% 0;
@@ -1882,9 +1910,9 @@ body {
         background-color: $green;
         color: #fff;
         border: none;
-        border-radius: 50px;
+        border-radius: 5px;
         padding: 10px 20px;
-        font-size: 16px;
+        font-size: 2vh;
         cursor: pointer;
         // place it on the middle of the screen
         position: absolute;
@@ -1966,7 +1994,9 @@ body {
 
 .darkMode {
 
-   
+    .taskColumnHeader, .settingsBtn {
+        background-color: #2a2a2a !important;
+    }
 
     .alertCard {
         background-color: #3d3d3d !important;
@@ -1980,7 +2010,7 @@ body {
     background-color: #636363 !important;
     color: white !important;
 
-    nav ul li, h2, h1, p, ul, button {
+    nav ul li, h2, h1, p, ul, button, input {
         color: white !important;
     }
 
