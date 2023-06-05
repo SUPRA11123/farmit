@@ -9,6 +9,7 @@ import Tasks from './Utilities/Tasks';
 import Team from './Utilities/Team';
 import Settings from './Utilities/Settings';
 import axios from 'axios';
+import { InfluxDB } from "@influxdata/influxdb-client";
 
 const URL = process.env.REACT_APP_URL;
 
@@ -85,7 +86,81 @@ class Dashboard extends React.Component {
 
         this.weatherForecast = data2;
         this.setState({weatherForecast: data2})
+
+        // get sensor data
+
+        this.sensorLocationQuery();
+
+        // fecth the sensorData every 20 seconds
+        setInterval(async () => {
+            await this.sensorLocationQuery();
+        }
+        , 20000);
+
     }
+
+    async sensorLocationQuery() {
+        const influxDB = new InfluxDB({
+            url: "https://eu-central-1-1.aws.cloud2.influxdata.com",
+            token: "WWs7Muam9CP-Y65yjsLgz9VVuzS9mfuwWmlFgJJjiLTKjPUdZGXdTpfQtG0ULZ5a2iy8z54rfbS5nPtUb6qWKg==",
+          });
+          
+          const queryApi = influxDB.getQueryApi("FarmIT");
+          
+          const sensorLocationQuery = `
+            from(bucket: "test")
+            |> range(start: -50m)
+            |> filter(fn: (r) =>
+              r._measurement == "mqtt_consumer" and
+              (
+                r._field == "decoded_payload_temperature" or
+                r._field == "decoded_payload_humidity" or
+                r._field == "locations_user_latitude" or
+                r._field == "locations_user_longitude"
+              ) and
+              exists r._value
+            )
+            |> last()
+          `;
+          
+          const sensors = {}; // Object to store sensor data
+          
+          const fetchSensorLocationData = new Promise((resolve, reject) => {
+            queryApi.queryRows(sensorLocationQuery, {
+              next: (row, tableMeta) => {
+                const sensorData = tableMeta.toObject(row);
+          
+                const { _field, _value, topic } = sensorData;
+          
+                // Extract the sensor ID from the topic. It's the 4th part of the topic
+                const sensorId = topic.split("/")[3];
+          
+                if (_field === "locations_user_latitude") {
+                  sensors[sensorId] = { ...sensors[sensorId], latitude: _value, sensorId };
+                } else if (_field === "locations_user_longitude") {
+                  sensors[sensorId] = { ...sensors[sensorId], longitude: _value, sensorId };
+                } else if (_field === "decoded_payload_temperature") {
+                  sensors[sensorId] = { ...sensors[sensorId], temperature: _value, sensorId };
+                } else if (_field === "decoded_payload_humidity") {
+                  sensors[sensorId] = { ...sensors[sensorId], humidity: _value, sensorId };
+                }
+              },
+              error: (error) => {
+                console.error(error);
+                console.log("\nFinished ERROR");
+                reject(error);
+              },
+              complete: () => {
+                console.log("\nFinished SUCCESS");
+                // Set the sensor data in the state
+                const sensorArray = Object.values(sensors);
+                this.setState({ sensors: sensorArray });
+                resolve();
+              },
+            });
+          });
+                    
+        }
 
     getFarmDetails(token) {
 
@@ -93,7 +168,6 @@ class Dashboard extends React.Component {
         return axios
         .get(URL + "getfarmbyfieldmanager/" + token.id + "/")
             .then((res) => {
-                    console.log(res);
                     return res.data;
                 }
             )
@@ -104,7 +178,6 @@ class Dashboard extends React.Component {
             return axios
             .get(URL + "getfarmbyownerorfarmer/" + token.id + "/")
             .then((res) => {
-                console.log(res);
                 return res.data;
             }
             )
@@ -182,12 +255,12 @@ class Dashboard extends React.Component {
     render() {
 
 
-        const { currentDashboardScreen, weatherData, weatherForecast, farmDetails, user } = this.state;
+        const { currentDashboardScreen, weatherData, weatherForecast, farmDetails, user, sensors } = this.state;
 
         const CurrentUtility = this.utilityComponents[currentDashboardScreen];
 
 
-        if (!weatherData || !weatherForecast || !farmDetails || !user) {
+        if (!weatherData || !weatherForecast || !farmDetails || !user || !sensors) {
             return (<i id="loadingIcon" className="fas fa-circle-notch fa-spin"></i>);
         }
 
@@ -253,6 +326,7 @@ class Dashboard extends React.Component {
                     weatherData={this.state.weatherData} weatherForecast={this.state.weatherForecast} 
                     farmDetails={this.state.farmDetails} user={this.state.user} 
                     changeTheme={this.changeTheme} getTheme={this.getTheme}
+                    sensors={this.state.sensors}
                     logout={this.handleLogout}
                     />
 

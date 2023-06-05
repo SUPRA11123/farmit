@@ -10,7 +10,6 @@ class Task(models.Model):
     farmer = models.ForeignKey(User, on_delete=models.CASCADE)
     field = models.ForeignKey(Field, on_delete=models.CASCADE, default=None)
     created_at = models.DateTimeField(auto_now_add=True)
-    deadline = models.DateTimeField()
     status = models.CharField(max_length=50, default='To do')
 
     def __str__(self):

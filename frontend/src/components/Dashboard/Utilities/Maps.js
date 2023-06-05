@@ -43,7 +43,7 @@ class Maps extends React.Component {
 
             mapTypeId: "satellite",
             center: { lat: this.props.farmDetails.latitude, lng: this.props.farmDetails.longitude },
-            zoom: 15,
+            zoom: 13,
             streetViewControl: false,
             mapTypeControl: false,
         });
@@ -995,4 +995,4 @@ class Maps extends React.Component {
     }
 }
 
-export default Maps;
+export default Maps;    
