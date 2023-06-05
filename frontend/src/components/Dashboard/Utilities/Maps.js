@@ -13,19 +13,19 @@ const URL = process.env.REACT_APP_URL;
 class Maps extends React.Component {
 
 
-
     constructor(props) {
         super(props);
         this.state = {
             modalOpen: false,
             sensor_latitude: null,
             sensor_longitude: null,
+            markers: [],
         };
     }
 
     async componentDidMount() {
 
-        await this.sensorLocationQuery();
+        const markers = [];
 
       
         // check if any field already exists
@@ -115,7 +115,7 @@ class Maps extends React.Component {
                         isComplete: false,
                     });
 
-                    this.state.sensors.forEach((sensor) => {
+                    this.props.sensors.forEach((sensor) => {
 
 
 
@@ -131,27 +131,30 @@ class Maps extends React.Component {
                                 strokeWeight: 2,
                                 scale: 15,
                               };
-
-                            // add a little point in the rectangle in the point position
-                            const marker = new window.google.maps.Marker({
+                
+                              // create a marker for the sensor with a label
+                              const marker = new window.google.maps.Marker({
+                
                                 position: { lat: sensor.latitude, lng: sensor.longitude },
                                 map: map,
-                                icon: markerIcon,
-                                // make a dot
                                 label: {
-                                    fontFamily: 'Fontawesome',
-                                    text: '\uf1eb',
-                                    color: 'green',
-                                    clickable: true,
-                                    background: 'white',
-                            
+                                  // add text saying the temperature and humidity of the sensors with a break in between
+                                  text: sensor.temperature + "°C\n" + sensor.humidity + "%",
+                                  color: "white",
+                                  fontSize: "10px",
+                                  fontWeight: "bold",
                                 },
-                            });
+                              });
 
+                              markers.push(marker); 
+                
                             // on click, open the modal
                             marker.addListener("click", () => {
                                 this.showData(sensor);
                             });
+
+                           
+
                         }
                     });
 
@@ -233,7 +236,7 @@ class Maps extends React.Component {
                     });
 
 
-                    this.state.sensors.forEach((sensor) => {
+                    this.props.sensors.forEach((sensor) => {
                         // check if the sensor is inside the rectangle
                         if (this.isPointInsidePolygon(sensor, polygonCoordinates)) {
 
@@ -249,23 +252,23 @@ class Maps extends React.Component {
                                 strokeWeight: 2,
                                 scale: 15,
                               };
-
-                            // add a little point in the rectangle in the point position
-                            const marker = new window.google.maps.Marker({
+                
+                              // create a marker for the sensor with a label
+                              const marker = new window.google.maps.Marker({
+                
                                 position: { lat: sensor.latitude, lng: sensor.longitude },
                                 map: map,
-                                icon: markerIcon,
-                                // make a dot
                                 label: {
-                                    fontFamily: 'Fontawesome',
-                                    text: '\uf1eb',
-                                    color: 'green',
-                                    clickable: true,
-                                    background: 'white',
-                            
+                                  // add text saying the temperature and humidity of the sensors with a break in between
+                                  text: sensor.temperature + "°C\n" + sensor.humidity + "%",
+                                  color: "white",
+                                  fontSize: "10px",
+                                  fontWeight: "bold",
                                 },
-                            });
+                              });
 
+                              markers.push(marker); 
+                
                             // on click, open the modal
                             marker.addListener("click", () => {
                                 this.showData(sensor);
@@ -304,72 +307,43 @@ class Maps extends React.Component {
 
             });
         }
+
+        this.setState({ markers: markers }); // Update the state with the markers array
+
         this.initDrawing(map);
     }
 
-    sensorLocationQuery() {
-        return new Promise((resolve, reject) => {
-            const influxDB = new InfluxDB({
-                url: "https://eu-central-1-1.aws.cloud2.influxdata.com",
-                token: "WWs7Muam9CP-Y65yjsLgz9VVuzS9mfuwWmlFgJJjiLTKjPUdZGXdTpfQtG0ULZ5a2iy8z54rfbS5nPtUb6qWKg==",
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.sensors !== this.props.sensors) {
+    
+          // get all the markers from state
+          const markers = this.state.markers;
+    
+          // for each sensor in the sensors array, update the marker
+          this.props.sensors.forEach((sensor) => {
+            markers.forEach((marker) => {
+              if (marker.position.lat() === sensor.latitude && marker.position.lng() === sensor.longitude) {
+                
+                // update the text of the marker
+                marker.setLabel({
+                  text: sensor.temperature + "°C\n" + sensor.humidity + "%",
+                  color: "white",
+                  fontSize: "10px",
+                  fontWeight: "bold",
+                });
+    
+              }
             });
+          });
+    
+    
+    
+          this.setState({ markers: markers });
+        }
+      }
+    
 
-            const queryApi = influxDB.getQueryApi("FarmIT");
-
-            const sensorLocationQuery = `
-            from(bucket: "test")
-            |> range(start: -50m)
-            |> filter(fn: (r) =>
-              r._measurement == "mqtt_consumer" and
-              (
-                r._field == "decoded_payload_temperature" or
-                r._field == "decoded_payload_humidity" or
-                r._field == "locations_user_latitude" or
-                r._field == "locations_user_longitude"
-              ) and
-              exists r._value
-            )
-            |> last()
-          `;
-
-            const sensors = {}; // Object to store sensor data
-
-            const fetchSensorLocationData = queryApi.queryRows(sensorLocationQuery, {
-                next: (row, tableMeta) => {
-                    const sensorData = tableMeta.toObject(row);
-
-
-                    const { _field, _value, topic } = sensorData;
-
-                    // Extract the sensor ID from the topic. It's the 4th part of the topic
-                    const sensorId = topic.split("/")[3];
-
-                    if (_field === "locations_user_latitude") {
-                        sensors[sensorId] = { ...sensors[sensorId], latitude: _value, sensorId };
-                    } else if (_field === "locations_user_longitude") {
-                        sensors[sensorId] = { ...sensors[sensorId], longitude: _value, sensorId };
-                    } else if (_field === "decoded_payload_temperature") {
-                        sensors[sensorId] = { ...sensors[sensorId], temperature: _value, sensorId };
-                    } else if (_field === "decoded_payload_humidity") {
-                        sensors[sensorId] = { ...sensors[sensorId], humidity: _value, sensorId };
-                    }
-                },
-                error: (error) => {
-                    console.error(error);
-                    console.log("\nFinished ERROR");
-                    reject(error);
-                },
-                complete: () => {
-                    console.log("\nFinished SUCCESS");
-                    // Set the sensor data in the state
-                    const sensorArray = Object.values(sensors);
-                    this.setState({ sensors: sensorArray });
-                    console.log(sensorArray)
-                    resolve();
-                },
-            });
-        });
-    }
 
     showClickedCoordinates(latLng) {
         const { lat, lng } = latLng.toJSON();
