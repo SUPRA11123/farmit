@@ -6,6 +6,7 @@ from .models import Task
 from .serializers import TaskSerializer
 from rest_framework.decorators import api_view
 from farm.models import Farm
+from user.models import User
 
 
 @api_view(['GET'])
@@ -49,6 +50,13 @@ def get_tasks_by_farm(request, id):
     tasks = Task.objects.filter(farmer__in=users)
     serializer = TaskSerializer(tasks, many=True)
     return JsonResponse(serializer.data, safe=False)
+
+@api_view(['GET'])
+def get_tasks_by_assignee(request, id):
+   farmer = User.objects.get(id=id)
+   tasks = Task.objects.filter(farmer=farmer)
+   serializer = TaskSerializer(tasks, many=True)
+   return JsonResponse(serializer.data, safe=False)
 
  
  
