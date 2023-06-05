@@ -36,7 +36,7 @@ class Home extends React.Component {
       streetViewControl: false,
       mapTypeControl: false,
       fullscreenControl: false,
-      draggable: false,
+      draggable: true,
       clickable: true,
       draggableCursor: 'pointer',
     });
@@ -115,28 +115,30 @@ class Home extends React.Component {
             // check if the sensor is inside the rectangle
             if (this.isPointInsideRectangle(sensor, rectangleBounds)) {
 
-              const markerIcon = {
-                path: window.google.maps.SymbolPath.CIRCLE,
-                fillColor: 'white',
+               // add a little point in the rectangle in the point position
+               const markerIcon = {
+                path: 'M22-10h-44v20h16l6 5 6-5h16z',
+                fillColor: 'white', 
                 fillOpacity: 1,
-                strokeColor: 'green',
-                strokeWeight: 2,
-                scale: 15,
+                scale: 1.3,
               };
-
-              // create a marker for the sensor with a label
+              
               const marker = new window.google.maps.Marker({
-
                 position: { lat: sensor.latitude, lng: sensor.longitude },
                 map: map,
+                icon: markerIcon,
                 label: {
-                  // add text saying the temperature and humidity of the sensors with a break in between
-                  text: sensor.temperature + "°C\n" + sensor.humidity + "%",
-                  color: "white",
-                  fontSize: "10px",
-                  fontWeight: "bold",
+                  fontFamily: 'Fontawesome',
+                  text: "\uf2c8 " + sensor.temperature + '°C ' + "\uf043 " + sensor.humidity + '%',
+                  color: 'black',
+                  fontSize: '1vh',
+                  fontWeight: 'bold',
+                  backgroundColor: 'white',
+                  labelOrigin: new window.google.maps.Point(24, -12),
                 },
               });
+
+              //text: sensor.temperature + "°C\n" + sensor.humidity + "%",
 
               marker.addListener('click', (event) => {
                 this.props.displayScreen("maps");
@@ -197,27 +199,25 @@ class Home extends React.Component {
             if (this.isPointInsidePolygon(sensor, polygonCoordinates)) {
 
               // add a little point in the rectangle in the point position
-
               const markerIcon = {
-                path: window.google.maps.SymbolPath.CIRCLE,
-                fillColor: 'white',
+                path: 'M22-10h-44v20h16l6 5 6-5h16z',
+                fillColor: 'white', 
                 fillOpacity: 1,
-                strokeColor: 'green',
-                strokeWeight: 2,
-                scale: 15,
+                scale: 1.3,
               };
-
-              // create a marker for the sensor with a label
+              
               const marker = new window.google.maps.Marker({
-
                 position: { lat: sensor.latitude, lng: sensor.longitude },
                 map: map,
+                icon: markerIcon,
                 label: {
-                  // add text saying the temperature and humidity of the sensors with a break in between
-                  text: sensor.temperature + "°C\n" + sensor.humidity + "%",
-                  color: "white",
-                  fontSize: "10px",
-                  fontWeight: "bold",
+                  fontFamily: 'Fontawesome',
+                  text: "\uf2c8 " + sensor.temperature + '°C ' + "\uf043 " + sensor.humidity + '%',
+                  color: 'black',
+                  fontSize: '1vh',
+                  fontWeight: 'bold',
+                  backgroundColor: 'white',
+                  labelOrigin: new window.google.maps.Point(24, -12),
                 },
               });
 
@@ -239,7 +239,6 @@ class Home extends React.Component {
 
   }
   
-
   componentDidUpdate(prevProps) {
     if (prevProps.sensors !== this.props.sensors) {
 
@@ -253,22 +252,21 @@ class Home extends React.Component {
             
             // update the text of the marker
             marker.setLabel({
-              text: sensor.temperature + "°C\n" + sensor.humidity + "%",
-              color: "white",
-              fontSize: "10px",
-              fontWeight: "bold",
+               fontFamily: 'Fontawesome',
+                  text: "\uf2c8 " + sensor.temperature + '°C ' + "\uf043 " + sensor.humidity + '%',
+                  color: 'black',
+                  fontSize: '1vh',
+                  fontWeight: 'bold',
+                  backgroundColor: 'white',
+                  labelOrigin: new window.google.maps.Point(24, -12),
             });
 
           }
         });
       });
-
-
-
       this.setState({ markers: markers });
     }
   }
-
 
 
   getFieldsByManager(id) {
