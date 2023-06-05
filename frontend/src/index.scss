@@ -321,6 +321,10 @@ body {
     overflow: scroll;
 }
 
+.utilityContainer::-webkit-scrollbar{
+    display: none;
+}
+
 .expandedUtility {
     width: 95%;
     left: 5%;
