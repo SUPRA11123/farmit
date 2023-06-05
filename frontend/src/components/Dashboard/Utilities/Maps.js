@@ -27,7 +27,7 @@ class Maps extends React.Component {
 
         const markers = [];
 
-      
+
         // check if any field already exists
         var fields;
         const role = this.props.user.role;
@@ -50,7 +50,7 @@ class Maps extends React.Component {
 
         map.addListener("click", (event) => {
             this.showClickedCoordinates(event.latLng);
-          });
+        });
 
 
         const marker = new window.google.maps.Marker({
@@ -60,8 +60,8 @@ class Maps extends React.Component {
                 fontFamily: 'Fontawesome',
                 text: '\uf015',
                 color: 'white',
-
             },
+            cursor: "drag",
 
         });
 
@@ -70,27 +70,12 @@ class Maps extends React.Component {
 
         centreMap.addEventListener("click", () => {
             map.setCenter(marker.getPosition());
-            map.setZoom(15);
+            map.setZoom(13);
         });
 
         if (fields.length > 0) {
 
             fields.forEach((field) => {
-
-                var row = table.insertRow(0);
-
-                var cell1 = row.insertCell(0);
-                cell1.innerHTML = "<span>" + field.name + "</span>";
-
-                var cell2 = row.insertCell(1);
-                cell2.innerHTML = "<span>" + field.area + " m<sup>2 </span>";
-
-                var cell3 = row.insertCell(2);
-                cell3.innerHTML = "<span>" + field.crop_type + "</span>";
-
-                var cell4 = row.insertCell(3);
-                cell4.innerHTML = '<div class="delete-container"><i class="fa-solid fa-ellipsis-vertical"></i><button class="delete-button">Delete</button></div>';
-
 
                 if (field.type === "rectangle") {
 
@@ -113,6 +98,33 @@ class Maps extends React.Component {
                             west: parseFloat(coordinates[3]),
                         },
                         isComplete: false,
+                        cursor: "drag",
+                    });
+
+                    var row = table.insertRow(0);
+
+                    var cell1 = row.insertCell(0);
+                    cell1.innerHTML = "<span>" + field.name + "</span>";
+
+                    var cell2 = row.insertCell(1);
+                    cell2.innerHTML = "<span>" + field.area + " m<sup>2 </span>";
+
+                    var cell3 = row.insertCell(2);
+                    cell3.innerHTML = "<span>" + field.crop_type + "</span>";
+
+                    var cell4 = row.insertCell(3);
+                    cell4.innerHTML = '<div class="delete-container"><i class="fa-solid fa-ellipsis-vertical"></i><button class="delete-button">Delete</button></div>';
+
+                    cell4.addEventListener('click', () => {
+                        axios.delete(URL + "deletefield/" + field.id + "/")
+                            .then((response) => {
+                                console.log(response);
+                                row.remove();
+                                rectangle.setMap(null);
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                            });
                     });
 
                     this.props.sensors.forEach((sensor) => {
@@ -130,30 +142,30 @@ class Maps extends React.Component {
                                 strokeColor: 'green',
                                 strokeWeight: 2,
                                 scale: 15,
-                              };
-                
-                              // create a marker for the sensor with a label
-                              const marker = new window.google.maps.Marker({
-                
+                            };
+
+                            // create a marker for the sensor with a label
+                            const marker = new window.google.maps.Marker({
+
                                 position: { lat: sensor.latitude, lng: sensor.longitude },
                                 map: map,
                                 label: {
-                                  // add text saying the temperature and humidity of the sensors with a break in between
-                                  text: sensor.temperature + "°C\n" + sensor.humidity + "%",
-                                  color: "white",
-                                  fontSize: "10px",
-                                  fontWeight: "bold",
+                                    // add text saying the temperature and humidity of the sensors with a break in between
+                                    text: sensor.temperature + "°C\n" + sensor.humidity + "%",
+                                    color: "white",
+                                    fontSize: "10px",
+                                    fontWeight: "bold",
                                 },
-                              });
+                            });
 
-                              markers.push(marker); 
-                
+                            markers.push(marker);
+
                             // on click, open the modal
                             marker.addListener("click", () => {
                                 this.showData(sensor);
                             });
 
-                           
+
 
                         }
                     });
@@ -194,7 +206,7 @@ class Maps extends React.Component {
 
                     row.addEventListener("click", () => {
                         map.setCenter({ lat: lat, lng: lng });
-                        map.setZoom(15);
+                        map.setZoom(13);
                     });
 
 
@@ -228,7 +240,35 @@ class Maps extends React.Component {
                         map,
                         path: path,
                         isComplete: false,
+                        cursor: "drag",
                     });
+
+                    var row = table.insertRow(0);
+
+                    var cell1 = row.insertCell(0);
+                    cell1.innerHTML = "<span>" + field.name + "</span>";
+
+                    var cell2 = row.insertCell(1);
+                    cell2.innerHTML = "<span>" + field.area + " m<sup>2 </span>";
+
+                    var cell3 = row.insertCell(2);
+                    cell3.innerHTML = "<span>" + field.crop_type + "</span>";
+
+                    var cell4 = row.insertCell(3);
+                    cell4.innerHTML = '<div class="delete-container"><i class="fa-solid fa-ellipsis-vertical"></i><button class="delete-button">Delete</button></div>';
+
+                    cell4.addEventListener('click', () => {
+                        axios.delete(URL + "deletefield/" + field.id + "/")
+                            .then((response) => {
+                                console.log(response);
+                                row.remove();
+                                polygon.setMap(null);
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                            });
+                    });
+
 
                     const polygonCoordinates = coordinates.map((coord) => {
                         const [lat, lng] = coord.split(",");
@@ -243,7 +283,7 @@ class Maps extends React.Component {
 
 
                             // add a little point in the rectangle in the point position
-                          
+
                             const markerIcon = {
                                 path: window.google.maps.SymbolPath.CIRCLE,
                                 fillColor: 'white',
@@ -251,24 +291,24 @@ class Maps extends React.Component {
                                 strokeColor: 'green',
                                 strokeWeight: 2,
                                 scale: 15,
-                              };
-                
-                              // create a marker for the sensor with a label
-                              const marker = new window.google.maps.Marker({
-                
+                            };
+
+                            // create a marker for the sensor with a label
+                            const marker = new window.google.maps.Marker({
+
                                 position: { lat: sensor.latitude, lng: sensor.longitude },
                                 map: map,
                                 label: {
-                                  // add text saying the temperature and humidity of the sensors with a break in between
-                                  text: sensor.temperature + "°C\n" + sensor.humidity + "%",
-                                  color: "white",
-                                  fontSize: "10px",
-                                  fontWeight: "bold",
+                                    // add text saying the temperature and humidity of the sensors with a break in between
+                                    text: sensor.temperature + "°C\n" + sensor.humidity + "%",
+                                    color: "white",
+                                    fontSize: "10px",
+                                    fontWeight: "bold",
                                 },
-                              });
+                            });
 
-                              markers.push(marker); 
-                
+                            markers.push(marker);
+
                             // on click, open the modal
                             marker.addListener("click", () => {
                                 this.showData(sensor);
@@ -301,7 +341,7 @@ class Maps extends React.Component {
 
                     row.addEventListener("click", () => {
                         map.setCenter(polygonCenter);
-                        map.setZoom(15);
+                        map.setZoom(13);
                     });
                 }
 
@@ -316,39 +356,38 @@ class Maps extends React.Component {
 
     componentDidUpdate(prevProps) {
         if (prevProps.sensors !== this.props.sensors) {
-    
-          // get all the markers from state
-          const markers = this.state.markers;
-    
-          // for each sensor in the sensors array, update the marker
-          this.props.sensors.forEach((sensor) => {
-            markers.forEach((marker) => {
-              if (marker.position.lat() === sensor.latitude && marker.position.lng() === sensor.longitude) {
-                
-                // update the text of the marker
-                marker.setLabel({
-                  text: sensor.temperature + "°C\n" + sensor.humidity + "%",
-                  color: "white",
-                  fontSize: "10px",
-                  fontWeight: "bold",
+
+            // get all the markers from state
+            const markers = this.state.markers;
+
+            // for each sensor in the sensors array, update the marker
+            this.props.sensors.forEach((sensor) => {
+                markers.forEach((marker) => {
+                    if (marker.position.lat() === sensor.latitude && marker.position.lng() === sensor.longitude) {
+
+                        // update the text of the marker
+                        marker.setLabel({
+                            text: sensor.temperature + "°C\n" + sensor.humidity + "%",
+                            color: "white",
+                            fontSize: "10px",
+                            fontWeight: "bold",
+                        });
+
+                    }
                 });
-    
-              }
             });
-          });
-    
-    
-    
-          this.setState({ markers: markers });
+
+
+
+            this.setState({ markers: markers });
         }
-      }
-    
+    }
 
 
     showClickedCoordinates(latLng) {
         const { lat, lng } = latLng.toJSON();
         console.log(`Clicked coordinates: Latitude: ${lat}, Longitude: ${lng}`);
-      }
+    }
 
 
 
@@ -385,6 +424,7 @@ class Maps extends React.Component {
 
         return inside;
     }
+
 
     getFieldsByManager(id) {
         return axios
@@ -433,6 +473,7 @@ class Maps extends React.Component {
                 strokeWeight: 2,
                 fillColor: "#0ba837",
                 fillOpacity: 0.35,
+                cursor: "drag",
             },
 
             rectangleOptions: {
@@ -443,9 +484,10 @@ class Maps extends React.Component {
                 strokeWeight: 2,
                 fillColor: "#0ba837",
                 fillOpacity: 0.35,
+                cursor: "drag",
             }
         });
-       
+
         drawingManager.setDrawingMode(null);
 
         drawingManager.setOptions({
@@ -579,6 +621,10 @@ class Maps extends React.Component {
                         area: area,
                         farm: this.props.farmDetails.id,
                     }).then((res) => {
+
+                        console.log(res);
+
+
                         var table = document.getElementById("fieldTable").getElementsByTagName('tbody')[0];
 
                         var row = table.insertRow(0);
@@ -591,7 +637,19 @@ class Maps extends React.Component {
                         cell1.innerHTML = "<span>" + fieldName + "</span>";
                         cell2.innerHTML = "<span>" + area + "</span> m<sup>2";
                         cell3.innerHTML = "<span>" + cropType + "</span>";
-                        cell4.innerHTML = '<i class="fa-solid fa-ellipsis-vertical"></i>';
+                        cell4.innerHTML = '<div class="delete-container"><i class="fa-solid fa-ellipsis-vertical"></i><button class="delete-button">Delete</button></div>';
+
+                        cell4.addEventListener('click', () => {
+                            axios.delete(URL + "deletefield/" + res.data.id + "/")
+                                .then((response) => {
+                                    console.log(response);
+                                    row.remove();
+                                    polygon.setMap(null);
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
+                        });
 
 
                         polygon.isComplete = true;
@@ -608,7 +666,7 @@ class Maps extends React.Component {
 
                         row.addEventListener("click", () => {
                             map.setCenter(polygonCenter);
-                            map.setZoom(15);
+                            map.setZoom(13);
                         });
 
                     }).catch((err) => {
@@ -787,14 +845,26 @@ class Maps extends React.Component {
                         cell1.innerHTML = "<span>" + fieldName + "</span>";
                         cell2.innerHTML = "<span>" + area + "</span> m<sup>2";
                         cell3.innerHTML = "<span>" + cropType + "</span>";
-                        cell4.innerHTML = '<i className="fa-solid fa-ellipsis-vertical"></i>';
+                        cell4.innerHTML = '<div class="delete-container"><i class="fa-solid fa-ellipsis-vertical"></i><button class="delete-button">Delete</button></div>';
 
+                        cell4.addEventListener('click', () => {
+                            axios.delete(URL + "deletefield/" + res.data.id + "/")
+                                .then((response) => {
+                                    console.log(response);
+                                    row.remove();
+                                    rectangle.setMap(null);
+
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
+                        });
 
                         rectangle.isComplete = true;
 
                         row.addEventListener("click", () => {
                             map.setCenter({ lat: lat, lng: lng });
-                            map.setZoom(15);
+                            map.setZoom(13);
                         });
 
                     }).catch((err) => {
@@ -873,7 +943,7 @@ class Maps extends React.Component {
     }
 
     showData(sensorData) {
-       
+
         this.setState({ modalOpen: true, sensorData: sensorData });
     }
 
@@ -887,7 +957,7 @@ class Maps extends React.Component {
             const firstColumnValue = row.cells[0].textContent.trim();
 
             if (firstColumnValue === fieldName) {
-                row.style.backgroundColor = "#0ba837"; 
+                row.style.backgroundColor = "#0ba837";
                 row.style.color = 'white';
             }
         }
@@ -914,19 +984,19 @@ class Maps extends React.Component {
 
         return (
             <>
-                
-                <button onClick={this.centreToMap} id="centreToMap" className={`fieldsTableBtn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}><i className="fa-solid fa-location-crosshairs"></i></button> 
+
+                <button onClick={this.centreToMap} id="centreToMap" className={`fieldsTableBtn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}><i className="fa-solid fa-location-crosshairs"></i></button>
                 <div id="map">
                     {modalOpen && (
                         <Modal setOpenModal={(isOpen) => this.setState({ modalOpen: isOpen })}
-                        sensorData={this.state.sensorData}
-                         />
+                            sensorData={this.state.sensorData}
+                        />
                     )}
                 </div>
                 <div className="fieldsTableConatiner">
 
                     <h2 className="hidden" id="addFieldsHeader">Use the rectangle/polygon tool to draw the field onto map</h2>
-                    <button  onClick={this.showFieldForm} id="cancelNewField" className={`fieldsTableBtn hidden ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}><i className='fa-solid fa-xmark'></i> Cancel</button>                   
+                    <button onClick={this.showFieldForm} id="cancelNewField" className={`fieldsTableBtn hidden ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}><i className='fa-solid fa-xmark'></i> Cancel</button>
 
                     <form id="createField" className="hidden" onSubmit={this.createField}>
                         <label htmlFor="name">Field Name</label>
@@ -954,8 +1024,8 @@ class Maps extends React.Component {
 
                                     {this.props.user.role === 'farmer' || this.props.user.role === 'field manager' ? null :
 
-                                        
-                                        <button  onClick={this.showFieldForm} id="addNewField" className={`fieldsTableBtn`}> <i className="fa-solid fa-plus"></i> Add Field</button>                   
+
+                                        <button onClick={this.showFieldForm} id="addNewField" className={`fieldsTableBtn`}> <i className="fa-solid fa-plus"></i> Add Field</button>
                                     }
                                 </td>
                             </tr>

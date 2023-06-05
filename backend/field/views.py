@@ -27,7 +27,7 @@ def create_field(request):
     serializer = FieldSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
-        return JsonResponse({'message': 'Field info updated successfully'}, status=201)
+        return JsonResponse(serializer.data, status=201)
     else:
         return JsonResponse({'message': 'Please check if every field is filled correctly'}, status=400)
     
@@ -68,6 +68,15 @@ def getFieldById(request, id):
         field = Field.objects.get(id=id)
         serializer = FieldSerializer(field)
         return JsonResponse(serializer.data, safe=False)
+    except Field.DoesNotExist:
+        return JsonResponse({'message': 'Field not found'}, status=400)
+    
+@api_view(['DELETE'])
+def deleteField(request, id):
+    try:
+        field = Field.objects.get(id=id)
+        field.delete()
+        return JsonResponse({'message': 'Field deleted successfully'}, status=200)
     except Field.DoesNotExist:
         return JsonResponse({'message': 'Field not found'}, status=400)
     

@@ -37,6 +37,8 @@ class Home extends React.Component {
       mapTypeControl: false,
       fullscreenControl: false,
       draggable: false,
+      clickable: true,
+      draggableCursor: 'pointer',
     });
 
     map.addListener('click', (event) => {
@@ -129,7 +131,7 @@ class Home extends React.Component {
                 map: map,
                 label: {
                   // add text saying the temperature and humidity of the sensors with a break in between
-                  text: sensor.temperature + "°C" + "\n" + sensor.humidity + "%",
+                  text: sensor.temperature + "°C\n" + sensor.humidity + "%",
                   color: "white",
                   fontSize: "10px",
                   fontWeight: "bold",
@@ -212,7 +214,7 @@ class Home extends React.Component {
                 map: map,
                 label: {
                   // add text saying the temperature and humidity of the sensors with a break in between
-                  text: sensor.temperature + "°C" + "\n" + sensor.humidity + "%",
+                  text: sensor.temperature + "°C\n" + sensor.humidity + "%",
                   color: "white",
                   fontSize: "10px",
                   fontWeight: "bold",
@@ -251,7 +253,7 @@ class Home extends React.Component {
             
             // update the text of the marker
             marker.setLabel({
-              text: sensor.temperature + "°C" + "\n" + sensor.humidity + "%",
+              text: sensor.temperature + "°C\n" + sensor.humidity + "%",
               color: "white",
               fontSize: "10px",
               fontWeight: "bold",
