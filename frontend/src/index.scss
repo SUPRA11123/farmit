@@ -1784,6 +1784,18 @@ body {
 
 }
 
+.tAndC {
+    position: absolute;
+    z-index: 302;
+    width: 60%;
+    height: 90%;
+    left: 10%;
+    padding: 5%;
+    border-radius: 15px;
+    background-color: $grey;
+    overflow-y: scroll;
+}
+
 .confirmLogout {
     position: absolute;
     z-index: 302;
@@ -1924,7 +1936,10 @@ body {
         text-decoration: underline;
       }
 
+}
 
+#languageSelector {
+    font-size: 2vh;
 }
 
   #settingsOverlay {
@@ -1935,6 +1950,8 @@ body {
 	cursor: pointer;
 	display: inline-block;
     margin-left: 5%;
+    margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 .toggle-switch {
