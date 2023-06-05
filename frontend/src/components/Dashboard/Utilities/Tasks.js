@@ -24,12 +24,11 @@ class Tasks extends React.Component {
         this.createTask = this.createTask.bind(this);
         this.showTasks = this.showTasks.bind(this);
         this.getMember = this.getMember.bind(this);
+        this.cancelTask = this.cancelTask.bind(this);
 
     }
 
     componentDidMount() {
-
-        this.setMinDeadline();
 
         axios.get("http://localhost:8000/getteam/" + this.props.farmDetails.id + "/")
             .then(response => {
@@ -47,25 +46,25 @@ class Tasks extends React.Component {
             .then(response => {
                 const fields = response.data;
                 this.setState({ fields: fields });
-                
+
             })
             .catch(error => {
                 console.log(error);
-            });        
+            });
     }
 
     getTasks() {
 
         axios.get("http://localhost:8000/gettasksbyfarm/" + this.props.farmDetails.id + "/")
-        .then(response => {
-            const tasks = response.data;
-            this.setState({ tasks: tasks });
-            this.showTasks(tasks);
-            
-        })
-        .catch(error => {
-            console.log(error);
-        });
+            .then(response => {
+                const tasks = response.data;
+                this.setState({ tasks: tasks });
+                this.showTasks(tasks);
+
+            })
+            .catch(error => {
+                console.log(error);
+            });
 
     }
 
@@ -80,6 +79,16 @@ class Tasks extends React.Component {
         document.getElementById("addTask").reset();
         document.getElementById("taskOverlay").classList.add('hidden');
         document.getElementById("addTask").classList.add('hidden');
+
+
+        // clear the selected field and assignee
+        this.setState({
+            selectedField: "",
+            selectedAssignee: ""
+        });
+
+
+
     }
 
     async showTasks(tasks) {
@@ -87,18 +96,18 @@ class Tasks extends React.Component {
         const toDo = document.getElementById('toDoTasksContainer');
         toDo.innerHTML = '';
 
-        if(tasks.length > 0) {
-            
+        if (tasks.length > 0) {
+
             tasks.forEach((task) => {
 
                 const div = document.createElement('div');
                 div.classList.add('taskCard');
 
                 const taskTitle = document.createElement('h3');
-                taskTitle.innerHTML = task.title; 
+                taskTitle.innerHTML = task.title;
 
                 const taskDescription = document.createElement('p');
-                taskDescription.textContent = task.description; 
+                taskDescription.textContent = task.description;
 
                 const taskMember = document.createElement('span');
                 const member = this.getMember(task.farmer);
@@ -116,13 +125,13 @@ class Tasks extends React.Component {
                 div.appendChild(taskMember);
                 div.appendChild(taskSettings2);
 
-               if(task.status = 'To do') {
-                toDo.appendChild(div);
-               } else if (task.status = 'In progress') {
-                document.getElementById('inProgressTasksContainer').appendChild(div);
-               } else{
-                document.getElementById('completedTasksContainer').appendChild(div);
-               }
+                if (task.status = 'To do') {
+                    toDo.appendChild(div);
+                } else if (task.status = 'In progress') {
+                    document.getElementById('inProgressTasksContainer').appendChild(div);
+                } else {
+                    document.getElementById('completedTasksContainer').appendChild(div);
+                }
 
 
             });
@@ -135,7 +144,7 @@ class Tasks extends React.Component {
         const team = this.state.team;
         const member = team.find(member => member.id === id);
         return member;
-      }
+    }
 
     async createTask(event) {
 
@@ -149,7 +158,8 @@ class Tasks extends React.Component {
         const description = document.getElementById("taskDescription").value;
         const assignee = document.getElementById("taskAssignee").value;
         const field = document.getElementById("fields").value;
-        const deadline = document.getElementById("taskDeadline").value;
+
+        const assigneeJson = JSON.parse(assignee);
 
         // call function to get the user by id
 
@@ -157,9 +167,8 @@ class Tasks extends React.Component {
         axios.post("http://localhost:8000/createtask/", {
             title: title,
             description: description,
-            farmer: assignee,
+            farmer: assigneeJson.id,
             field: field,
-            deadline: deadline
         }).then(response => {
             console.log(response);
             // show the tasks table
@@ -174,11 +183,15 @@ class Tasks extends React.Component {
         );
     }
 
+    handleMemberChange = (event) => {
 
-    setMinDeadline() {
-        const currentDate = new Date().toISOString().slice(0, 16);
-        document.getElementById("taskDeadline").setAttribute("min", currentDate);
-    }
+        const selectedMember = JSON.parse(event.target.value);
+
+        this.setState({
+            selectedAssignee: selectedMember,
+        });
+
+    };
 
     render() {
         return (
@@ -191,7 +204,7 @@ class Tasks extends React.Component {
                         <h2 className="taskColumnHeader">To Do<button id="addNewTask" onClick={this.showAddTaskForm}><i class="fa-solid fa-plus"></i></button></h2>
 
                         <div id='toDoTasksContainer' className='taskContainer'>
-                            
+
                         </div>
 
                     </div>
@@ -225,30 +238,57 @@ class Tasks extends React.Component {
                     <input type="text" id="taskDescription" name="taskDescription" />
 
                     <label htmlFor="taskAssignee">Assignee</label>
-                    <select defaultValue="" id="taskAssignee" name="taskAssignee" className="form-control">
+                    <select
+                        defaultValue=""
+                        id="taskAssignee"
+                        name="taskAssignee"
+                        className="form-control"
+                        onChange={this.handleMemberChange}
+                    >
                         <option value="" disabled>Select a team member</option>
-                        {this.state.team.map((member) => (
-                            <option key={member.id} value={member.id}>{member.name}</option>
-                        ))}
-                    </select>
-
-                    <label htmlFor="taskField">Field</label>
-                    <select defaultValue="" id="fields" name="fields" className="form-control">
-                        {this.state.fields.length > 0 ? (
-                            <>
-                                <option value="" disabled>Select a field</option>
-                                {this.state.fields.map((field) => (
-                                    <option key={field.id} value={field.id}>{field.name}</option>
-                                ))}
-                            </>
-                        ) : (
-                            <option value="" disabled>No fields available</option>
-                        )}
+                        {this.state.team.map((member) => {
+                            if (member.id !== this.props.user.id) {
+                                return (
+                                    <option key={member.id} value={JSON.stringify(member)}>
+                                        {member.name}
+                                    </option>
+                                );
+                            }
+                            return null;
+                        })}
                     </select>
 
 
-                    <label htmlFor="taskDeadline">Deadline</label>
-                    <input type="datetime-local" id="taskDeadline" name="taskDeadline" />
+                    {this.state.selectedAssignee && (
+                        <>
+                            <label htmlFor="taskField">Field</label>
+                            <select defaultValue="" id="fields" name="fields" className="form-control">
+                                {this.state.fields.length > 0 ? (
+                                    <>
+                                        <option value="" disabled>Select a field</option>
+                                        {this.state.fields.map((field) => {
+                                            // Check if the selected member is a field manager and the field is assigned to them
+                                            if (this.state.selectedAssignee.role === "field manager" && field.manager === this.state.selectedAssignee.id) {
+                                                return (
+                                                    <option key={field.id} value={field.id}>{field.name}</option>
+                                                );
+                                            }
+                                            // If not a field manager, show all fields
+                                            else if (this.state.selectedAssignee.role !== "field manager") {
+                                                return (
+                                                    <option key={field.id} value={field.id}>{field.name}</option>
+                                                );
+                                            }
+                                            return null;
+                                        })}
+                                    </>
+                                ) : (
+                                    <option value="" disabled>No fields available</option>
+                                )}
+                            </select>
+                        </>
+                    )}
+
 
                     <input id="taskSubmit" type="submit" value="Create" />
 

@@ -6,6 +6,7 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from django.db.models import Q
 
+
 from .models import User
 from .serializers import FarmSerializer
 from .models import Farm
@@ -53,13 +54,13 @@ def addFarmer(request, id):
 def getFarmByFieldManager(request, id):
     # get field by field manager
     try:
-        field = Field.objects.get(manager=id)
-        farm = field.farm
+        farm = Farm.objects.filter(fieldmanagers=id).first()
         serializer = FarmSerializer(farm)
         return JsonResponse(serializer.data)
-    except Field.DoesNotExist:
-        return JsonResponse({'message': 'Field not found'}, status=400)
     except Farm.DoesNotExist:
-        return JsonResponse({'message': 'Farm not found'}, status=400)
+        return JsonResponse({'message': 'Farm not found'}, status=200)
+    
+    
+
 
      

@@ -33,23 +33,32 @@ def create_field(request):
     
 @api_view(['PUT'])
 def add_field_manager(request, id):
-    # with id of the user, add user to the field 'manager' of the field
-    if Field.objects.filter(id=id).exists():
-        field = Field.objects.get(id=id)
-        user = request.data['email']
-        # get user by email
-        if not User.objects.filter(email=user).exists():
-            return JsonResponse({'message': 'Field manager not found'}, status=400)
-        user = User.objects.get(email=user)
-        print(user)
-        field.manager = user
-        field.save()
+    # id of the field manager
+    if User.objects.filter(id=id).exists():
+        user = User.objects.get(id=id)
+        fields = request.data['fields']
+        # get fields by id
+        for field in fields:
+            if Field.objects.filter(id=field).exists():
+                field = Field.objects.get(id=field)
+                field.manager = user
+                field.save()
+                
+                # if field manager is already in the farm, dont add
+                if field.farm.fieldmanagers.filter(id=id).exists():
+                    pass
+                else:
+                    farm = field.farm
+                    farm.fieldmanagers.add(user)
+                    farm.save()
+                    
+               
+            else:
+                return JsonResponse({'message': 'Field not found'}, status=400)
+        return JsonResponse({'message': 'Field manager added successfully'}, status=200)
+    
 
-        farm = field.farm
-        # add the field manager to the farm
-        farm.fieldmanagers.add(user)
-        farm.save()
-        return JsonResponse({'message': 'Field manager added to the field successfully'}, status=200)
+
     
 @api_view(['GET'])
 def getFieldsByManager(request, id):

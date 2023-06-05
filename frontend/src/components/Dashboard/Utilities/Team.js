@@ -17,6 +17,7 @@ class Team extends React.Component {
             passwordMatchError: false
         };
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.cancelMember = this.cancelMember.bind(this);
     }
 
     componentDidMount() {
@@ -29,10 +30,12 @@ class Team extends React.Component {
               if (member.role === "field manager") {
                 return axios.get("http://localhost:8000/getfieldsbymanager/" + member.id + "/")
                   .then(response => {
+
+                    console.log(response.data);
                     // create a new member object with the field property
                     const updatedMember = {
                       ...member,
-                      field: response.data[0].name
+                      field: response.data.map(field => field.name).join(", ")
                     };
                     return updatedMember;
                   })
@@ -79,7 +82,6 @@ class Team extends React.Component {
 
 
         const farmId = this.props.farmDetails.id;
-        console.log(farmId);
 
         if (password === confirmPassword) {
             this.setState({ passwordMatchError: false });
@@ -109,12 +111,11 @@ class Team extends React.Component {
                     );
                 } else {
                     // get the select value from the fields dropdown
-                    const field = this.state.selectedField;
-                    axios.put("http://localhost:8000/addfieldmanager/" + field + "/", {
-                        email: email
+                    const fields = this.state.selectedFields;
+                    axios.put("http://localhost:8000/addfieldmanager/" + response.data.id + "/", {
+                        fields: fields
                     }).then(response => {
 
-                     
                         document.getElementById("teamContainer").classList.remove('hidden');
                         document.getElementById("addTeamMember").classList.add('hidden');
                         
@@ -163,13 +164,19 @@ class Team extends React.Component {
         document.getElementById("addTeamMember").reset();
         document.getElementById("teamOverlay").classList.add('hidden');
         document.getElementById("addTeamMember").classList.add('hidden');
+
+        this.setState({
+            role: "",
+            fields: [],
+        });
     }
 
     handleFieldChange = (event) => {
-        const selectedField = event.target.value;
-        this.setState({ selectedField });
-    }
+        const selectedFields = Array.from(event.target.selectedOptions, (option) => option.value);
 
+        console.log(selectedFields);
+        this.setState({ selectedFields });
+    }
 
 
     render() {
@@ -191,7 +198,6 @@ class Team extends React.Component {
                         </thead>
                         <tbody>
                             {this.state.team.map(member => (
-                                console.log(member),
                             <tr key={member.id} colspan="5">
                                 <td>{member.name}</td>
                                 <td>{member.role}</td>
@@ -233,8 +239,8 @@ class Team extends React.Component {
                         <input required type="password" id="confirmPassword" name="confirmPassword" className="form-control" placeholder="Confirm Password" />
     
                         <label htmlFor="role">Role</label>
-                        <select id="role" name="role" className="form-control" onChange={this.handleRoleChange}>
-                            <option value="" selected disabled>Select the role you want</option>
+                        <select defaultValue="" id="role" name="role" className="form-control" onChange={this.handleRoleChange}>
+                            <option value="" selected disabled>Select a role</option>
                             <option value="field manager">field manager</option>
                             <option value="farmer">farmer</option>
                         </select>
@@ -242,7 +248,7 @@ class Team extends React.Component {
                     {role === 'field manager' && (
                         <>
                             <label htmlFor="fields">Fields</label>
-                            <select id="fields" name="fields" className="form-control" onChange={this.handleFieldChange}>
+                            <select id="fields" name="fields" className="form-control" onChange={this.handleFieldChange} multiple>
                                 <option value="" selected disabled>Select a field</option>
                                 {this.state.fields.map(field => (
                                     <option key={field.id} value={field.id}>{field.name}</option>
