@@ -42,4 +42,7 @@ urlpatterns = [
     path('deleteuser/<str:email>/', views.deleteUser),
     path('deleteaccount/', views.deleteAccount),
     path('changepassword/', views.changePassword),
+    path('deletefield/<int:id>/', field_views.deleteField),
+    path('gettasksbyassignee/<int:id>/', task_views.get_tasks_by_assignee),
+    path('edituser/<int:id>/', views.editUser),
     ]

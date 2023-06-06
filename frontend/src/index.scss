@@ -1372,6 +1372,72 @@ body {
 
 }
 
+#editTeamMember {
+    position: absolute;
+    width: 50%;
+    height: fit-content;
+    left: 25%;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    color: $darkGrey;
+    z-index: 202;
+    border: 2px solid $darkGrey;
+
+    h2 {
+        color: black;
+        font-size: 2.5vh;
+        i{color: $green; margin-right: 10px;}
+    }
+
+    hr {
+        height: 2px;
+        background-color: $darkGrey;
+        border: none;
+        width: 100%;
+    }
+
+    input, select, button {
+        width: 60%;
+        font-size: 2.5vh;
+    }
+
+    button {
+        margin: 25px;
+    }
+
+    label {
+        margin: 5px;
+        width: 60%;
+        text-align: left;
+        
+    }
+
+    #editMemberCancel {
+        position: absolute;
+        right: 5%;
+        font-size: 3vh;
+        color: black;
+        cursor: pointer;
+    }
+
+    #editMember {
+        background-color: #0ba837;
+        color: white;
+        border: none;
+        width: auto;
+        padding: 5px;
+        font-size: 2.5vh;
+        border-radius: 5px;
+        margin-top: 10%;
+        cursor: pointer;
+    }
+
+}
+
 #teamOverlay {
     z-index: 199;
 }
@@ -1448,6 +1514,19 @@ body {
     border: none;
     z-index: 300;
     background: $red;
+    color: white;
+    cursor: pointer;
+    margin: 0;
+    padding: 5px;
+    border-radius: 5px;
+  }
+
+  .edit-button{
+    align-items: center;
+    justify-content: center;
+    border: none;
+    z-index: 300;
+    background: $blue;
     color: white;
     cursor: pointer;
     margin: 0;
