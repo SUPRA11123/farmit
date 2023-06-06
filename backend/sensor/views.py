@@ -12,6 +12,8 @@ def getSensors(request, id):
         sensors = Sensor.objects.filter(farm=id)
         serializer = SensorSerializer(sensors, many=True)
         return JsonResponse(serializer.data, safe=False)
-    return JsonResponse({'message': 'Sensors not found'}, status=200)
+    else:
+        return JsonResponse([], safe=False)
+    
 
 # Create your views here.

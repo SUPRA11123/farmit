@@ -96,15 +96,23 @@ class Dashboard extends React.Component {
 
 
        await this.getSensors();
+       
+        // only call sensorLocationQuery if there are sensors
 
-        this.sensorLocationQuery();
+        if (this.state.sensorsOwned.length > 0) {
 
+            this.sensorLocationQuery();
 
-        // fecth the sensorData every 5 seconds
-        setInterval(async () => {
-            await this.sensorLocationQuery();
+            // fecth the sensorData every 5 seconds
+            setInterval(async () => {
+                await this.sensorLocationQuery();
+            }
+            , 5000);
+        } else {
+            this.setState({ sensors: [] });
+
         }
-        , 5000);
+        
 
     }
 
@@ -116,8 +124,8 @@ class Dashboard extends React.Component {
           
           const queryApi = influxDB.getQueryApi("FarmIT");
 
-          console.log("BOAS PESSOAL");
-
+          
+          console.log(this.state.sensorsOwned);
 
           const sensorNames = this.state.sensorsOwned.map((sensor) => sensor.name);
            
@@ -125,7 +133,7 @@ class Dashboard extends React.Component {
 
         const sensorLocationQuery = `
         from(bucket: "test")
-        |> range(start: -5m)
+        |> range(start: -1m)
         |> filter(fn: (r) => r["_measurement"] == "mqtt_consumer")
         |> filter(fn: (r) => r["_field"] == "decoded_payload_temperature" or r["_field"] == "decoded_payload_humidity")
         |> filter(fn: (r) => ${sensorNamesFilter})
@@ -209,6 +217,8 @@ class Dashboard extends React.Component {
               this.setState({ sensorsOwned: response.data }, () => {
                 resolve(); // Resolve the promise after setState is finished
               });
+
+
             })
             .catch(error => {
               console.log(error);
