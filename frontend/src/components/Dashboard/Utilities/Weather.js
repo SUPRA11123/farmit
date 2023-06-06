@@ -72,9 +72,10 @@ class Weather extends React.Component {
               label: this.state.statSelector,
               gridLines: 'false',
               data: forecastData[this.state.day],
-              borderColor: '#0ba837',
               tension: 0.4,
-              backgroundColor: '#BAECB8',
+              // if data is temperature, use red, else use green
+              backgroundColor: this.state.statSelector === 'temperature' ? '#BAECB8' : '#AFEEEE',
+              borderColor:this.state.statSelector === 'temperature' ? '#0ba837' : '#00CED1',
               pointStyle: 'rectRounded',
               fill: true,
               lineTension: 0.4,

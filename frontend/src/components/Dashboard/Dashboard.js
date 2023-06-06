@@ -35,7 +35,10 @@ class Dashboard extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { currentDashboardScreen: "dashboard"};
+        this.state = { 
+            currentDashboardScreen: "dashboard",
+            sensorsOwned: [],
+        };
         this.changeUtility = this.changeUtility.bind(this);
         this.displaySettings = this.displaySettings.bind(this);
         this.displayDashboardScreen = this.displayDashboardScreen.bind(this);
@@ -85,17 +88,23 @@ class Dashboard extends React.Component {
         const data2 = await response2.json();
 
         this.weatherForecast = data2;
-        this.setState({weatherForecast: data2})
+        this.setState({weatherForecast: data2});
 
-        // get sensor data
+        // get sensors from farm
+       
+        // before calling sensorLocationQuery, we need to wait for the sensors to be fetched
+
+
+       await this.getSensors();
 
         this.sensorLocationQuery();
 
-        // fecth the sensorData every 20 seconds
+
+        // fecth the sensorData every 5 seconds
         setInterval(async () => {
             await this.sensorLocationQuery();
         }
-        , 20000);
+        , 5000);
 
     }
 
@@ -106,59 +115,62 @@ class Dashboard extends React.Component {
           });
           
           const queryApi = influxDB.getQueryApi("FarmIT");
-          
-          const sensorLocationQuery = `
-            from(bucket: "test")
-            |> range(start: -50m)
-            |> filter(fn: (r) =>
-              r._measurement == "mqtt_consumer" and
-              (
-                r._field == "decoded_payload_temperature" or
-                r._field == "decoded_payload_humidity" or
-                r._field == "locations_user_latitude" or
-                r._field == "locations_user_longitude"
-              ) and
-              exists r._value
-            )
-            |> last()
-          `;
-          
-          const sensors = {}; // Object to store sensor data
-          
-          const fetchSensorLocationData = new Promise((resolve, reject) => {
-            queryApi.queryRows(sensorLocationQuery, {
-              next: (row, tableMeta) => {
-                const sensorData = tableMeta.toObject(row);
-          
-                const { _field, _value, topic } = sensorData;
-          
-                // Extract the sensor ID from the topic. It's the 4th part of the topic
-                const sensorId = topic.split("/")[3];
-          
-                if (_field === "locations_user_latitude") {
-                  sensors[sensorId] = { ...sensors[sensorId], latitude: _value, sensorId };
-                } else if (_field === "locations_user_longitude") {
-                  sensors[sensorId] = { ...sensors[sensorId], longitude: _value, sensorId };
-                } else if (_field === "decoded_payload_temperature") {
-                  sensors[sensorId] = { ...sensors[sensorId], temperature: _value, sensorId };
-                } else if (_field === "decoded_payload_humidity") {
-                  sensors[sensorId] = { ...sensors[sensorId], humidity: _value, sensorId };
-                }
-              },
-              error: (error) => {
-                console.error(error);
-                console.log("\nFinished ERROR");
-                reject(error);
-              },
-              complete: () => {
-                console.log("\nFinished SUCCESS");
-                // Set the sensor data in the state
-                const sensorArray = Object.values(sensors);
-                this.setState({ sensors: sensorArray });
-                resolve();
-              },
-            });
-          });
+
+          console.log("BOAS PESSOAL");
+
+
+          const sensorNames = this.state.sensorsOwned.map((sensor) => sensor.name);
+           
+        const sensorNamesFilter = sensorNames.map((sensorName) => `r["topic"] == "v3/farmit@ttn/devices/${sensorName}/up"`).join(" or ");
+
+        const sensorLocationQuery = `
+        from(bucket: "test")
+        |> range(start: -5m)
+        |> filter(fn: (r) => r["_measurement"] == "mqtt_consumer")
+        |> filter(fn: (r) => r["_field"] == "decoded_payload_temperature" or r["_field"] == "decoded_payload_humidity")
+        |> filter(fn: (r) => ${sensorNamesFilter})
+        |> last()
+      `;
+
+
+      const sensors = {};
+
+      const fetchSensorLocationData = new Promise((resolve, reject) => {
+        queryApi.queryRows(sensorLocationQuery, {
+          next: (row, tableMeta) => {
+            const sensorData = tableMeta.toObject(row);
+            console.log(sensorData);
+            
+            const { _field, _value, topic } = sensorData;
+      
+            // Extract the sensor ID from the topic. It's the 4th part of the topic
+            const sensorId = topic.split("/")[3];
+
+            if (_field === "decoded_payload_temperature") {
+              sensors[sensorId] = { ...sensors[sensorId], temperature: _value, sensorId };
+            } else if (_field === "decoded_payload_humidity") {
+              sensors[sensorId] = { ...sensors[sensorId], humidity: _value, sensorId };
+            }
+
+            const sensor = this.state.sensorsOwned.find((sensor) => sensor.name === sensorId);
+            sensors[sensorId] = { ...sensors[sensorId], latitude: sensor.latitude, longitude: sensor.longitude, sensorId };
+
+          },
+          error: (error) => {
+            console.error(error);
+            console.log("\nFinished ERROR");
+            reject(error);
+          },
+          complete: () => {
+            console.log("\nFinished SUCCESS");
+            // Set the sensor data in the state
+            const sensorArray = Object.values(sensors);
+            this.setState({ sensors: sensorArray });
+            resolve();
+          },
+        });
+      });
+                
                     
         }
 
@@ -188,6 +200,22 @@ class Dashboard extends React.Component {
         }
     
     }
+
+    getSensors() {
+        return new Promise((resolve, reject) => {
+          axios.get(URL + "getsensors/" + this.state.farmDetails.id + "/")
+            .then(response => {
+              console.log(response.data);
+              this.setState({ sensorsOwned: response.data }, () => {
+                resolve(); // Resolve the promise after setState is finished
+              });
+            })
+            .catch(error => {
+              console.log(error);
+              reject(error); // Reject the promise if there is an error
+            });
+        });
+      }
 
     changeUtility(util){this.setState({currentDashboardScreen: util});}
 

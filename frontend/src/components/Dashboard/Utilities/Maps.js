@@ -98,7 +98,6 @@ class Maps extends React.Component {
                             west: parseFloat(coordinates[3]),
                         },
                         isComplete: false,
-                        cursor: "drag",
                     });
 
                     var row = table.insertRow(0);
@@ -238,7 +237,6 @@ class Maps extends React.Component {
                         map,
                         path: path,
                         isComplete: false,
-                        cursor: "drag",
                     });
 
                     var row = table.insertRow(0);
@@ -474,7 +472,6 @@ class Maps extends React.Component {
                 strokeWeight: 2,
                 fillColor: "#0ba837",
                 fillOpacity: 0.35,
-                cursor: "drag",
             },
 
             rectangleOptions: {
@@ -485,7 +482,6 @@ class Maps extends React.Component {
                 strokeWeight: 2,
                 fillColor: "#0ba837",
                 fillOpacity: 0.35,
-                cursor: "drag",
             }
         });
 

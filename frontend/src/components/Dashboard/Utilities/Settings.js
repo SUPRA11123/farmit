@@ -187,7 +187,7 @@ class Settings extends React.Component {
                     <h2>General</h2>
                     <hr></hr>
 
-                    <button className="settingsBtn" onClick={this.showTandC}><i className="fa-solid fa-trash"></i> Terms & Conditions</button><br/>
+                    <button className="settingsBtn" onClick={this.showTandC}><i className="fa-solid fa-file-contract"></i> Terms & Conditions</button><br/>
 
                     <label className="toggle">
                         <span className="toggle-label">Dark Mode: </span>
