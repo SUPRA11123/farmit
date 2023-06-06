@@ -104,6 +104,12 @@ class Team extends React.Component {
                         document.getElementById("teamContainer").classList.remove('hidden');
                         document.getElementById("addTeamMember").classList.add('hidden');
 
+                        this.setState({
+                            role: "",
+                            fields: [],
+                            selectedFields: [],
+                        });
+
                         this.componentDidMount();
 
                     }
@@ -114,20 +120,41 @@ class Team extends React.Component {
                 } else {
                     // get the select value from the fields dropdown
                     const fields = this.state.selectedFields;
-                    axios.put("http://localhost:8000/addfieldmanager/" + response.data.id + "/", {
-                        fields: fields
-                    }).then(response => {
 
+                    if (fields) {
+
+                        axios.put("http://localhost:8000/addfieldmanager/" + response.data.id + "/", {
+                            fields: fields
+                        }).then(response => {
+
+                            document.getElementById("teamContainer").classList.remove('hidden');
+                            document.getElementById("addTeamMember").classList.add('hidden');
+
+                            this.setState({
+                                role: "",
+                                fields: [],
+                                selectedFields: [],
+                            });
+
+                            this.componentDidMount();
+
+                        }
+                        ).catch(error => {
+                            console.log(error);
+                        }
+                        );
+                    } else {
                         document.getElementById("teamContainer").classList.remove('hidden');
                         document.getElementById("addTeamMember").classList.add('hidden');
 
-                        this.componentDidMount();
+                        this.setState({
+                            role: "",
+                            fields: [],
+                            selectedFields: []
+                        });
 
+                        this.componentDidMount();
                     }
-                    ).catch(error => {
-                        console.log(error);
-                    }
-                    );
                 }
 
             }).catch(error => {
@@ -169,10 +196,12 @@ class Team extends React.Component {
                 }).catch(error => {
                     console.log(error);
                 });
+        } else {
+            this.setState({ selectedFields: [] });
         }
     }
 
-    
+
 
     showTeamForm() {
         document.getElementById("addTeamMember").reset();
@@ -188,6 +217,7 @@ class Team extends React.Component {
         this.setState({
             role: "",
             fields: [],
+            selectedFields: [],
         });
     }
 
@@ -217,7 +247,6 @@ class Team extends React.Component {
         if (member.role === "field manager") {
             axios.get("http://localhost:8000/getfieldsbyid/" + this.props.farmDetails.id + "/")
                 .then(response => {
-
                     const fields = response.data.filter(field => !field.manager || field.manager === member.id);
                     this.setState({ fields });
                     console.log(fields);
@@ -236,28 +265,35 @@ class Team extends React.Component {
 
         this.setState({
             role: "",
+            fields: [],
+            selectedFields: [],
         });
     }
 
-    handleEditMember(event){
+    handleEditMember(event) {
         event.preventDefault();
 
         document.getElementById("teamOverlay").classList.add('hidden');
-        
+
         // get role and fields if role is field manager
         const role = document.getElementById("editRole").value;
         const fields = this.state.selectedFields;
 
-        console.log(fields);
 
-       // call the backend to edit the user
-         axios.put("http://localhost:8000/edituser/" + this.state.member.id + "/", {
+        // call the backend to edit the user
+        axios.put("http://localhost:8000/edituser/" + this.state.member.id + "/", {
             role: role,
             fields: fields,
         }).then(response => {
             console.log(response);
 
             document.getElementById("editTeamMember").classList.add('hidden');
+
+            this.setState({
+                role: "",
+                fields: [],
+                selectedFields: [],
+            });
 
             this.componentDidMount();
 
@@ -266,10 +302,46 @@ class Team extends React.Component {
             console.log(error);
         }
         );
-        
+
 
 
     }
+
+    isFormValid() {
+        const fields = this.state.fields;
+
+        if (this.state.role === "field manager" && fields.length === 0) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    isEditFormValid() {
+        // get selected fields
+        const fields = this.state.selectedFields;
+
+        console.log("MANOOOO");
+        console.log(fields);
+
+        if (fields) {
+            if (fields.length > 0 && this.state.role === "field manager") {
+                return true;
+            } else if (this.state.role === "farmer") {
+                return true;
+            } else {
+                return false;
+            }
+
+        } else {
+            return false;
+        }
+
+
+    }
+
+
 
 
 
@@ -335,16 +407,16 @@ class Team extends React.Component {
                     <input required type="password" id="confirmPassword" name="confirmPassword" className="form-control" placeholder="Confirm Password" />
 
                     <label htmlFor="role">Role</label>
-                    <select defaultValue="" id="role" name="role" className="form-control" onChange={this.handleRoleChange}>
+                    <select defaultValue="" id="role" name="role" className="form-control" onChange={this.handleRoleChange} required>
                         <option value="" selected disabled>Select a role</option>
                         <option value="field manager">field manager</option>
                         <option value="farmer">farmer</option>
                     </select>
 
-                    {role === 'field manager' && (
+                    {role === 'field manager' && this.state.fields.length > 0 && (
                         <>
                             <label htmlFor="fields">Fields</label>
-                            <select id="fields" name="fields" className="form-control" onChange={this.handleFieldChange} multiple>
+                            <select id="fields" name="fields" className="form-control" onChange={this.handleFieldChange} multiple required>
                                 <option value="" disabled>Select a field</option>
                                 {this.state.fields.map(field => (
                                     <option key={field.id} value={field.id}>{field.name}</option>
@@ -356,7 +428,9 @@ class Team extends React.Component {
                         <p style={{ color: "red" }}>Passwords do not match</p>
                     )}
 
-                    <button id='addMember' type="submit">Create User</button>
+                    <button id="addMember" type="submit" disabled={!this.isFormValid()}>
+                        Create User
+                    </button>
 
                 </form>
 
@@ -381,7 +455,7 @@ class Team extends React.Component {
                         <option value="farmer">farmer</option>
                     </select>
 
-                    {role === 'field manager' && (
+                    {role === 'field manager' && this.state.fields.length > 0 && (
                         <>
                             <label htmlFor="fields">Fields</label>
                             <select id="fields" name="fields" className="form-control" onChange={this.handleFieldChange} multiple>
@@ -393,8 +467,9 @@ class Team extends React.Component {
                         </>
                     )}
 
-                    <button id='editMember' type="submit">Edit User</button>
-
+                    <button id="editMember" type="submit" disabled={!this.isEditFormValid()}>
+                        Edit User
+                    </button>
                 </form>
 
                 <div id='teamOverlay' className="overlayDarken hidden"></div>
