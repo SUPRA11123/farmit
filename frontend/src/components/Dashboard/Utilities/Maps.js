@@ -170,6 +170,9 @@ class Maps extends React.Component {
                                 infoWindow.close();
                               });
 
+                              marker.infoWindow = infoWindow;
+
+
                             markers.push(marker);
 
                             // on click, open the modal
@@ -329,6 +332,8 @@ class Maps extends React.Component {
                                 infoWindow.close();
                               });
 
+                             marker.infoWindow = infoWindow;
+
                             markers.push(marker);
 
                             // on click, open the modal
@@ -387,6 +392,10 @@ class Maps extends React.Component {
             this.props.sensors.forEach((sensor) => {
                 markers.forEach((marker) => {
                     if (marker.position.lat() === sensor.latitude && marker.position.lng() === sensor.longitude) {
+
+                        const infoWindow = marker.infoWindow;
+
+                        infoWindow.setContent("Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b>');
 
                         /* 
                         // update the text of the marker
