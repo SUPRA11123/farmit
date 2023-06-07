@@ -445,6 +445,7 @@ class Home extends React.Component {
             suggestedMin: 0,
             suggestedMax: 40,
             ticks: {
+              stepSize: 10,
               callback: function (value) {
                 return value + '°C';
               },

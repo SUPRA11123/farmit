@@ -160,6 +160,7 @@ class Maps extends React.Component {
                             // on click, open the modal
                             marker.addListener("click", () => {
                                 this.showData(sensor);
+                                this.smallMap();
                             });
 
 
@@ -303,6 +304,7 @@ class Maps extends React.Component {
                             // on click, open the modal
                             marker.addListener("click", () => {
                                 this.showData(sensor);
+                                this.smallMap();
                             });
                         }
                     });
@@ -935,8 +937,16 @@ class Maps extends React.Component {
     }
 
     showData(sensorData) {
-
+        
         this.setState({ modalOpen: true, sensorData: sensorData });
+    }
+
+    smallMap(){
+        document.getElementById("map").classList.add("smallMap");
+    }
+
+    largeMap(){
+        document.getElementById("map").classList.remove("smallMap");
     }
 
     highlightRow(fieldName) {
@@ -979,12 +989,13 @@ class Maps extends React.Component {
 
                 <button onClick={this.centreToMap} id="centreToMap" className='fieldsTableBtn'><i className="fa-solid fa-location-crosshairs"></i></button>
                 <div id="map">
-                    {modalOpen && (
+                  
+                </div>
+                {modalOpen && (
                         <Modal setOpenModal={(isOpen) => this.setState({ modalOpen: isOpen })}
-                            sensorData={this.state.sensorData}
+                            sensorData={this.state.sensorData} largeMap={this.largeMap}
                         />
                     )}
-                </div>
                 <div className="fieldsTableConatiner">
 
                     <h2 className="hidden" id="addFieldsHeader">Use the rectangle/polygon tool to draw the field onto map</h2>

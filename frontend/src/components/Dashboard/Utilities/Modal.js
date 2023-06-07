@@ -176,14 +176,10 @@ class Modal extends React.Component {
     this.setState({ startDate: "", endDate: "", showDateInputs: false });
   };
 
- 
-
-
   updateChart(data) {
     if (data.length === 0) {
       return; // No new data, exit the function
     }
-  
   
     // populate the graph with humidity and temperature data
     const humidityData = data.filter((row) => row["decoded_payload_humidity"]);
@@ -191,13 +187,10 @@ class Modal extends React.Component {
   
     this.setState({ humidityData, temperatureData });
   
-
-  
     // store the time values in an array and don't repeat them, also transform into local time
     const uniqueTime = new Set(data.map((row) => row.time));
     const time = [...uniqueTime].map((time) => new Date(time).toLocaleTimeString());
-  
-  
+    
     if (!this.myChart) {
       const chartRef = this.chartRef.current;
       const myChartRef = chartRef.getContext("2d");
@@ -222,6 +215,8 @@ class Modal extends React.Component {
           ],
         },
         options: {
+          responsive: true,
+          maintainAspectRatio: false,
           plugins: {
             legend: {
               display: true, // Display the legend
@@ -280,21 +275,17 @@ class Modal extends React.Component {
     const { showDateInputs, startDate, endDate } = this.state;
 
     return (
-      <div className="modalBackground">
         <div className="modalContainer">
           <div className="titleCloseBtn">
-            <button onClick={() => setOpenModal(false)}>X</button>
-          </div>
-          <div className="title">
-            <h5>Field data</h5>
+          <button onClick={() => { setOpenModal(false); this.props.largeMap(); }}>X</button>
           </div>
           <div className="title2">
             <h1>Real-Time Temperature and Humidity Values From Sensor {this.props.sensorData.sensorId}</h1>
           </div>
           <div className="body">
-            <div>
-              <canvas ref={this.chartRef} style={{ height: "450px", width: "700px" }} />
-            </div>
+        
+              <canvas ref={this.chartRef} style={{ height: "250px", width: "95%" }} />
+         
             <br />
             {showDateInputs && (
               <div>
@@ -315,7 +306,6 @@ class Modal extends React.Component {
 
           </div>
         </div>
-      </div>
     );
   }
 }
