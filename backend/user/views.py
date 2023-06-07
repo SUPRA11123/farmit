@@ -6,6 +6,7 @@ from rest_framework.decorators import api_view
 from django.contrib.auth.hashers import check_password
 import jwt, datetime
 from farm.models import Farm
+from field.models import Field
 
 
 
@@ -121,4 +122,82 @@ def changePassword(request):
             return JsonResponse({'message': 'Password changed'}, status=200)
         return JsonResponse({'message': 'Invalid credentials'}, status=401)
     
+@api_view(['PUT'])
+def editUser(request, id):
+    user = User.objects.get(id=id)
+    role = user.role
+    newRole = request.data['role']
+    if role == 'farmer' and newRole == 'field manager':
+        fields = request.data['fields']
+        for field in fields:
+            field = Field.objects.get(id=field)
+            field.manager = user
+            field.save()
+
+            farm = field.farm
+            farm.fieldmanagers.add(user)
+            farm.farmers.remove(user)
+            farm.save()
+
+            user.role = newRole
+            user.save()
+    elif role == 'field manager' and newRole == 'farmer':
+        # get the fields that the user is managing
+        fields = Field.objects.filter(manager=user)
+        for field in fields:
+            field.manager = None
+            field.save()
+
+            farm = field.farm
+            farm.fieldmanagers.remove(user)
+            farm.farmers.add(user)
+            farm.save()
+            
+            user.role = newRole
+            user.save()
+    elif role == 'field manager' and newRole == 'field manager':
+        fields = request.data['fields']
+
+         # if the user is already managing fields, remove him from them
+        if Field.objects.filter(manager=user).exists():
+                managedFields = Field.objects.filter(manager=user)
+                for field in managedFields:
+                    field.manager = None
+                    field.save()
+
+                    farm = field.farm
+                    farm.fieldmanagers.remove(user)
+                    farm.save()
+
+        for field in fields:
+            
+            field = Field.objects.get(id=field)
+            field.manager = user
+            field.save()
+
+            farm = field.farm
+            farm.fieldmanagers.add(user)
+            farm.save()
+
+            user.role = newRole
+            user.save()
+
+    elif role == 'farmer' and newRole == 'farmer':
+        pass
+
+    else:
+        return JsonResponse({'message': 'Invalid role'}, status=400)
+    
+    return JsonResponse({'message': 'User updated'}, status=200)
+
+
+        
+            
+
+
+
+
+
+    
+
   
