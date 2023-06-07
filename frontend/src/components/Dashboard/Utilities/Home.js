@@ -119,10 +119,12 @@ class Home extends React.Component {
 
                // add a little point in the rectangle in the point position
                const markerIcon = {
-                path: 'M22-10h-44v20h16l6 5 6-5h16z',
-                fillColor: 'white', 
+                path: window.google.maps.SymbolPath.CIRCLE,
+                fillColor: 'white',
                 fillOpacity: 1,
-                scale: 1.3,
+                strokeColor: 'green',
+                strokeWeight: 2,
+                scale: 15,
               };
               
               const marker = new window.google.maps.Marker({
@@ -131,13 +133,26 @@ class Home extends React.Component {
                 icon: markerIcon,
                 label: {
                   fontFamily: 'Fontawesome',
-                  text: "\uf2c8 " + sensor.temperature + '°C ' + "\uf043 " + sensor.humidity + '%',
-                  color: 'black',
-                  fontSize: '1vh',
-                  fontWeight: 'bold',
-                  backgroundColor: 'white',
-                  labelOrigin: new window.google.maps.Point(24, -12),
+                  text: '\uf1eb',
+                  color: 'white',
+                  color: 'green',
+                  clickable: true,
+                  background: 'white',
                 },
+              });
+
+              const infoWindow = new window.google.maps.InfoWindow({
+                content: "Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b>',
+              });
+              
+              
+              
+              marker.addListener('mouseover', () => {
+                infoWindow.open(map, marker);
+              });
+              
+              marker.addListener('mouseout', () => {
+                infoWindow.close();
               });
 
               //text: sensor.temperature + "°C\n" + sensor.humidity + "%",
@@ -200,12 +215,13 @@ class Home extends React.Component {
             // check if the sensor is inside the rectangle
             if (this.isPointInsidePolygon(sensor, polygonCoordinates)) {
 
-              // add a little point in the rectangle in the point position
               const markerIcon = {
-                path: 'M22-10h-44v20h16l6 5 6-5h16z',
-                fillColor: 'white', 
+                path: window.google.maps.SymbolPath.CIRCLE,
+                fillColor: 'white',
                 fillOpacity: 1,
-                scale: 1.3,
+                strokeColor: 'green',
+                strokeWeight: 2,
+                scale: 15,
               };
               
               const marker = new window.google.maps.Marker({
@@ -214,13 +230,26 @@ class Home extends React.Component {
                 icon: markerIcon,
                 label: {
                   fontFamily: 'Fontawesome',
-                  text: "\uf2c8 " + sensor.temperature + '°C ' + "\uf043 " + sensor.humidity + '%',
-                  color: 'black',
-                  fontSize: '1vh',
-                  fontWeight: 'bold',
-                  backgroundColor: 'white',
-                  labelOrigin: new window.google.maps.Point(24, -12),
+                  text: '\uf1eb',
+                  color: 'white',
+                  color: 'green',
+                  clickable: true,
+                  background: 'white',
                 },
+              });
+
+              const infoWindow = new window.google.maps.InfoWindow({
+                content: "Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b>',
+              });
+              
+              
+              
+              marker.addListener('mouseover', () => {
+                infoWindow.open(map, marker);
+              });
+              
+              marker.addListener('mouseout', () => {
+                infoWindow.close();
               });
 
               marker.addListener('click', (event) => {
@@ -251,7 +280,7 @@ class Home extends React.Component {
       this.props.sensors.forEach((sensor) => {
         markers.forEach((marker) => {
           if (marker.position.lat() === sensor.latitude && marker.position.lng() === sensor.longitude) {
-            
+            /* 
             // update the text of the marker
             marker.setLabel({
                fontFamily: 'Fontawesome',
@@ -262,6 +291,7 @@ class Home extends React.Component {
                   backgroundColor: 'white',
                   labelOrigin: new window.google.maps.Point(24, -12),
             });
+            */
 
           }
         });
@@ -286,7 +316,7 @@ class Home extends React.Component {
 
   getTasksByAsignee(id) {
     return axios
-      .get(URL + "gettasksbyasignee/" + id + "/")
+      .get(URL + "gettasksbyassignee/" + id + "/")
       .then((res) => {
         return res.data;
       }

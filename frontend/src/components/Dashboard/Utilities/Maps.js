@@ -133,27 +133,42 @@ class Maps extends React.Component {
 
 
                               // add a little point in the rectangle in the point position
-                            const markerIcon = {
-                                path: 'M22-10h-44v20h16l6 5 6-5h16z',
-                                fillColor: 'white', 
+                              const markerIcon = {
+                                path: window.google.maps.SymbolPath.CIRCLE,
+                                fillColor: 'white',
                                 fillOpacity: 1,
-                                scale: 1.3,
-                            };
-                            
-                            const marker = new window.google.maps.Marker({
+                                strokeColor: 'green',
+                                strokeWeight: 2,
+                                scale: 15,
+                              };
+                              
+                              const marker = new window.google.maps.Marker({
                                 position: { lat: sensor.latitude, lng: sensor.longitude },
                                 map: map,
                                 icon: markerIcon,
                                 label: {
-                                fontFamily: 'Fontawesome',
-                                text: "\uf2c8 " + sensor.temperature + '°C ' + "\uf043 " + sensor.humidity + '%',
-                                color: 'black',
-                                fontSize: '1vh',
-                                fontWeight: 'bold',
-                                backgroundColor: 'white',
-                                labelOrigin: new window.google.maps.Point(24, -12),
+                                  fontFamily: 'Fontawesome',
+                                  text: '\uf1eb',
+                                  color: 'white',
+                                  color: 'green',
+                                  clickable: true,
+                                  background: 'white',
                                 },
-                            });
+                              });
+                
+                              const infoWindow = new window.google.maps.InfoWindow({
+                                content: "Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b>',
+                              });
+                              
+                              
+                              
+                              marker.addListener('mouseover', () => {
+                                infoWindow.open(map, marker);
+                              });
+                              
+                              marker.addListener('mouseout', () => {
+                                infoWindow.close();
+                              });
 
                             markers.push(marker);
 
@@ -277,27 +292,42 @@ class Maps extends React.Component {
                         // check if the sensor is inside the rectangle
                         if (this.isPointInsidePolygon(sensor, polygonCoordinates)) {
 
-                        const markerIcon = {
-                            path: 'M22-10h-44v20h16l6 5 6-5h16z',
-                            fillColor: 'white', 
-                            fillOpacity: 1,
-                            scale: 1.3,
-                        };
-                        
-                        const marker = new window.google.maps.Marker({
-                            position: { lat: sensor.latitude, lng: sensor.longitude },
-                            map: map,
-                            icon: markerIcon,
-                            label: {
-                            fontFamily: 'Fontawesome',
-                            text: "\uf2c8 " + sensor.temperature + '°C ' + "\uf043 " + sensor.humidity + '%',
-                            color: 'black',
-                            fontSize: '1vh',
-                            fontWeight: 'bold',
-                            backgroundColor: 'white',
-                            labelOrigin: new window.google.maps.Point(24, -12),
-                            },
-                        });
+                            const markerIcon = {
+                                path: window.google.maps.SymbolPath.CIRCLE,
+                                fillColor: 'white',
+                                fillOpacity: 1,
+                                strokeColor: 'green',
+                                strokeWeight: 2,
+                                scale: 15,
+                              };
+                              
+                              const marker = new window.google.maps.Marker({
+                                position: { lat: sensor.latitude, lng: sensor.longitude },
+                                map: map,
+                                icon: markerIcon,
+                                label: {
+                                  fontFamily: 'Fontawesome',
+                                  text: '\uf1eb',
+                                  color: 'white',
+                                  color: 'green',
+                                  clickable: true,
+                                  background: 'white',
+                                },
+                              });
+                
+                              const infoWindow = new window.google.maps.InfoWindow({
+                                content: "Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b>',
+                              });
+                              
+                              
+                              
+                              marker.addListener('mouseover', () => {
+                                infoWindow.open(map, marker);
+                              });
+                              
+                              marker.addListener('mouseout', () => {
+                                infoWindow.close();
+                              });
 
                             markers.push(marker);
 
@@ -358,6 +388,7 @@ class Maps extends React.Component {
                 markers.forEach((marker) => {
                     if (marker.position.lat() === sensor.latitude && marker.position.lng() === sensor.longitude) {
 
+                        /* 
                         // update the text of the marker
                         marker.setLabel({
                             fontFamily: 'Fontawesome',
@@ -368,6 +399,7 @@ class Maps extends React.Component {
                             backgroundColor: 'white',
                             labelOrigin: new window.google.maps.Point(24, -12),
                         });
+                        */
 
                     }
                 });
@@ -937,7 +969,7 @@ class Maps extends React.Component {
     }
 
     showData(sensorData) {
-        
+
         this.setState({ modalOpen: true, sensorData: sensorData });
     }
 
