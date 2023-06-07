@@ -20,7 +20,8 @@ from farm import views as farm_views
 from field import views as field_views
 from task import views as task_views
 from sensor import views as sensor_views
-
+from django.conf.urls.static import static
+from backend import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -47,4 +48,5 @@ urlpatterns = [
     path('gettasksbyassignee/<int:id>/', task_views.get_tasks_by_assignee),
     path('edituser/<int:id>/', views.editUser),  
     path('getsensors/<int:id>/', sensor_views.getSensors),
+    path('scan/', include(('parseImage.urls', 'parseImage'), namespace="parseImage"))
     ]
