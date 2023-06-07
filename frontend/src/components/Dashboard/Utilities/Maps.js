@@ -43,7 +43,7 @@ class Maps extends React.Component {
 
             mapTypeId: "satellite",
             center: { lat: this.props.farmDetails.latitude, lng: this.props.farmDetails.longitude },
-            zoom: 13,
+            zoom: 14,
             streetViewControl: false,
             mapTypeControl: false,
         });
@@ -70,7 +70,7 @@ class Maps extends React.Component {
 
         centreMap.addEventListener("click", () => {
             map.setCenter(marker.getPosition());
-            map.setZoom(13);
+            map.setZoom(14);
         });
 
         if (fields.length > 0) {

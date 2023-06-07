@@ -34,7 +34,7 @@ class Home extends React.Component {
     const map = new window.google.maps.Map(document.getElementById("homeMap"), {
       mapTypeId: "satellite",
       center: { lat: this.props.farmDetails.latitude, lng: this.props.farmDetails.longitude },
-      zoom: 12.5,
+      zoom: 14,
       streetViewControl: false,
       mapTypeControl: false,
       fullscreenControl: false,
