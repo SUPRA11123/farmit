@@ -25,6 +25,8 @@ class Home extends React.Component {
 
   async componentDidMount() {
 
+    this.getTasksByAsignee(this.props.user.id);
+
     const markers = [];
 
     this.populateWeather(this.props.weatherData);
@@ -272,6 +274,19 @@ class Home extends React.Component {
   getFieldsByManager(id) {
     return axios
       .get(URL + "getfieldsbymanager/" + id + "/")
+      .then((res) => {
+        return res.data;
+      }
+      )
+      .catch((err) => {
+        console.log(err);
+      }
+      );
+  }
+
+  getTasksByAsignee(id) {
+    return axios
+      .get(URL + "gettasksbyasignee/" + id + "/")
       .then((res) => {
         return res.data;
       }

@@ -568,13 +568,9 @@ body {
     align-items: flex-start;
     justify-content: center;
     width: 100%;
-    height: 17.5%;
+    height: 15%;
     top: 0;
-    
- //background-image: url("https://img.freepik.com/free-photo/harvested-grain-field-captured-sunny-day-with-some-clouds_181624-44956.jpg?w=1800&t=st=1684370902~exp=1684371502~hmac=cb72f01976942c7d753cb16fb4eb547d09496bfa64056cf06a7893905dc92a1f");
-    background-size: cover;
-    background-position: 50%;
-    border-radius: 5px;
+    border-bottom: 2PX solid $green;
 
     h1 {
         margin: 0;
@@ -582,7 +578,7 @@ body {
         font-size: 4vh;
         color: $green;
         font-weight: bold;
-        margin-bottom: 5px;
+        margin-bottom: 10px;
     }
 
     p {
@@ -659,6 +655,8 @@ body {
     }
 
     #homeChart {
+        position: absolute;
+        bottom: 5%;
         width: 90% !important;
         margin-left: 5%;
         margin-top: 2.5%;

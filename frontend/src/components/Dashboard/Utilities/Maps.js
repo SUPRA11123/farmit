@@ -278,11 +278,6 @@ class Maps extends React.Component {
                         // check if the sensor is inside the rectangle
                         if (this.isPointInsidePolygon(sensor, polygonCoordinates)) {
 
-
-
-                            // add a little point in the rectangle in the point position
-
-                              // add a little point in the rectangle in the point position
                         const markerIcon = {
                             path: 'M22-10h-44v20h16l6 5 6-5h16z',
                             fillColor: 'white', 
@@ -986,7 +981,7 @@ class Maps extends React.Component {
         return (
             <>
 
-                <button onClick={this.centreToMap} id="centreToMap" className={`fieldsTableBtn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}><i className="fa-solid fa-location-crosshairs"></i></button>
+                <button onClick={this.centreToMap} id="centreToMap" className='fieldsTableBtn'><i className="fa-solid fa-location-crosshairs"></i></button>
                 <div id="map">
                     {modalOpen && (
                         <Modal setOpenModal={(isOpen) => this.setState({ modalOpen: isOpen })}
