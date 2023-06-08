@@ -209,6 +209,9 @@ class Modal extends React.Component {
     const uniqueTime = new Set(data.map((row) => row.time));
     const time = [...uniqueTime].map((time) => new Date(time).toLocaleTimeString());
 
+    const darkMode = localStorage.getItem("darkMode") === "true";
+    const labelColor = darkMode ? '#ffffff' : '#8D8D8D';
+
 
     if (!this.myChart) {
       console.log("creating chart");
@@ -223,13 +226,13 @@ class Modal extends React.Component {
             {
               label: "Temperature (ºC)",
               data: temperatureData.map((row) => row.decoded_payload_temperature),
-              borderColor: "#FF0000",
+              borderColor: "#C44940",
               fill: false,
             },
             {
               label: "Humidity (%)",
               data: humidityData.map((row) => row.decoded_payload_humidity),
-              borderColor: "#0000FF",
+              borderColor: "#4079c4",
               fill: false,
             },
           ],
@@ -240,6 +243,9 @@ class Modal extends React.Component {
           plugins: {
             legend: {
               display: true, // Display the legend
+              labels: {
+                color: labelColor, // Set the color of the legend text
+              },
             },
           },
           responsive: true,
@@ -252,12 +258,18 @@ class Modal extends React.Component {
                 display: true,
                 text: "Value",
               },
+              ticks: {
+                color: labelColor,
+              }
             },
             x: {
               title: {
                 display: true,
                 text: "Time",
               },
+              ticks: {
+                color: labelColor,
+              }
             },
           },
           animation: {
@@ -298,7 +310,7 @@ class Modal extends React.Component {
     const { showDateInputs, startDate, endDate } = this.state;
 
     return (
-      <div className="modalContainer">
+      <div className={`modalContainer ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
         <div className="titleCloseBtn">
           <button onClick={() => { setOpenModal(false); this.props.largeMap(); }}>X</button>
         </div>

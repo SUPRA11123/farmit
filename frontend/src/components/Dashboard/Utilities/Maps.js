@@ -157,7 +157,7 @@ class Maps extends React.Component {
                               });
                 
                               const infoWindow = new window.google.maps.InfoWindow({
-                                content: "Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b>',
+                                content: "Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b><br><br> Click to view graph',
                               });
                               
                               
@@ -222,7 +222,7 @@ class Maps extends React.Component {
 
                     row.addEventListener("click", () => {
                         map.setCenter({ lat: lat, lng: lng });
-                        map.setZoom(13);
+                        map.setZoom(14);
                     });
 
 
@@ -319,7 +319,7 @@ class Maps extends React.Component {
                               });
                 
                               const infoWindow = new window.google.maps.InfoWindow({
-                                content: "Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b>',
+                                content: "Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b><br><br> Click to view graph',
                               });
                               
                               
@@ -369,7 +369,7 @@ class Maps extends React.Component {
 
                     row.addEventListener("click", () => {
                         map.setCenter(polygonCenter);
-                        map.setZoom(13);
+                        map.setZoom(14);
                     });
                 }
 
@@ -395,7 +395,7 @@ class Maps extends React.Component {
 
                         const infoWindow = marker.infoWindow;
 
-                        infoWindow.setContent("Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b>');
+                        infoWindow.setContent("Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b><br><br> Click to view graph');
 
                         /* 
                         // update the text of the marker
@@ -701,7 +701,7 @@ class Maps extends React.Component {
 
                         row.addEventListener("click", () => {
                             map.setCenter(polygonCenter);
-                            map.setZoom(13);
+                            map.setZoom(14);
                         });
 
                     }).catch((err) => {
@@ -899,7 +899,7 @@ class Maps extends React.Component {
 
                         row.addEventListener("click", () => {
                             map.setCenter({ lat: lat, lng: lng });
-                            map.setZoom(13);
+                            map.setZoom(14);
                         });
 
                     }).catch((err) => {

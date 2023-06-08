@@ -371,11 +371,15 @@ class Team extends React.Component {
                                     <td>{member.role}</td>
                                     <td>{member.email}</td>
                                     <td>{member.field}</td>
-                                    {member.role !== 'owner' && (
-                                        <>
-                                            <td><button className="edit-button" onClick={() => this.showEditMemberForm(member)}>Edit</button></td>
-                                            <td><button className="delete-button">Delete</button></td>
-                                        </>
+                                    {member.role !== 'owner' ? (
+                                    <>
+                                        <td>
+                                        <button className="edit-button" onClick={() => this.showEditMemberForm(member)}>Edit</button>
+                                        <button className="delete-button">Delete</button>
+                                        </td>
+                                    </>
+                                    ) : (
+                                    <td></td>
                                     )}
                                 </tr>
                             ))}

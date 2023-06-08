@@ -978,8 +978,11 @@ body {
           }
     }
 
-  
+    tbody tr td {
+        width: 30%;
+    }
     tbody tr td span {
+        
       margin-left: 15%;
       font-size: 2vh;
     }
@@ -1459,6 +1462,7 @@ body {
   }
 
   .delete-button {
+    display: none;
     align-items: center;
     justify-content: center;
     border: none;
@@ -1466,17 +1470,19 @@ body {
     background: $red;
     color: white;
     cursor: pointer;
-    margin: 0;
+    margin: 0 5px 0 5px;
     padding: 5px;
     border-radius: 5px;
+    
   }
 
   .edit-button{
+    display: none;
     align-items: center;
     justify-content: center;
     border: none;
     z-index: 300;
-    background: $blue;
+    background: $darkGrey;
     color: white;
     cursor: pointer;
     margin: 0;
@@ -1523,6 +1529,7 @@ body {
         cursor: pointer;
     }
 
+
     #teamTable {
         position: absolute;
         top: 2.5%;
@@ -1540,7 +1547,7 @@ body {
         }
 
         tbody tr:hover {
-            background-color: $green !important;
+            background-color: $lightBlue !important;
         }
         tbody tr td:last-child {
             width: 50px; /* Adjust the width as needed */
@@ -1548,7 +1555,7 @@ body {
         tbody tr td {
             font-size: 2vh;
             padding-left: 5%;
-            width: 50px;
+            width: 20%;
         }
 
         tbody tr:nth-child(odd) {
@@ -1557,6 +1564,11 @@ body {
         
         
         tbody tr { line-height: 50px; margin-left: 5%; }
+
+     tbody tr:hover .edit-button,
+    tbody tr:hover .delete-button {
+        display: inline-block;
+    }
     }
 }
 
@@ -1565,7 +1577,7 @@ body {
     top: 52.5%;
     width: 52.5%;
     height: 42.5%;
-    border-radius: 5px;
+    border-radius: 15px;
     background-color: white;
     border: 2px solid #D9D9D9;
     display: flex;
@@ -2040,7 +2052,7 @@ body {
 
 .darkMode {
 
-    .taskColumnHeader, .settingsBtn {
+    .taskColumnHeader, .settingsBtn, .modalContainer {
         background-color: #2a2a2a !important;
     }
 
@@ -2069,12 +2081,20 @@ body {
     }
 
     tbody tr:nth-child(odd) {
+        background-color: #2a2a2a;
+    }
+
+    #teamTable tbody tr:nth-child(odd) {
         background-color: #2a2a2a !important;
     }
 
     tbody tr:hover {
-        background-color: $green;
+        background-color: $green !important;
         color: white;
+    }
+
+    #teamTable tr:hover {
+        color: black !important;
     }
 
     .alertContainer i {
