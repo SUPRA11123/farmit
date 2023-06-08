@@ -1,7 +1,6 @@
 import React from "react";
 import { InfluxDB } from "@influxdata/influxdb-client";
 import { Chart } from "chart.js/auto";
-import Hammer from 'hammerjs';
 import zoomPlugin from 'chartjs-plugin-zoom';
 
 
