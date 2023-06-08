@@ -124,9 +124,6 @@ class Dashboard extends React.Component {
           
           const queryApi = influxDB.getQueryApi("FarmIT");
 
-          
-          console.log(this.state.sensorsOwned);
-
           const sensorNames = this.state.sensorsOwned.map((sensor) => sensor.name);
            
         const sensorNamesFilter = sensorNames.map((sensorName) => `r["topic"] == "v3/farmit@ttn/devices/${sensorName}/up"`).join(" or ");
@@ -170,7 +167,7 @@ class Dashboard extends React.Component {
             reject(error);
           },
           complete: () => {
-            console.log("\nFinished SUCCESS");
+            
             // Set the sensor data in the state
             const sensorArray = Object.values(sensors);
             this.setState({ sensors: sensorArray });
