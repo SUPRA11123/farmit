@@ -1587,7 +1587,7 @@ body {
     animation-delay: 0.5s; 
 
     .body {
-        width: 100%;
+        width: 85%;
         height: 100%;
         display: flex;
         align-items: flex-end;
@@ -2135,6 +2135,34 @@ body {
     font-size: 16px;
   }
 
+  .timerange-dropdown{
+    position: absolute;
+    right: 2%;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 5px;
+    // make it more beautiful
+    z-index: 20;
+  }
+    .resetZoomButton {
+       // put on the bottom right corner
+         position: absolute;
+            bottom: 1%;
+            right: 2%;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+
+      }
+      
+      .resetZoomButton:hover {
+        background-color: #0056b3;
+      }
+   
+
+
+
   
   
 
@@ -2343,5 +2371,4 @@ body {
 
     
     }
-
   }

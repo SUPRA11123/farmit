@@ -1,7 +1,12 @@
 import React from "react";
 import { InfluxDB } from "@influxdata/influxdb-client";
 import { Chart } from "chart.js/auto";
+import Hammer from 'hammerjs';
+import zoomPlugin from 'chartjs-plugin-zoom';
 
+
+
+Chart.register(zoomPlugin);
 
 
 class Modal extends React.Component {
@@ -13,6 +18,7 @@ class Modal extends React.Component {
       startDate: "",
       endDate: "",
       showDateInputs: false,
+      selectedTimeOption: "20m",
     };
     this.chartRef = React.createRef();
 
@@ -20,6 +26,7 @@ class Modal extends React.Component {
 
   componentDidMount() {
 
+    
     console.log(this.props.sensorData.sensorId);
 
     this.fetchData(); // Fetch data initially
@@ -32,20 +39,20 @@ class Modal extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.sensorData !== this.props.sensorData) {
-      
+
       if (this.myChart) {
         this.myChart.destroy();
         this.myChart = undefined;
       }
 
-      this.fetchData(); 
-      
+      this.fetchData();
+
     }
   }
 
 
 
-  
+
 
   componentWillUnmount() {
     clearInterval(this.interval); // Clear the interval when the component unmounts
@@ -60,9 +67,11 @@ class Modal extends React.Component {
 
     const queryApi = influxDB.getQueryApi("FarmIT");
 
+    console.log(this.state.selectedTimeOption);
+
     const query = `
     from(bucket: "test")
-    |> range(start: -20m) 
+    |> range(start: -${this.state.selectedTimeOption}) 
     |> filter(fn: (r) => r["_measurement"] == "mqtt_consumer")
     |> filter(fn: (r) => r["_field"] == "decoded_payload_temperature" or r["_field"] == "decoded_payload_humidity")
     |> filter(fn: (r) => r["topic"] == "v3/farmit@ttn/devices/${this.props.sensorData.sensorId}/up")
@@ -115,6 +124,32 @@ class Modal extends React.Component {
   handleEndDateChange = (event) => {
     this.setState({ endDate: event.target.value });
   };
+
+  handleTimeRangeChange = (event) => {
+    this.setState({ selectedTimeOption: event.target.value });
+
+    // wait 1 second and then update the chart
+    setTimeout(() => {
+      if (this.myChart) {
+
+
+        this.myChart.destroy();
+        this.myChart = undefined;
+        this.fetchData();
+      }
+    }, 100);
+  
+
+    
+    
+  };
+
+  resetZoom = () => {
+    if (this.myChart) {
+      this.myChart.resetZoom();
+    }
+  };
+
 
   handleExportCSV = () => {
     const { startDate, endDate } = this.state;
@@ -213,10 +248,23 @@ class Modal extends React.Component {
     const labelColor = darkMode ? '#ffffff' : '#8D8D8D';
 
 
+    
+
+
     if (!this.myChart) {
       console.log("creating chart");
       const chartRef = this.chartRef.current;
       const myChartRef = chartRef.getContext("2d");
+
+// limit the data points to 20 independent of the time range
+  //     const maxDataPoints = 20;
+  //     const stepSize = Math.ceil(time.length / maxDataPoints);
+
+  //     const downsampledTime = time.filter((_, index) => index % stepSize === 0);
+  // const downsampledTemperatureData = temperatureData.filter((_, index) => index % stepSize === 0);
+  // const downsampledHumidityData = humidityData.filter((_, index) => index % stepSize === 0);
+
+      
 
       this.myChart = new Chart(myChartRef, {
         type: "line",
@@ -241,6 +289,23 @@ class Modal extends React.Component {
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
+            zoom: {
+              zoom: {
+                wheel: {
+                  enabled: true,
+                },
+                pinch: {
+                  enabled: true
+                },
+                // enable pan on the axis of choice
+                pan: {
+                  enabled: true,
+                },
+
+             
+                mode: 'xy',
+              }
+            },
             legend: {
               display: true, // Display the legend
               labels: {
@@ -280,7 +345,7 @@ class Modal extends React.Component {
     } else {
 
       console.log("updating chart");
-      
+
       const latestTime = new Date([...uniqueTime][uniqueTime.size - 1]).toLocaleTimeString();
       const latestTemperature = temperatureData[temperatureData.length - 1].decoded_payload_temperature;
       const latestHumidity = humidityData[humidityData.length - 1].decoded_payload_humidity;
@@ -309,6 +374,15 @@ class Modal extends React.Component {
 
     const { showDateInputs, startDate, endDate } = this.state;
 
+    const timeOptions = [
+      { value: '20m', label: 'Past 20m' },
+      { value: '1h', label: 'Past 1h' },
+      { value: '3h', label: 'Past 3h' },
+      { value: '6h', label: 'Past 6h' },
+      { value: '12h', label: 'Past 12h' },
+      { value: '24h', label: 'Past 24h' },
+    ];
+
     return (
       <div className={`modalContainer ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
         <div className="titleCloseBtn">
@@ -319,7 +393,16 @@ class Modal extends React.Component {
         </div>
         <div className="body">
 
+        <select value={this.selectedTimeOption} onChange={this.handleTimeRangeChange} className="timerange-dropdown">
+            {timeOptions.map((option) => (
+              <option key={option.value} value={option.value}>{option.label}</option>
+            ))}
+          </select>
+
+          <button className="resetZoomButton" onClick={this.resetZoom}>Reset Zoom</button>
+
           <canvas ref={this.chartRef} style={{ height: "250px", width: "95%" }} />
+        
 
           <br />
           {showDateInputs && (
