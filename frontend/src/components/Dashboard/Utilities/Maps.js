@@ -38,14 +38,22 @@ class Maps extends React.Component {
             fields = await this.getFields(this.props.farmDetails.id);
         }
 
+        var maxLat = Math.atan(Math.sinh(Math.PI)) * 180 / Math.PI;
+
 
         const map = new window.google.maps.Map(document.getElementById("map"), {
-
             mapTypeId: "satellite",
             center: { lat: this.props.farmDetails.latitude, lng: this.props.farmDetails.longitude },
             zoom: 14,
             streetViewControl: false,
             mapTypeControl: false,
+            fullscreenControl: false,
+            restriction: {
+                latLngBounds: { north: maxLat, south: -maxLat, west: -180, east: 180 },
+                strictBounds: true
+            },
+
+
         });
 
         map.addListener("click", (event) => {
@@ -132,45 +140,45 @@ class Maps extends React.Component {
                         if (this.isPointInsideRectangle(sensor, rectangleBounds)) {
 
 
-                              // add a little point in the rectangle in the point position
-                              const markerIcon = {
+                            // add a little point in the rectangle in the point position
+                            const markerIcon = {
                                 path: window.google.maps.SymbolPath.CIRCLE,
                                 fillColor: 'white',
                                 fillOpacity: 1,
                                 strokeColor: 'green',
                                 strokeWeight: 2,
                                 scale: 15,
-                              };
-                              
-                              const marker = new window.google.maps.Marker({
+                            };
+
+                            const marker = new window.google.maps.Marker({
                                 position: { lat: sensor.latitude, lng: sensor.longitude },
                                 map: map,
                                 icon: markerIcon,
                                 label: {
-                                  fontFamily: 'Fontawesome',
-                                  text: '\uf1eb',
-                                  color: 'white',
-                                  color: 'green',
-                                  clickable: true,
-                                  background: 'white',
+                                    fontFamily: 'Fontawesome',
+                                    text: '\uf1eb',
+                                    color: 'white',
+                                    color: 'green',
+                                    clickable: true,
+                                    background: 'white',
                                 },
-                              });
-                
-                              const infoWindow = new window.google.maps.InfoWindow({
-                                content: "Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b><br><br> Click to view graph',
-                              });
-                              
-                              
-                              
-                              marker.addListener('mouseover', () => {
-                                infoWindow.open(map, marker);
-                              });
-                              
-                              marker.addListener('mouseout', () => {
-                                infoWindow.close();
-                              });
+                            });
 
-                              marker.infoWindow = infoWindow;
+                            const infoWindow = new window.google.maps.InfoWindow({
+                                content: "Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b><br><br> Click to view graph',
+                            });
+
+
+
+                            marker.addListener('mouseover', () => {
+                                infoWindow.open(map, marker);
+                            });
+
+                            marker.addListener('mouseout', () => {
+                                infoWindow.close();
+                            });
+
+                            marker.infoWindow = infoWindow;
 
 
                             markers.push(marker);
@@ -302,37 +310,37 @@ class Maps extends React.Component {
                                 strokeColor: 'green',
                                 strokeWeight: 2,
                                 scale: 15,
-                              };
-                              
-                              const marker = new window.google.maps.Marker({
+                            };
+
+                            const marker = new window.google.maps.Marker({
                                 position: { lat: sensor.latitude, lng: sensor.longitude },
                                 map: map,
                                 icon: markerIcon,
                                 label: {
-                                  fontFamily: 'Fontawesome',
-                                  text: '\uf1eb',
-                                  color: 'white',
-                                  color: 'green',
-                                  clickable: true,
-                                  background: 'white',
+                                    fontFamily: 'Fontawesome',
+                                    text: '\uf1eb',
+                                    color: 'white',
+                                    color: 'green',
+                                    clickable: true,
+                                    background: 'white',
                                 },
-                              });
-                
-                              const infoWindow = new window.google.maps.InfoWindow({
-                                content: "Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b><br><br> Click to view graph',
-                              });
-                              
-                              
-                              
-                              marker.addListener('mouseover', () => {
-                                infoWindow.open(map, marker);
-                              });
-                              
-                              marker.addListener('mouseout', () => {
-                                infoWindow.close();
-                              });
+                            });
 
-                             marker.infoWindow = infoWindow;
+                            const infoWindow = new window.google.maps.InfoWindow({
+                                content: "Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b><br><br> Click to view graph',
+                            });
+
+
+
+                            marker.addListener('mouseover', () => {
+                                infoWindow.open(map, marker);
+                            });
+
+                            marker.addListener('mouseout', () => {
+                                infoWindow.close();
+                            });
+
+                            marker.infoWindow = infoWindow;
 
                             markers.push(marker);
 
@@ -717,6 +725,10 @@ class Maps extends React.Component {
                         this.unhighlightRow(fieldName);
                     });
 
+                    polygon.addListener("click", (event) => {
+                        this.showClickedCoordinates(event.latLng);
+                    });
+
                     document.getElementById("fieldName").value = "";
                     document.getElementById("cropType").value = "";
                 });
@@ -916,6 +928,10 @@ class Maps extends React.Component {
                         this.unhighlightRow(fieldName);
                     });
 
+                    rectangle.addListener("click", (event) => {
+                        this.showClickedCoordinates(event.latLng);
+                    });
+
 
                     document.getElementById("fieldName").value = "";
                     document.getElementById("cropType").value = "";
@@ -982,11 +998,11 @@ class Maps extends React.Component {
         this.setState({ modalOpen: true, sensorData: sensorData });
     }
 
-    smallMap(){
+    smallMap() {
         document.getElementById("map").classList.add("smallMap");
     }
 
-    largeMap(){
+    largeMap() {
         document.getElementById("map").classList.remove("smallMap");
     }
 
@@ -1030,13 +1046,13 @@ class Maps extends React.Component {
 
                 <button onClick={this.centreToMap} id="centreToMap" className='fieldsTableBtn'><i className="fa-solid fa-location-crosshairs"></i></button>
                 <div id="map">
-                  
+
                 </div>
                 {modalOpen && (
-                        <Modal setOpenModal={(isOpen) => this.setState({ modalOpen: isOpen })}
-                            sensorData={this.state.sensorData} largeMap={this.largeMap}
-                        />
-                    )}
+                    <Modal setOpenModal={(isOpen) => this.setState({ modalOpen: isOpen })}
+                        sensorData={this.state.sensorData} largeMap={this.largeMap}
+                    />
+                )}
                 <div className="fieldsTableConatiner">
 
                     <h2 className="hidden" id="addFieldsHeader">Use the rectangle/polygon tool to draw the field onto map</h2>
