@@ -31,6 +31,10 @@ class Home extends React.Component {
 
     this.populateWeather(this.props.weatherData);
 
+    var maxLat = Math.atan(Math.sinh(Math.PI)) * 180 / Math.PI;
+
+
+
     const map = new window.google.maps.Map(document.getElementById("homeMap"), {
       mapTypeId: "satellite",
       center: { lat: this.props.farmDetails.latitude, lng: this.props.farmDetails.longitude },
@@ -41,6 +45,10 @@ class Home extends React.Component {
       draggable: true,
       clickable: true,
       draggableCursor: 'pointer',
+      restriction: {
+        latLngBounds: { north: maxLat, south: -maxLat, west: -180, east: 180 },
+        strictBounds: true
+      },
     });
 
     map.addListener('click', (event) => {
@@ -117,8 +125,8 @@ class Home extends React.Component {
             // check if the sensor is inside the rectangle
             if (this.isPointInsideRectangle(sensor, rectangleBounds)) {
 
-               // add a little point in the rectangle in the point position
-               const markerIcon = {
+              // add a little point in the rectangle in the point position
+              const markerIcon = {
                 path: window.google.maps.SymbolPath.CIRCLE,
                 fillColor: 'white',
                 fillOpacity: 1,
@@ -126,7 +134,7 @@ class Home extends React.Component {
                 strokeWeight: 2,
                 scale: 15,
               };
-              
+
               const marker = new window.google.maps.Marker({
                 position: { lat: sensor.latitude, lng: sensor.longitude },
                 map: map,
@@ -144,13 +152,13 @@ class Home extends React.Component {
               const infoWindow = new window.google.maps.InfoWindow({
                 content: "Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b>',
               });
-              
-              
-              
+
+
+
               marker.addListener('mouseover', () => {
                 infoWindow.open(map, marker);
               });
-              
+
               marker.addListener('mouseout', () => {
                 infoWindow.close();
               });
@@ -161,13 +169,13 @@ class Home extends React.Component {
                 this.props.displayScreen("maps");
               });
 
-              markers.push(marker); 
+              markers.push(marker);
             }
 
-           
+
           });
 
-         
+
 
         } else {
 
@@ -223,7 +231,7 @@ class Home extends React.Component {
                 strokeWeight: 2,
                 scale: 15,
               };
-              
+
               const marker = new window.google.maps.Marker({
                 position: { lat: sensor.latitude, lng: sensor.longitude },
                 map: map,
@@ -241,13 +249,13 @@ class Home extends React.Component {
               const infoWindow = new window.google.maps.InfoWindow({
                 content: "Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b>',
               });
-              
-              
-              
+
+
+
               marker.addListener('mouseover', () => {
                 infoWindow.open(map, marker);
               });
-              
+
               marker.addListener('mouseout', () => {
                 infoWindow.close();
               });
@@ -256,7 +264,7 @@ class Home extends React.Component {
                 this.props.displayScreen("maps");
               });
 
-              markers.push(marker); 
+              markers.push(marker);
             }
           });
 
@@ -269,7 +277,7 @@ class Home extends React.Component {
 
 
   }
-  
+
   componentDidUpdate(prevProps) {
     if (prevProps.sensors !== this.props.sensors) {
 

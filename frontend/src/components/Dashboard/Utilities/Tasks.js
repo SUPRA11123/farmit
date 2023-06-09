@@ -247,7 +247,7 @@ class Tasks extends React.Component {
                     >
                         <option value="" disabled>Select a team member</option>
                         {this.state.team.map((member) => {
-                            if (member.id !== this.props.user.id) {
+                            if (member.id !== this.props.user.id && member.role !== "owner") {
                                 return (
                                     <option key={member.id} value={JSON.stringify(member)}>
                                         {member.name}
