@@ -8,6 +8,7 @@ $darkGrey: #8D8D8D;
 $red: #C44940;
 $blue: #4079c4;
 $lightBlue: #D0DDFF;
+$yellow: #FFE000;
 
 /* MIXINS */
 
@@ -168,7 +169,6 @@ body {
     height: 100%;
     width: 15%;
     background-color: #f4f4f4;
-    transition: width 1s;
     z-index: 200;
    
     .navTop {
@@ -229,7 +229,7 @@ body {
         flex-direction: column;
         list-style-type: none;
         color: $darkGrey;
-        overflow-x: hidden;
+        overflow-x: hidden;    
 
         li {
             display: flex;
@@ -238,7 +238,6 @@ body {
             flex-direction: row;
             padding: 5% 0 5% 0;
             white-space:nowrap;
-           
         }
 
         li p {
@@ -300,7 +299,6 @@ body {
         }
     
         img {
-            transition: 1s;
             width: 60%;
         }
 
@@ -317,7 +315,7 @@ body {
 
     ul li p{display: none; }
 
-    ul li i {padding: 15% 0 15% 0; margin: 0;}
+    ul li i {transition: none; padding: 15% 0 15% 0; margin: 0;}
   
 }
 
@@ -339,7 +337,7 @@ body {
     width: 85%;
     height: 100%;
     left: 15%;
-    transition: all 1s, background-color 1ms;
+    transition: all 0.3s, background-color 1ms;
     overflow: scroll;
 }
 
@@ -589,22 +587,31 @@ body {
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
+    gap: 0px;
     width: 100%;
-    height: 12.5%;
+    height: 10%;
     top: 0;
 
     p {
         margin: 0;
         font-family: $font1;
-        font-size: 3.5vh;
+        font-size: 3.7vh;
         font-weight: 600;
+        margin-bottom: 0;
 
         span {
+            position: absolute;
             font-weight: normal;
             font-size: 2vh;
             color: $darkGrey;
         }
     }
+}
+
+.Col2Card:hover {
+    top: 14.5%;
+    transition: 0.5s;
+    cursor: pointer;
 }
 
 .Col2Card {
@@ -613,31 +620,36 @@ body {
     left: 0%;
     width: 30%;
     height: 35%;
-    background-color: $grey;
+    background-image: linear-gradient(#428FFF, #BED9FF);
     border-radius: 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: $darkGrey;
+    color: white;
 
     #widgetPin {
-        color: $red;
+        color: white;
     }
 
     #widgetHumidity i {
-        color: $blue;
+        color: white;
     }
 
     #wigetClouds {
         text-transform: capitalize;
+        margin-top: 0;
     }
 
     h1 {
-        color: black;
-        font-size: 5vh;
+        color: white;
+        font-size: 8vh;
         margin: 0;
-        font-weight: normal;
+        font-weight: bold;
+        span {
+            color: $yellow;
+            font-weight: normal;
+        }
     }
 
     .weatherWigetTop, .weatherWigetBottom {
@@ -647,6 +659,10 @@ body {
         display: flex;
         flex-direction: row;
         justify-content: space-around;
+
+        #widgetWeatherIcon {
+           height: 50px;
+        }
       
     }
 
@@ -683,37 +699,28 @@ body {
 }
 
 .col4Card:hover {
-    background-color: $lightBlue;
+    
+    top: 14.5%;
+    transition: 0.5s;
     cursor: pointer;
-    border: 1px solid white;
 }
 
-
-#homeMap::before {
-    content: '';
-    position: fixed;
-    left: 17.5%;
-    top: 55%;
-    width: 80%;
-    height: 40%;
-    background-color: $grey;
-    border-radius: 15px;
-    transition: all 1s, border 1ms, background-color 1ms;
-}
 
 #homeMap {
     position: absolute;
-    width: 95%;
-    left: 2.5%;
-    height: 35%;
-    top: 57.5%;
+    top: 55%;
+    width: 67.5%;
+    height: 40%;
     border-radius: 15px;
     cursor: pointer;
 }
 
-#homeMap:hover::before {
-    background-color: $lightBlue;
-    border: 1px solid white;
+#homeMap:hover {
+   
+    top: 54.5%;
+    transition: 0.5s;
+    cursor: pointer;
+
   }
 
 
@@ -1704,6 +1711,7 @@ body {
     width: 100%;
     border-radius: 15px 15px 0 0;
     background-color: $grey;
+    border-bottom: 2px solid #D9D9D9;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1850,7 +1858,11 @@ body {
     height: 100%;
     object-fit: cover;
     cursor: pointer;
-    filter:grayscale(0.7);
+    filter:grayscale(1);
+  }
+
+  .thumbnail:hover {
+    filter: none;
   }
   
   .thumbnail.selected {

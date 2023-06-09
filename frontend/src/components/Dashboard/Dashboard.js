@@ -334,7 +334,7 @@ class Dashboard extends React.Component {
                             </li>
                             <li onClick={() => this.setState({currentDashboardScreen: "predictions"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "predictions" ? "navActive": ""}>
                             <i className="fa-solid fa-leaf"></i>
-                            <p>Fruit Predictions</p>
+                            <p>Fruit-scan</p>
                             </li>
                             <li onClick={() => this.setState({currentDashboardScreen: "settings"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "settings" ? "navActive": ""}>
                             <i className="fa-solid fa-gear"></i>

@@ -141,14 +141,14 @@ class Predictions extends React.Component {
     return (
       <>
         <section className='imageInput'>
-          <div className='imageInputHeader'>
+          <div className={`imageInputHeader ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
             {showClearButton && (
               <button className="imageClearBtn" onClick={this.clearAllImages}>
                 <i className="fa-solid fa-delete-left"></i>
                 <span className="clearAllText">Clear All</span>
               </button>
             )}
-            <h2 id='imageInputH2'>Input Images</h2>
+            <h2 id='imageInputH2'>Input</h2>
           </div>
   
           {hasUploadedImages && (
@@ -172,9 +172,6 @@ class Predictions extends React.Component {
                   />
                 ))}
               </div>
-              {selectedImageDate && (
-                <p className='imageDate'>Date taken: {selectedImageDate}</p>
-              )}
             </div>
           )}
   
@@ -197,7 +194,7 @@ class Predictions extends React.Component {
         </section>
   
         <section id='imageOutput' className='imageOutput'>
-          <div className='imageInputHeader'>
+          <div className={`imageInputHeader ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
             <h2>Preview Image</h2>
           </div>
           
@@ -208,6 +205,9 @@ class Predictions extends React.Component {
               src={selectedImage}
               alt='Large preview of uploaded image'
             />
+             {selectedImageDate && (
+                <p className='imageDate'>Date taken: {selectedImageDate}</p>
+              )}
             <p id='countMaturity' className='hidden'>Count: ??? <br></br>Maturity: ???</p>
             </>
           ) : (

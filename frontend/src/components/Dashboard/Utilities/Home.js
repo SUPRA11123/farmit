@@ -388,7 +388,7 @@ class Home extends React.Component {
     var iconurl = "http://openweathermap.org/img/w/" + iconcode + ".png";
     document.getElementById("widgetWeatherIcon").src = iconurl;
 
-    document.getElementById("wigetWeather").innerHTML = (data.main.temp).toFixed(0) + "°C";
+    document.getElementById("wigetWeather").innerHTML = (data.main.temp).toFixed(0) + "<span>°</span>";
     document.getElementById("wigetClouds").innerHTML = data.weather[0].description;
     document.getElementById("wigetWind").innerHTML += " " + this.convertToKM(data.wind.speed) + " km/h";
     document.getElementById("wigetLocation").innerHTML += " " + data.name;
@@ -545,10 +545,10 @@ class Home extends React.Component {
 
         <div onClick={() => this.props.displayScreen("weather")} id="weatherWidget" className={`Col2Card ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
           <div className="weatherWigetTop">
-            <p id="wigetLocation"><i id="widgetPin" className="fa-solid fa-location-pin"></i></p>
-            <p><i className="fa-regular fa-clock"></i>{this.displayTime()}</p>
+            <p id="wigetLocation"><i id="widgetPin" className="fa-solid fa-location-dot"></i></p>
+            <img id="widgetWeatherIcon" src="" alt="Weather icon" />
           </div>
-          <img id="widgetWeatherIcon" src="" alt="Weather icon" />
+        
           <h1 id="wigetWeather">error</h1>
           <p id="wigetClouds"></p>
 
