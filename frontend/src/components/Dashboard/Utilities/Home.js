@@ -506,11 +506,11 @@ class Home extends React.Component {
     var curHr = today.getHours();
 
     if (curHr < 12) {
-      return "Good morning,";
+      return "Good morning ";
     } else if (curHr < 18) {
-      return "Good afternoon,";
+      return "Good afternoon ";
     } else {
-      return "Good evening,";
+      return "Good evening ";
     }
   }
 
@@ -539,8 +539,8 @@ class Home extends React.Component {
     return (
       <>
         <div className="homeBackground">
-          <h1>Agrosensor</h1>
-          <p className={`${localStorage.getItem("darkMode") === "true" ? "darkModeBG" : ''}`}>{this.props.farmDetails.name} - {this.getCurrentDayAndDate()}</p>
+          <p className={`${localStorage.getItem("darkMode") === "true" ? "darkModeBG" : ''}`}>{this.getWelcomeMessage()}{this.props.user.name}!</p>
+          <p className={`${localStorage.getItem("darkMode") === "true" ? "darkModeBG" : ''}`}><span>Your current dashboard for today</span></p>
         </div>
 
         <div onClick={() => this.props.displayScreen("weather")} id="weatherWidget" className={`Col2Card ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>

@@ -305,21 +305,44 @@ class Dashboard extends React.Component {
                 <aside id="navContainer" className={`${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''} navContainer`}>
                     <div id='navTop' className='navTop'>
                     <img className="navLogoImg" onClick={() => this.setState({currentDashboardScreen: "dashboard"})} src={require('../../resources/img/roundLogo.png')} draggable="false" alt="Agrosensor logo"/>
+                    <h1>AGRO<span>SENSOR</span></h1>
                     <i onClick={this.toggleMenu} id="toggleNavMenu" className="fa-solid fa-angles-left"></i>
                     </div>
                     <nav id='navList'>
                         <ul>
-                            <li onClick={() => this.setState({currentDashboardScreen: "dashboard"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "dashboard" ? "navActive": ""}><p>Dashboard</p><i className="fa-solid fa-table-cells-large"></i></li>
-                            <li onClick={() => this.setState({currentDashboardScreen: "maps"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "maps" ? "navActive": ""}><p>Fields</p><i className="fa-regular fa-map"></i></li>
-                            <li onClick={() => this.setState({currentDashboardScreen: "tasks"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "tasks" ? "navActive": ""}><p>Tasks</p><i className="fa-solid fa-bullseye"></i></li>
+                            <li onClick={() => this.setState({currentDashboardScreen: "dashboard"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "dashboard" ? "navActive": ""}>
+                            <i className="fa-solid fa-table-cells-large"></i>
+                            <p>Dashboard</p>
+                            </li>
+                            <li onClick={() => this.setState({currentDashboardScreen: "maps"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "maps" ? "navActive": ""}>
+                            <i className="fa-regular fa-map"></i>
+                            <p>Fields</p>
+                            </li>
+                            <li onClick={() => this.setState({currentDashboardScreen: "tasks"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "tasks" ? "navActive": ""}>
+                            <i className="fa-solid fa-bullseye"></i>
+                            <p>Tasks</p>
+                            </li>
                             {this.state.user.role === 'owner' && (                           
-                            <li onClick={() => this.setState({currentDashboardScreen: "team"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "team" ? "navActive": ""}><p>Team</p><i className="fa-solid fa-people-group"></i></li>
+                            <li onClick={() => this.setState({currentDashboardScreen: "team"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "team" ? "navActive": ""}>
+                                <i className="fa-solid fa-people-group"></i>
+                                <p>Team</p>
+                            </li>
                             )}
-                            <li onClick={() => this.setState({currentDashboardScreen: "weather"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "weather" ? "navActive": ""}><p>Weather</p><i className="fa-solid fa-cloud-sun"></i></li>
-                            <li onClick={() => this.setState({currentDashboardScreen: "predictions"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "predictions" ? "navActive": ""}><p>Fruit Predictions</p><i className="fa-solid fa-leaf"></i></li>
-                            <li onClick={() => this.setState({currentDashboardScreen: "settings"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "settings" ? "navActive": ""}><p>Settings</p><i className="fa-solid fa-gear"></i></li>
+                            <li onClick={() => this.setState({currentDashboardScreen: "weather"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "weather" ? "navActive": ""}>
+                            <i className="fa-solid fa-cloud-sun"></i>
+                            <p>Weather</p>
+                            </li>
+                            <li onClick={() => this.setState({currentDashboardScreen: "predictions"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "predictions" ? "navActive": ""}>
+                            <i className="fa-solid fa-leaf"></i>
+                            <p>Fruit Predictions</p>
+                            </li>
+                            <li onClick={() => this.setState({currentDashboardScreen: "settings"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "settings" ? "navActive": ""}>
+                            <i className="fa-solid fa-gear"></i>
+                            <p>Settings</p>
+                            </li>
                         </ul>
                     </nav>
+
                 </aside>
 
                 <aside id='navContainerMobile'>

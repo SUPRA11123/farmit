@@ -15,7 +15,7 @@ class Predictions extends React.Component {
     };
 
     this.processImages = this.processImages.bind(this);
-
+    this.clearAllImages = this.clearAllImages.bind(this);
   }
 
   handleFileUpload = (event) => {
@@ -110,13 +110,22 @@ class Predictions extends React.Component {
           console.error(error);
         })
         .then(() => {
+          
           document.getElementById('processImgs').classList.add('hidden');
+          document.getElementById('countMaturity').classList.remove('hidden');
+          document.getElementById('imageInputH2').innerText = "Results";
         });
     });
   }
-  
-  
-  
+
+  clearAllImages() {
+    this.setState({
+      selectedImages: [],
+      previewImages: [],
+      selectedImage: null,
+      selectedImageDate: null,
+    });
+  }
   
   render() {
     const {
@@ -127,17 +136,24 @@ class Predictions extends React.Component {
     } = this.state;
     const hasUploadedImages = previewImages.length > 0;
     const showProcessButton = hasUploadedImages;
+    const showClearButton = hasUploadedImages;
   
     return (
       <>
         <section className='imageInput'>
           <div className='imageInputHeader'>
-            <h2>Input Images</h2>
+            {showClearButton && (
+              <button className="imageClearBtn" onClick={this.clearAllImages}>
+                <i className="fa-solid fa-delete-left"></i>
+                <span className="clearAllText">Clear All</span>
+              </button>
+            )}
+            <h2 id='imageInputH2'>Input Images</h2>
           </div>
   
           {hasUploadedImages && (
             <div>
-              <div className='thumbnailContainer'>
+              <div id="thumbnailContainer" className='thumbnailContainer'>
                 {previewImages.map((image, index) => (
                   <img
                     key={index}
@@ -181,13 +197,19 @@ class Predictions extends React.Component {
         </section>
   
         <section id='imageOutput' className='imageOutput'>
-          <h2>Output</h2>
+          <div className='imageInputHeader'>
+            <h2>Preview Image</h2>
+          </div>
+          
           {selectedImage ? (
+            <>
             <img
               className='largePreview'
               src={selectedImage}
               alt='Large preview of uploaded image'
             />
+            <p id='countMaturity' className='hidden'>Count: ??? <br></br>Maturity: ???</p>
+            </>
           ) : (
             <p>No image selected</p>
           )}
@@ -221,8 +243,6 @@ class Predictions extends React.Component {
       </>
     );
   }
-  
-  
 }
 
 export default Predictions;
