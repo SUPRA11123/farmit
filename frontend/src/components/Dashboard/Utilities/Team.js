@@ -322,9 +322,6 @@ class Team extends React.Component {
         // get selected fields
         const fields = this.state.selectedFields;
 
-        console.log("MANOOOO");
-        console.log(fields);
-
         if (fields) {
             if (fields.length > 0 && this.state.role === "field manager") {
                 return true;
@@ -341,15 +338,10 @@ class Team extends React.Component {
 
     }
 
-
-
-
-
-
-
     render() {
 
         const { role } = this.state;
+
         return (
             <>
                 <section id="teamContainer" className={`${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>

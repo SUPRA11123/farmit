@@ -1,6 +1,8 @@
 import React from "react";
 import axios from "axios";
 
+const URL = process.env.REACT_APP_URL;
+
 class Tasks extends React.Component {
 
     constructor(props) {
@@ -18,6 +20,7 @@ class Tasks extends React.Component {
             fields: [],
             team: [],
             tasks: [],
+            myTasks: [],
             passwordMatchError: false
         };
 
@@ -25,6 +28,7 @@ class Tasks extends React.Component {
         this.showTasks = this.showTasks.bind(this);
         this.getMember = this.getMember.bind(this);
         this.cancelTask = this.cancelTask.bind(this);
+        this.getField = this.getField.bind(this);
 
     }
 
@@ -54,6 +58,8 @@ class Tasks extends React.Component {
     }
 
     getTasks() {
+
+        console.log(this.props.user);
 
         axios.get("http://localhost:8000/gettasksbyfarm/" + this.props.farmDetails.id + "/")
             .then(response => {
@@ -96,9 +102,11 @@ class Tasks extends React.Component {
         const toDo = document.getElementById('toDoTasksContainer');
         toDo.innerHTML = '';
 
-        if (tasks.length > 0) {
+        if (tasks.length > 0 && (this.props.user.role == "owner" || this.props.user.role == "field manager") ) {
 
-            tasks.forEach((task) => {
+            tasks.forEach(async (task) => {
+
+                const fieldName = await this.getField(task.field);
 
                 const div = document.createElement('div');
                 div.classList.add('taskCard');
@@ -111,23 +119,23 @@ class Tasks extends React.Component {
 
                 const taskMember = document.createElement('span');
                 const member = this.getMember(task.farmer);
-                taskMember.innerHTML = "<i class='fa-regular fa-user'></i> " + member.name;
+                taskMember.innerHTML = "<i class='fa-regular fa-user'></i>  " + member.name + " <i class='fa-regular fa-map'></i> " + fieldName.name;
 
                 const taskSettings = document.createElement('i');
                 taskSettings.classList.add('fa-solid', 'fa-ellipsis-vertical', 'taskSettings');
 
                 const taskSettings2 = document.createElement("span");
                 taskSettings2.classList.add('taskSettings')
-                taskSettings2.innerHTML = '<div class="delete-container"><i class="fa-solid fa-ellipsis-vertical"></i><button class="delete-button">Delete</button></div>';
+                taskSettings2.innerHTML = '<i class="taskDelete fa-regular fa-trash-can"></i>';
 
                 div.appendChild(taskTitle);
                 div.appendChild(taskDescription);
                 div.appendChild(taskMember);
                 div.appendChild(taskSettings2);
 
-                if (task.status = 'To do') {
+                if (task.status === 'To do') {
                     toDo.appendChild(div);
-                } else if (task.status = 'In progress') {
+                } else if (task.status === 'In progress') {
                     document.getElementById('inProgressTasksContainer').appendChild(div);
                 } else {
                     document.getElementById('completedTasksContainer').appendChild(div);
@@ -138,7 +146,93 @@ class Tasks extends React.Component {
 
         }
 
+        else if (tasks.length > 0 && this.props.user.role == "farmer") {
+
+            //const memberId = this.props.user.id;
+            //const memberTasks = tasks.filter(task => task.farmer === memberId);
+            //const memberTasks = await ;
+
+            await this.getTasksByAsignee(this.props.user.id);
+            
+            this.state.myTasks.forEach(async (task) => {
+
+                console.log(task);
+                const fieldName = await this.getField(task.field);
+
+                const div = document.createElement('div');
+                div.classList.add('taskCard');
+
+                const taskTitle = document.createElement('h3');
+                taskTitle.innerHTML = task.title;
+
+                const taskDescription = document.createElement('p');
+                taskDescription.textContent = task.description;
+
+                const taskMember = document.createElement('span');
+                const member = this.getMember(task.farmer);
+                taskMember.innerHTML = "<i class='fa-regular fa-map'></i> " + fieldName.name;
+
+                const taskSettings = document.createElement('i');
+                taskSettings.classList.add('fa-solid', 'fa-ellipsis-vertical', 'taskSettings');
+
+                const taskSettings2 = document.createElement("span");
+                taskSettings2.classList.add('taskSettings')
+                taskSettings2.innerHTML = '<i class="taskProgress fa-solid fa-circle-chevron-right"></i>';
+
+                div.appendChild(taskTitle);
+                div.appendChild(taskDescription);
+                div.appendChild(taskMember);
+                div.appendChild(taskSettings2);
+
+                if (task.status === 'To do') {
+                    toDo.appendChild(div);
+                } else if (task.status === 'In progress') {
+                    document.getElementById('inProgressTasksContainer').appendChild(div);
+                } else {
+                    document.getElementById('completedTasksContainer').appendChild(div);
+                }
+
+
+            });
+
+
+        }
     }
+
+    getField(id) {
+        
+        return axios
+          .get(URL + "getfieldbyid/" + id + "/")
+          .then((res) => {
+            console.log(res.data);
+            return res.data;
+          }
+          )
+          .catch((err) => {
+            console.log(err);
+          }
+          );
+      }
+
+    getTasksByAsignee(id) {
+        return new Promise((resolve, reject) => {
+            axios
+            .get(URL + "gettasksbyassignee/" + id + "/")
+            .then((res) => {
+              const tasks = res.data;
+              this.setState({myTasks: tasks}, () => {
+                resolve();
+              });
+            }
+            )
+            .catch((err) => {
+              console.log(err);
+              reject(err);
+            }
+            );
+        })
+          
+      }
 
     getMember(id) {
         const team = this.state.team;
@@ -194,6 +288,9 @@ class Tasks extends React.Component {
     };
 
     render() {
+
+        const { role } = this.state;
+
         return (
             <>
                 <section id="taskBoard" className={`${localStorage.getItem("darkMode") === "true" ? "darkModeBG" : ''}`}>
@@ -201,13 +298,23 @@ class Tasks extends React.Component {
                     <div id='taskOverlay' className="overlayDarken hidden"></div>
 
                     <div className={`taskColumn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
-                        <h2 className="taskColumnHeader">To Do<button id="addNewTask" onClick={this.showAddTaskForm}><i class="fa-solid fa-plus"></i></button></h2>
+                        <h2 className="taskColumnHeader">
+                            {this.props.user.role === "owner" || this.props.user.role === "field manager"
+                            ? "To Do"
+                            : "My Tasks"}
+                            {this.props.user.role === "owner" || this.props.user.role === "field manager" ? (
+                            <button id="addNewTask" onClick={this.showAddTaskForm}>
+                                <i className="fa-solid fa-plus"></i>
+                            </button>
+                            ) : null}
+                        </h2>
 
-                        <div id='toDoTasksContainer' className='taskContainer'>
-
+                        <div id="toDoTasksContainer" className="taskContainer">
+                           
                         </div>
-
                     </div>
+
+
 
                     <div className={`taskColumn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
                         <h2 className="taskColumnHeader">In Progress</h2>

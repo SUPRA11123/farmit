@@ -388,7 +388,7 @@ class Modal extends React.Component {
           <button onClick={() => { setOpenModal(false); this.props.largeMap(); }}>X</button>
         </div>
         <div className="title2">
-          <h1>Real-Time Temperature and Humidity Values From Sensor {this.props.sensorData.sensorId}</h1>
+          <h1>Temperature and Humidity Values From Sensor {this.props.sensorData.sensorId}</h1>
         </div>
         <div className="body">
 
