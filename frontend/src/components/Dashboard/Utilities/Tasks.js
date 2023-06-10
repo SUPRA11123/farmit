@@ -156,7 +156,6 @@ class Tasks extends React.Component {
             
             this.state.myTasks.forEach(async (task) => {
 
-                console.log(task);
                 const fieldName = await this.getField(task.field);
 
                 const div = document.createElement('div');
@@ -246,7 +245,6 @@ class Tasks extends React.Component {
 
         event.preventDefault();
 
-        console.log("creating task");
 
         const title = document.getElementById("task").value;
         const description = document.getElementById("taskDescription").value;

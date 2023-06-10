@@ -125,6 +125,7 @@ class Home extends React.Component {
             // check if the sensor is inside the rectangle
             if (this.isPointInsideRectangle(sensor, rectangleBounds)) {
 
+
               // add a little point in the rectangle in the point position
               const markerIcon = {
                 path: window.google.maps.SymbolPath.CIRCLE,
@@ -150,7 +151,7 @@ class Home extends React.Component {
               });
 
               const infoWindow = new window.google.maps.InfoWindow({
-                content: "Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b>',
+                content: "Sensor ID: <b>" + sensor.sensorId + "</b><br>Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b>',
               });
 
 
@@ -247,7 +248,7 @@ class Home extends React.Component {
               });
 
               const infoWindow = new window.google.maps.InfoWindow({
-                content: "Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b>',
+                content: "Sensor ID: <b>" + sensor.sensorId + "</b><br>Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b>',
               });
 
 

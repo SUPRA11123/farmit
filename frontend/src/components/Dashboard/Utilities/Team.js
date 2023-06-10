@@ -161,7 +161,6 @@ class Team extends React.Component {
                 console.log(error);
             });
         } else {
-            console.log("Passwords do not match");
             this.setState({ passwordMatchError: true });
         }
 
@@ -224,12 +223,10 @@ class Team extends React.Component {
     handleFieldChange = (event) => {
         const selectedFields = Array.from(event.target.selectedOptions, (option) => option.value);
 
-        console.log(selectedFields);
         this.setState({ selectedFields });
     }
 
     showEditMemberForm(member) {
-        console.log(member);
 
         document.getElementById("editTeamMember").reset();
         document.getElementById("teamOverlay").classList.remove('hidden');
@@ -249,7 +246,6 @@ class Team extends React.Component {
                 .then(response => {
                     const fields = response.data.filter(field => !field.manager || field.manager === member.id);
                     this.setState({ fields });
-                    console.log(fields);
 
                 }).catch(error => {
                     console.log(error);

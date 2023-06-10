@@ -68,7 +68,6 @@ class Settings extends React.Component {
         // get password from document get id
         const password = document.getElementById('settingsPassword').value;
 
-        console.log(password);
 
 
         axios
@@ -108,16 +107,11 @@ class Settings extends React.Component {
 
     changePassword(event) {
         event.preventDefault();
-    
-        console.log("Change password clicked");
-    
+        
         const password = document.getElementById('currentPassword').value;
         const newPassword = document.getElementById('newPassword').value;
         const confirmPassword = document.getElementById('confirmNewPassword').value;
     
-        console.log(password);
-        console.log(newPassword);
-        console.log(confirmPassword);
     
         // if new password and confirm password are the same, send request to backend
         if (newPassword === confirmPassword) {

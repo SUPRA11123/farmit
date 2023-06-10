@@ -165,7 +165,7 @@ class Maps extends React.Component {
                             });
 
                             const infoWindow = new window.google.maps.InfoWindow({
-                                content: "Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b><br><br> Click to view graph',
+                                content: "Sensor ID: <b>" + sensor.sensorId + "</b><br>Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b>',
                             });
 
 
@@ -327,7 +327,7 @@ class Maps extends React.Component {
                             });
 
                             const infoWindow = new window.google.maps.InfoWindow({
-                                content: "Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b><br><br> Click to view graph',
+                                content: "Sensor ID: <b>" + sensor.sensorId + "</b><br>Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b>',
                             });
 
 
@@ -403,7 +403,7 @@ class Maps extends React.Component {
 
                         const infoWindow = marker.infoWindow;
 
-                        infoWindow.setContent("Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b><br><br> Click to view graph');
+                        infoWindow.setContent("Sensor ID: <b>" + sensor.sensorId + "</b><br>Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b><br><br> Click to view graph');
 
                         /* 
                         // update the text of the marker

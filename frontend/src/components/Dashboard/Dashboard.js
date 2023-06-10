@@ -35,9 +35,10 @@ class Dashboard extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { 
+        this.state = {
             currentDashboardScreen: "dashboard",
             sensorsOwned: [],
+            alerts: [],
         };
         this.changeUtility = this.changeUtility.bind(this);
         this.displaySettings = this.displaySettings.bind(this);
@@ -47,7 +48,7 @@ class Dashboard extends React.Component {
         this.changeTheme = this.changeTheme.bind(this);
         this.getTheme = this.getTheme.bind(this);
         this.myDivRef = React.createRef();
-      
+
     }
 
     async componentDidMount() {
@@ -63,14 +64,14 @@ class Dashboard extends React.Component {
         // get the current user
 
         const user = await this.getUser(decodedToken.id);
-        this.setState({user: user})
+        this.setState({ user: user })
 
         const farmDetails = await this.getFarmDetails(decodedToken);
 
-         // print the farm details
-         this.farmDetails = farmDetails;
- 
-         this.setState({farmDetails: farmDetails});
+        // print the farm details
+        this.farmDetails = farmDetails;
+
+        this.setState({ farmDetails: farmDetails });
 
 
         // get the weather data
@@ -79,7 +80,7 @@ class Dashboard extends React.Component {
         const data = await response.json();
 
         this.weatherData = data;
-        this.setState({weatherData: data})
+        this.setState({ weatherData: data })
 
         // get the weather forecast
 
@@ -88,15 +89,52 @@ class Dashboard extends React.Component {
         const data2 = await response2.json();
 
         this.weatherForecast = data2;
-        this.setState({weatherForecast: data2});
+        this.setState({ weatherForecast: data2 });
+
+
+        const totalDays = 4; // Number of days in the forecast
+        const dataPointsPerDay = 8; // Number of data points per day (assuming 3-hour intervals)
+        const iterationLimit = totalDays * dataPointsPerDay;
+
+        let biggestTemperatureRegistered = 0;
+
+        let biggestTemperatureRegisteredIndex = 0;
+
+        let biggestTemperatureRegisteredDayName = "";
+
+
+        for (let i = 0; i < iterationLimit; i++) {
+            const temperature = data2.list[i].main.temp;
+            const date = new Date(data2.list[i].dt_txt);
+            const dayName = date.toLocaleString('en-us', { weekday: 'long' });
+
+            if (temperature > biggestTemperatureRegistered) {
+                biggestTemperatureRegistered = temperature;
+            }
+
+            if (temperature > biggestTemperatureRegisteredIndex) {
+                biggestTemperatureRegisteredIndex = temperature;
+                biggestTemperatureRegisteredDayName = dayName;
+            }
+
+        }
+
+        alert = {
+            type: "weather",
+            message: `The temperature could reach over ${(biggestTemperatureRegistered).toFixed(0)}°C on ${biggestTemperatureRegisteredDayName}!`,
+        }
+
+
+        this.setState({ alerts: [alert] });
+
 
         // get sensors from farm
-       
+
         // before calling sensorLocationQuery, we need to wait for the sensors to be fetched
 
 
-       await this.getSensors();
-       
+        await this.getSensors();
+
         // only call sensorLocationQuery if there are sensors
 
         if (this.state.sensorsOwned.length > 0) {
@@ -107,12 +145,12 @@ class Dashboard extends React.Component {
             setInterval(async () => {
                 await this.sensorLocationQuery();
             }
-            , 5000);
+                , 5000);
         } else {
             this.setState({ sensors: [] });
 
         }
-        
+
 
     }
 
@@ -120,142 +158,257 @@ class Dashboard extends React.Component {
         const influxDB = new InfluxDB({
             url: "https://eu-central-1-1.aws.cloud2.influxdata.com",
             token: "WWs7Muam9CP-Y65yjsLgz9VVuzS9mfuwWmlFgJJjiLTKjPUdZGXdTpfQtG0ULZ5a2iy8z54rfbS5nPtUb6qWKg==",
-          });
-          
-          const queryApi = influxDB.getQueryApi("FarmIT");
+        });
 
-          const sensorNames = this.state.sensorsOwned.map((sensor) => sensor.name);
-           
+        const queryApi = influxDB.getQueryApi("FarmIT");
+
+        const sensorNames = this.state.sensorsOwned.map((sensor) => sensor.name);
+
         const sensorNamesFilter = sensorNames.map((sensorName) => `r["topic"] == "v3/farmit@ttn/devices/${sensorName}/up"`).join(" or ");
 
         const sensorLocationQuery = `
         from(bucket: "test")
-        |> range(start: -1m)
+        |> range(start: -24h)
         |> filter(fn: (r) => r["_measurement"] == "mqtt_consumer")
         |> filter(fn: (r) => r["_field"] == "decoded_payload_temperature" or r["_field"] == "decoded_payload_humidity")
         |> filter(fn: (r) => ${sensorNamesFilter})
-        |> last()
       `;
 
 
-      const sensors = {};
+        const sensors = {};
 
-      const fetchSensorLocationData = new Promise((resolve, reject) => {
-        queryApi.queryRows(sensorLocationQuery, {
-          next: (row, tableMeta) => {
-            const sensorData = tableMeta.toObject(row);
-            console.log(sensorData);
-            
-            const { _field, _value, topic } = sensorData;
-      
-            // Extract the sensor ID from the topic. It's the 4th part of the topic
-            const sensorId = topic.split("/")[3];
 
-            if (_field === "decoded_payload_temperature") {
-              sensors[sensorId] = { ...sensors[sensorId], temperature: _value, sensorId };
-            } else if (_field === "decoded_payload_humidity") {
-              sensors[sensorId] = { ...sensors[sensorId], humidity: _value, sensorId };
-            }
+        const fetchSensorLocationData = new Promise((resolve, reject) => {
+            queryApi.queryRows(sensorLocationQuery, {
+                next: async (row, tableMeta) => {
+                    const sensorData = tableMeta.toObject(row);
+                    //console.log(sensorData);
 
-            const sensor = this.state.sensorsOwned.find((sensor) => sensor.name === sensorId);
-            sensors[sensorId] = { ...sensors[sensorId], latitude: sensor.latitude, longitude: sensor.longitude, sensorId };
+                    const { _field, _value, topic } = sensorData;
 
-          },
-          error: (error) => {
-            console.error(error);
-            console.log("\nFinished ERROR");
-            reject(error);
-          },
-          complete: () => {
-            
-            // Set the sensor data in the state
-            const sensorArray = Object.values(sensors);
-            this.setState({ sensors: sensorArray });
-            resolve();
-          },
+                    // Extract the sensor ID from the topic. It's the 4th part of the topic
+                    const sensorId = topic.split("/")[3];
+
+                    if (_field === "decoded_payload_temperature") {
+                        sensors[sensorId] = { ...sensors[sensorId], temperature: _value, sensorId };
+
+                        // if the temperature has been above 30 degrees Celsius in the past 24 hours, send an alert.
+                        // if there's already an alert for this sensor, then don't send another alert
+
+                        if (_value > 30 && !this.state.alerts.find((alert) => alert.sensorId === sensorId && alert.temperature === "high")) {
+                            const alertMessage = `High temperature was detected in sensor ${sensorId} in the past 24 hours! Take necessary measures to cool the environment.`;
+
+                            // Create an object with the alert details
+                            const alert = {
+                                sensorId,
+                                type: "temperature",
+                                value: _value,
+                                message: alertMessage,
+                                timestamp: Date.now(),
+                                temperature: "high",
+                            };
+
+                            // Create a promise that resolves when the state is updated
+                            const setStatePromise = new Promise((resolve) => {
+                                this.setState((prevState) => ({
+                                    alerts: prevState.alerts.some((alert) => alert.sensorId === sensorId && alert.temperature === "high")
+                                        ? prevState.alerts // Alert already exists with temperature "high", return the current state
+                                        : [...prevState.alerts, alert], // Add new alert to the state
+                                }), resolve);
+                            });
+
+                            // Wait for the state to be updated before continuing
+                            await setStatePromise;
+                        } else if (_value < 10 && !this.state.alerts.find((alert) => alert.sensorId === sensorId && alert.temperature === "low")) {
+                            const alertMessage = `Low temperature was detected in sensor ${sensorId} in the past 24 hours! Take necessary measures to warm the environment.`;
+
+                            // Create an object with the alert details
+                            const alert = {
+                                sensorId,
+                                type: "temperature",
+                                value: _value,
+                                message: alertMessage,
+                                timestamp: Date.now(),
+                                temperature: "low",
+                            };
+
+                            // Create a promise that resolves when the state is updated
+                            const setStatePromise = new Promise((resolve) => {
+                                this.setState((prevState) => ({
+                                    alerts: prevState.alerts.some((alert) => alert.sensorId === sensorId && alert.temperature === "low")
+                                        ? prevState.alerts // Alert already exists with temperature "low", return the current state
+                                        : [...prevState.alerts, alert], // Add new alert to the state
+                                }), resolve);
+                            });
+
+                            // Wait for the state to be updated before continuing
+                            await setStatePromise;
+                        }
+
+
+
+
+                    } else if (_field === "decoded_payload_humidity") {
+                        sensors[sensorId] = { ...sensors[sensorId], humidity: _value, sensorId };
+
+                        // if for the past 24 hours, the humidity has been above 80%, then send an alert. 
+                        // if there's already an alert for this sensor, then don't send another alert
+
+                        if (_value > 60 && !this.state.alerts.find((alert) => alert.sensorId === sensorId && alert.humidity === "high")) {
+                            const alertMessage = `High soil moisture was detected in sensor ${sensorId} in the past 24 hours! Make sure to maintain optimal soil moisture levels.`;
+
+                            // Create an object with the alert details
+                            const alert = {
+                                sensorId,
+                                type: "humidity",
+                                value: _value,
+                                message: alertMessage,
+                                timestamp: Date.now(),
+                                humidity: "high",
+                            };
+
+                            // Create a promise that resolves when the state is updated
+                            const setStatePromise = new Promise((resolve) => {
+                                this.setState((prevState) => ({
+                                    alerts: prevState.alerts.some((alert) => alert.sensorId === sensorId && alert.humidity === "high")
+                                        ? prevState.alerts // Alert already exists with humidity "high", return the current state
+                                        : [...prevState.alerts, alert], // Add new alert to the state
+                                }), resolve);
+                            });
+
+                            // Wait for the state to be updated before continuing
+                            await setStatePromise;
+                        }
+                        else if (_value < 40 && !this.state.alerts.find((alert) => alert.sensorId === sensorId && alert.humidity === "low")) {
+                            const alertMessage = `Low soil moisture was detected in sensor ${sensorId} in the past 24 hours! Make sure to water the plants appropriately.`;
+
+                            // Create an object with the alert details
+                            const alert = {
+                                sensorId,
+                                type: "humidity",
+                                value: _value,
+                                message: alertMessage,
+                                timestamp: Date.now(),
+                                humidity: "low",
+                            };
+
+                            // Create a promise that resolves when the state is updated
+                            const setStatePromise = new Promise((resolve) => {
+                                this.setState((prevState) => ({
+                                    alerts: prevState.alerts.some((alert) => alert.sensorId === sensorId && alert.humidity === "low")
+                                        ? prevState.alerts // Alert already exists with humidity "low", return the current state
+                                        : [...prevState.alerts, alert], // Add new alert to the state
+                                }), resolve);
+                            });
+
+                            // Wait for the state to be updated before continuing
+                            await setStatePromise;
+                        }
+
+
+
+                    }
+
+                    const sensor = this.state.sensorsOwned.find((sensor) => sensor.name === sensorId);
+                    sensors[sensorId] = { ...sensors[sensorId], latitude: sensor.latitude, longitude: sensor.longitude, sensorId };
+
+                },
+                error: (error) => {
+                    console.error(error);
+                    console.log("\nFinished ERROR");
+                    reject(error);
+                },
+                complete: () => {
+
+                    // Set the sensor data in the state
+                    const sensorArray = Object.values(sensors);
+                    this.setState({ sensors: sensorArray });
+                    resolve();
+                },
+            });
         });
-      });
-                
-                    
-        }
+
+
+    }
 
     getFarmDetails(token) {
 
-        if(token.role === "field manager"){
-        return axios
-        .get(URL + "getfarmbyfieldmanager/" + token.id + "/")
-            .then((res) => {
+        if (token.role === "field manager") {
+            return axios
+                .get(URL + "getfarmbyfieldmanager/" + token.id + "/")
+                .then((res) => {
                     return res.data;
                 }
-            )
-            .catch((err) => {
-                console.log(err);
-            });
-        }else{
+                )
+                .catch((err) => {
+                    console.log(err);
+                });
+        } else {
             return axios
-            .get(URL + "getfarmbyownerorfarmer/" + token.id + "/")
-            .then((res) => {
-                return res.data;
-            }
-            )
-            .catch((err) => {
-                console.log(err);
-            }
-            );
+                .get(URL + "getfarmbyownerorfarmer/" + token.id + "/")
+                .then((res) => {
+                    return res.data;
+                }
+                )
+                .catch((err) => {
+                    console.log(err);
+                }
+                );
         }
-    
+
     }
 
     getSensors() {
         return new Promise((resolve, reject) => {
-          axios.get(URL + "getsensors/" + this.state.farmDetails.id + "/")
-            .then(response => {
-              console.log(response.data);
-              this.setState({ sensorsOwned: response.data }, () => {
-                resolve(); // Resolve the promise after setState is finished
-              });
+            axios.get(URL + "getsensors/" + this.state.farmDetails.id + "/")
+                .then(response => {
+                    // console.log(response.data);
+                    this.setState({ sensorsOwned: response.data }, () => {
+                        resolve(); // Resolve the promise after setState is finished
+
+                    });
 
 
-            })
-            .catch(error => {
-              console.log(error);
-              reject(error); // Reject the promise if there is an error
-            });
+                })
+                .catch(error => {
+                    console.log(error);
+                    reject(error); // Reject the promise if there is an error
+                });
         });
-      }
+    }
 
-    changeUtility(util){this.setState({currentDashboardScreen: util});}
+    changeUtility(util) { this.setState({ currentDashboardScreen: util }); }
 
-    displaySettings(){document.getElementById('fixedUtility').classList.add("expandFixed");}
+    displaySettings() { document.getElementById('fixedUtility').classList.add("expandFixed"); }
 
-    displayDashboardScreen(screen){this.setState({currentDashboardScreen: screen});}
+    displayDashboardScreen(screen) { this.setState({ currentDashboardScreen: screen }); }
 
-    changeTheme(x){this.setState({isDarkMode: x})}
+    changeTheme(x) { this.setState({ isDarkMode: x }) }
 
-    getTheme(){return this.state.isDarkMode}
+    getTheme() { return this.state.isDarkMode }
 
-    handleLogout(){
+    handleLogout() {
         localStorage.removeItem("token");
-        window.location.href = "/";    
+        window.location.href = "/";
     }
 
     getUser(id) {
         return axios
-        .get(URL + "getuserbyid/" + id + "/")
-        .then((res) => {
-            return res.data;
-        })
-        .catch((err) => {
-            console.log(err);
-        });
+            .get(URL + "getuserbyid/" + id + "/")
+            .then((res) => {
+                return res.data;
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }
 
-    expandMobileNav() {document.getElementById("navListMobile").classList.toggle('hidden');}
+    expandMobileNav() { document.getElementById("navListMobile").classList.toggle('hidden'); }
 
     handleMobileClick() {
         if (window.innerWidth < 600) {
             document.getElementById("navListMobile").classList.add('hidden');
-         }
+        }
     }
 
     toggleMenu() {
@@ -282,11 +435,11 @@ class Dashboard extends React.Component {
         document.getElementById('addNewAlert').classList.toggle('alertCardAnimation');
         const alertCards = document.getElementById("alertsContainer").querySelectorAll("div");
         alertCards.forEach((card) => {
-          card.classList.toggle('alertCardAnimation');
+            card.classList.toggle('alertCardAnimation');
         });
-      }
-      
-      
+    }
+
+
     render() {
 
 
@@ -299,46 +452,46 @@ class Dashboard extends React.Component {
             return (<i id="loadingIcon" className="fas fa-circle-notch fa-spin"></i>);
         }
 
-        return(
+        return (
             <div id='appContainer' className='screen'>
 
                 <aside id="navContainer" className={`${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''} navContainer`}>
                     <div id='navTop' className='navTop'>
-                    <img className="navLogoImg" onClick={() => this.setState({currentDashboardScreen: "dashboard"})} src={require('../../resources/img/roundLogo.png')} draggable="false" alt="Agrosensor logo"/>
-                    <h1>AGRO<span>SENSOR</span></h1>
-                    <i onClick={this.toggleMenu} id="toggleNavMenu" className="fa-solid fa-angles-left"></i>
+                        <img className="navLogoImg" onClick={() => this.setState({ currentDashboardScreen: "dashboard" })} src={require('../../resources/img/roundLogo.png')} draggable="false" alt="Agrosensor logo" />
+                        <h1>AGRO<span>SENSOR</span></h1>
+                        <i onClick={this.toggleMenu} id="toggleNavMenu" className="fa-solid fa-angles-left"></i>
                     </div>
                     <nav id='navList'>
                         <ul>
-                            <li onClick={() => this.setState({currentDashboardScreen: "dashboard"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "dashboard" ? "navActive": ""}>
-                            <i className="fa-solid fa-table-cells-large"></i>
-                            <p>Dashboard</p>
+                            <li onClick={() => this.setState({ currentDashboardScreen: "dashboard" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "dashboard" ? "navActive" : ""}>
+                                <i className="fa-solid fa-table-cells-large"></i>
+                                <p>Dashboard</p>
                             </li>
-                            <li onClick={() => this.setState({currentDashboardScreen: "maps"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "maps" ? "navActive": ""}>
-                            <i className="fa-regular fa-map"></i>
-                            <p>Fields</p>
+                            <li onClick={() => this.setState({ currentDashboardScreen: "maps" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "maps" ? "navActive" : ""}>
+                                <i className="fa-regular fa-map"></i>
+                                <p>Fields</p>
                             </li>
-                            <li onClick={() => this.setState({currentDashboardScreen: "tasks"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "tasks" ? "navActive": ""}>
-                            <i className="fa-solid fa-bullseye"></i>
-                            <p>Tasks</p>
+                            <li onClick={() => this.setState({ currentDashboardScreen: "tasks" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "tasks" ? "navActive" : ""}>
+                                <i className="fa-solid fa-bullseye"></i>
+                                <p>Tasks</p>
                             </li>
-                            {this.state.user.role === 'owner' && (                           
-                            <li onClick={() => this.setState({currentDashboardScreen: "team"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "team" ? "navActive": ""}>
-                                <i className="fa-solid fa-people-group"></i>
-                                <p>Team</p>
-                            </li>
+                            {this.state.user.role === 'owner' && (
+                                <li onClick={() => this.setState({ currentDashboardScreen: "team" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "team" ? "navActive" : ""}>
+                                    <i className="fa-solid fa-people-group"></i>
+                                    <p>Team</p>
+                                </li>
                             )}
-                            <li onClick={() => this.setState({currentDashboardScreen: "weather"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "weather" ? "navActive": ""}>
-                            <i className="fa-solid fa-cloud-sun"></i>
-                            <p>Weather</p>
+                            <li onClick={() => this.setState({ currentDashboardScreen: "weather" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "weather" ? "navActive" : ""}>
+                                <i className="fa-solid fa-cloud-sun"></i>
+                                <p>Weather</p>
                             </li>
-                            <li onClick={() => this.setState({currentDashboardScreen: "predictions"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "predictions" ? "navActive": ""}>
-                            <i className="fa-solid fa-leaf"></i>
-                            <p>Fruit-scan</p>
+                            <li onClick={() => this.setState({ currentDashboardScreen: "predictions" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "predictions" ? "navActive" : ""}>
+                                <i className="fa-solid fa-leaf"></i>
+                                <p>Fruit-scan</p>
                             </li>
-                            <li onClick={() => this.setState({currentDashboardScreen: "settings"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "settings" ? "navActive": ""}>
-                            <i className="fa-solid fa-gear"></i>
-                            <p>Settings</p>
+                            <li onClick={() => this.setState({ currentDashboardScreen: "settings" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "settings" ? "navActive" : ""}>
+                                <i className="fa-solid fa-gear"></i>
+                                <p>Settings</p>
                             </li>
                         </ul>
                     </nav>
@@ -347,19 +500,19 @@ class Dashboard extends React.Component {
 
                 <aside id='navContainerMobile'>
                     <div id='navTop'>
-                    <i onClick={this.expandMobileNav} id='mobileNavBtn' className="fa-solid fa-bars"></i>
-                    <img src={require('../../resources/img/roundLogo.png')} draggable="false" alt="Agrosensor logo"/>
+                        <i onClick={this.expandMobileNav} id='mobileNavBtn' className="fa-solid fa-bars"></i>
+                        <img src={require('../../resources/img/roundLogo.png')} draggable="false" alt="Agrosensor logo" />
                     </div>
                     <nav id='navListMobile' className='hidden'>
                         <ul>
-                            <li onClick={() => this.setState({currentDashboardScreen: "dashboard"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "dashboard" ? "navActive": ""}><p>Dashboard<i className="fa-solid fa-table-cells-large"></i></p></li>
-                            <li onClick={() => this.setState({currentDashboardScreen: "maps"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "maps" ? "navActive": ""}><p>My Fields<i className="fa-regular fa-map"></i></p></li>
-                            {this.state.user.role === 'owner' && (                           
-                            <li onClick={() => this.setState({currentDashboardScreen: "team"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "team" ? "navActive": ""}><p>Tasks<i className="fa-solid fa-people-group"></i></p></li>
+                            <li onClick={() => this.setState({ currentDashboardScreen: "dashboard" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "dashboard" ? "navActive" : ""}><p>Dashboard<i className="fa-solid fa-table-cells-large"></i></p></li>
+                            <li onClick={() => this.setState({ currentDashboardScreen: "maps" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "maps" ? "navActive" : ""}><p>My Fields<i className="fa-regular fa-map"></i></p></li>
+                            {this.state.user.role === 'owner' && (
+                                <li onClick={() => this.setState({ currentDashboardScreen: "team" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "team" ? "navActive" : ""}><p>Tasks<i className="fa-solid fa-people-group"></i></p></li>
                             )}
-                            <li onClick={() => this.setState({currentDashboardScreen: "predictions"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "predictions" ? "navActive": ""}><p>Predictions<i className="fa-solid fa-bullhorn"></i></p></li>
-                            <li onClick={() => this.setState({currentDashboardScreen: "weather"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "weather" ? "navActive": ""}><p>Weather<i className="fa-solid fa-cloud-sun"></i></p></li>
-                            <li onClick={() => this.setState({currentDashboardScreen: "settings"}, this.handleMobileClick)} className={this.state.currentDashboardScreen === "settings" ? "navActive": ""}><p>Settings<i className="fa-solid fa-gear"></i></p></li>
+                            <li onClick={() => this.setState({ currentDashboardScreen: "predictions" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "predictions" ? "navActive" : ""}><p>Predictions<i className="fa-solid fa-bullhorn"></i></p></li>
+                            <li onClick={() => this.setState({ currentDashboardScreen: "weather" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "weather" ? "navActive" : ""}><p>Weather<i className="fa-solid fa-cloud-sun"></i></p></li>
+                            <li onClick={() => this.setState({ currentDashboardScreen: "settings" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "settings" ? "navActive" : ""}><p>Settings<i className="fa-solid fa-gear"></i></p></li>
                             <li id='logout' onClick={this.handleLogout}><p>Logout<i className="fa-solid fa-arrow-right-from-bracket"></i></p></li>
                         </ul>
                     </nav>
@@ -367,75 +520,106 @@ class Dashboard extends React.Component {
 
                 <main ref={this.divRef} id='utilityContainer' className={`utilityContainer ${localStorage.getItem("darkMode") === "true" ? "darkModeBG" : ''}`}>
 
-                <section id='scrollUtility'>
-                
-                    <section className='alertContainer'>
-                    <i id="openSettings" onClick={() => this.setState({currentDashboardScreen: "settings"})} className={`fa-solid fa-gear ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}></i>
-                    <div class="notification-container">
-                        <i onClick={this.toggleAlertMenu} id='alertBell' className={`fa-regular fa-bell ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}></i>
-                        <span id='notification' class="notification">5</span>
-                    </div>
-                    
-         
+                    <section id='scrollUtility'>
+
+                        <section className='alertContainer'>
+                            <i id="openSettings" onClick={() => this.setState({ currentDashboardScreen: "settings" })} className={`fa-solid fa-gear ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}></i>
+                            <div class="notification-container">
+                                <i onClick={this.toggleAlertMenu} id='alertBell' className={`fa-regular fa-bell ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}></i>
+                                <span id='notification' class="notification">{this.state.alerts.length}</span>
+                            </div>
+
+
+                        </section>
+
+                        <CurrentUtility
+                            scrollToMap={this.scrollToMap} displayScreen={this.displayDashboardScreen}
+                            weatherData={this.state.weatherData} weatherForecast={this.state.weatherForecast}
+                            farmDetails={this.state.farmDetails} user={this.state.user}
+                            changeTheme={this.changeTheme} getTheme={this.getTheme}
+                            sensors={this.state.sensors}
+                            logout={this.handleLogout}
+                        />
+
+
                     </section>
-                   
-                    <CurrentUtility 
-                    scrollToMap={this.scrollToMap} displayScreen={this.displayDashboardScreen} 
-                    weatherData={this.state.weatherData} weatherForecast={this.state.weatherForecast} 
-                    farmDetails={this.state.farmDetails} user={this.state.user} 
-                    changeTheme={this.changeTheme} getTheme={this.getTheme}
-                    sensors={this.state.sensors}
-                    logout={this.handleLogout}
-                    />
-
-
-                </section>
 
                 </main>
 
-                
+
 
                 <section id="alertMenu" className={`alertMenu hidden ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
 
                     <h2>Alerts</h2>
-
                     <div id="alertsContainer" className='alertsContainer'>
+  {this.state.alerts.map((alert, index) => {
+    const matchingSensor = this.state.sensorsOwned.find(
+      (sensor) => sensor.name === alert.sensorId
+    );
 
-                        <div className='alertCard'>
+    const key = `${index}-${alert.type}`;
 
-                        <i class="fa-solid fa-wifi"></i>
-                        <h2>Low soil moisture detected in Field A. Irrigation recommended within the next 24 hours to maintain optimal soil moisture levels.</h2>
+    return (
+      <div className="alertCard" key={key}>
+        {alert.type === 'humidity' && (
+          <>
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <h2>{alert.message}</h2>
+          </>
+        )}
+        {alert.type === 'temperature' && (
+          <>
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <h2>{alert.message}</h2>
+          </>
+        )}
+        {alert.type === 'weather' && (
+          <>
+            <i class="fa-solid fa-cloud-sun"></i>
+            <h2>{alert.message}</h2>
+          </>
+        )}
+      </div>
+    );
+  })}
+
+
+
+                        {/* <div className='alertCard'>
+
+                            <i class="fa-solid fa-wifi"></i>
+                            <h2>Low soil moisture detected in Field A. Irrigation recommended within the next 24 hours to maintain optimal soil moisture levels.</h2>
 
                         </div>
 
                         <div className='alertCard'>
 
-                        <i class="fa-solid fa-bullseye"></i>
-                        <h2>At 4:25PM, Tiago completed the task: "Pick fruits"</h2>
+                            <i class="fa-solid fa-bullseye"></i>
+                            <h2>At 4:25PM, Tiago completed the task: "Pick fruits"</h2>
 
                         </div>
 
                         <div className='alertCard'>
 
-                        <i class="fa-solid fa-cloud-sun"></i>
-                        <h2>The temperature could reach over 27°C on tuesday</h2>
+                            <i class="fa-solid fa-cloud-sun"></i>
+                            <h2>The temperature could reach over 27°C on tuesday</h2>
 
                         </div>
 
                         <div className='alertCard'>
 
-                        <i class="fa-solid fa-circle-exclamation"></i>
-                        <h2>Low soil moisture detected in Field A. Irrigation recommended within the next 24 hours to maintain optimal soil moisture levels.</h2>
+                            <i class="fa-solid fa-circle-exclamation"></i>
+                            <h2>Low soil moisture detected in Field A. Irrigation recommended within the next 24 hours to maintain optimal soil moisture levels.</h2>
 
                         </div>
                         <div className='alertCard'>
 
-                        <i class="fa-solid fa-circle-exclamation"></i>
-                        <h2>Low soil moisture detected in Field A. Irrigation recommended within the next 24 hours to maintain optimal soil moisture levels.</h2>
+                            <i class="fa-solid fa-circle-exclamation"></i>
+                            <h2>Low soil moisture detected in Field A. Irrigation recommended within the next 24 hours to maintain optimal soil moisture levels.</h2>
 
-                        </div>
+                        </div> */}
 
-                        
+
 
                         <button id='clearAllAlerts'><i className="fa-solid fa-trash"></i> Clear All</button>
 

@@ -45,7 +45,6 @@ class Weather extends React.Component {
         forecastLabels: forecastLabelsData
       }, () => {
         this.updateChart();
-        console.log(forecastData);
       });
     }
     
@@ -123,7 +122,6 @@ class Weather extends React.Component {
 
     componentDidMount() {
         this.populateWeatherForecast(this.props.weatherForecast);
-        console.log(this.props.weatherForecast);
     }
 
     convertToKM(speed){

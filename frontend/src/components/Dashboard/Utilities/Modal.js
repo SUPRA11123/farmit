@@ -25,8 +25,6 @@ class Modal extends React.Component {
 
   componentDidMount() {
 
-    
-    console.log(this.props.sensorData.sensorId);
 
     this.fetchData(); // Fetch data initially
 
@@ -66,7 +64,6 @@ class Modal extends React.Component {
 
     const queryApi = influxDB.getQueryApi("FarmIT");
 
-    console.log(this.state.selectedTimeOption);
 
     const query = `
     from(bucket: "test")
@@ -76,7 +73,6 @@ class Modal extends React.Component {
     |> filter(fn: (r) => r["topic"] == "v3/farmit@ttn/devices/${this.props.sensorData.sensorId}/up")
   `;
 
-    console.log("boas");
 
     const data = []; // Initialize an empty array to store the data
 
@@ -99,7 +95,7 @@ class Modal extends React.Component {
         console.error("Error occurred during query:", error);
       },
       complete: () => {
-        console.log("Query completed");
+        // console.log("Query completed");
 
         this.updateChart(data);
       },
@@ -192,7 +188,7 @@ class Modal extends React.Component {
         console.error("Error occurred during test query:", error);
       },
       complete: () => {
-        console.log("Query completed");
+        // console.log("Query completed");
 
         // Sort the data array by time in ascending order
         data.sort((a, b) => new Date(a.time) - new Date(b.time));
@@ -251,7 +247,7 @@ class Modal extends React.Component {
 
 
     if (!this.myChart) {
-      console.log("creating chart");
+      // console.log("creating chart");
       const chartRef = this.chartRef.current;
       const myChartRef = chartRef.getContext("2d");
 
@@ -343,7 +339,7 @@ class Modal extends React.Component {
       });
     } else {
 
-      console.log("updating chart");
+      // console.log("updating chart");
 
       const latestTime = new Date([...uniqueTime][uniqueTime.size - 1]).toLocaleTimeString();
       const latestTemperature = temperatureData[temperatureData.length - 1].decoded_payload_temperature;
