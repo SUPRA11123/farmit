@@ -34,8 +34,8 @@ def update_task(request, task_id):
 
 
 @api_view(['DELETE'])
-def delete_task(request, task_id):
-    task = get_object_or_404(Task, id=task_id)
+def delete_task(request, id):
+    task = get_object_or_404(Task, id=id)
     task.delete()
     return JsonResponse({'message': 'Task deleted successfully'}, status=204)
 
@@ -58,9 +58,17 @@ def get_tasks_by_assignee(request, id):
    serializer = TaskSerializer(tasks, many=True)
    return JsonResponse(serializer.data, safe=False)
 
- 
- 
+@api_view(['PUT'])
+def update_task_status(request, id):
+    print(id)
+    task = get_object_or_404(Task, id=id)
+    task.status = request.data['status']
+    task.save()
+    serializer = TaskSerializer(task)
+    return JsonResponse(serializer.data, status=200)
 
+
+ 
 
 
 
