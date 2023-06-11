@@ -424,7 +424,7 @@ class Home extends React.Component {
       dailyForecasts.push({
         temperature: temperatures,
         humidity: forecastData.map(item => item.main.humidity),
-        labels: forecastData.map(item => this.getLabels(new Date(item.dt_txt)) + '@' + item.dt_txt.slice(11, 16))
+        labels: forecastData.map(item => this.getLabels(new Date(item.dt_txt)))
       });
     }
 
@@ -549,7 +549,7 @@ class Home extends React.Component {
       <>
         <div className="homeBackground">
           <p className={`${localStorage.getItem("darkMode") === "true" ? "darkModeBG" : ''}`}>{this.getWelcomeMessage()}{this.props.user.name}!</p>
-          <p className={`${localStorage.getItem("darkMode") === "true" ? "darkModeBG" : ''}`}><span>Your current dashboard for today</span></p>
+          <p className={`${localStorage.getItem("darkMode") === "true" ? "darkModeBG" : ''}`}><span>Dashboard for {this.getCurrentDayAndDate()}</span></p>
         </div>
 
         <div onClick={() => this.props.displayScreen("weather")} id="weatherWidget" className={`Col2Card ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>

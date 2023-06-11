@@ -574,13 +574,6 @@ body {
     font-family: $font1;
 }
 
-
-#weatherWidget:hover {
-    background-color: $lightBlue;
-    cursor: pointer;
-    border: 1px solid white;
-}
-
 .homeBackground {
     position: absolute;
     display: flex;
@@ -609,8 +602,7 @@ body {
 }
 
 .Col2Card:hover {
-    top: 14.5%;
-    transition: 0.5s;
+    outline: 2px solid $darkGrey;
     cursor: pointer;
 }
 
@@ -620,20 +612,20 @@ body {
     left: 0%;
     width: 30%;
     height: 35%;
-    background-image: linear-gradient(#428FFF, #BED9FF);
+    background-color: $grey;
     border-radius: 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: $darkGrey;
 
     #widgetPin {
-        color: white;
+        color: $red;
     }
 
     #widgetHumidity i {
-        color: white;
+        color: $blue;
     }
 
     #wigetClouds {
@@ -642,7 +634,7 @@ body {
     }
 
     h1 {
-        color: white;
+        color: black;
         font-size: 8vh;
         margin: 0;
         font-weight: bold;
@@ -699,9 +691,7 @@ body {
 }
 
 .col4Card:hover {
-    
-    top: 14.5%;
-    transition: 0.5s;
+    outline: 2px solid $darkGrey;
     cursor: pointer;
 }
 
@@ -710,18 +700,15 @@ body {
     position: absolute;
     top: 55%;
     width: 67.5%;
-    width: 100%;
+    width: 30%;
     height: 40%;
     border-radius: 15px;
     cursor: pointer;
 }
 
 #homeMap:hover {
-   
-    top: 54.5%;
-    transition: 0.5s;
+    outline: 2px solid $darkGrey;
     cursor: pointer;
-
   }
 
 
