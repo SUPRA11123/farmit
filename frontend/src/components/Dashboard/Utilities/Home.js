@@ -19,19 +19,17 @@ class Home extends React.Component {
       sensor_latitude: null,
       sensor_longitude: null,
       markers: [],
+      tasks: [],
     };
-
   }
 
   async componentDidMount() {
 
     this.getTasksByAsignee(this.props.user.id);
-
-    const markers = [];
-
+    this.getTasks();
     this.populateWeather(this.props.weatherData);
-
     var maxLat = Math.atan(Math.sinh(Math.PI)) * 180 / Math.PI;
+    const markers = [];
 
 
 
@@ -275,8 +273,6 @@ class Home extends React.Component {
 
     }
     this.setState({ markers: markers }); // Update the state with the markers array
-
-
   }
 
   componentDidUpdate(prevProps) {
@@ -392,6 +388,23 @@ class Home extends React.Component {
     return date;
   }
 
+  getTasks() {
+
+    axios.get(URL + "gettasksbyfarm/" + this.props.farmDetails.id + "/")
+        .then(response => {
+            const tasks = response.data;
+            this.setState({ tasks: tasks });
+            const todoCount = tasks.filter(task => task.status === "To do").length;
+            const inProgressCount = tasks.filter(task => task.status === "In progress").length;
+            const completedCount = tasks.filter(task => task.status === "Completed").length;
+            this.setState({ todoCount, inProgressCount, completedCount });
+        })
+        .catch(error => {
+            console.log(error);
+        });
+
+}
+
   populateWeather(data) {
     var iconcode = data.weather[0].icon;
     var iconurl = "http://openweathermap.org/img/w/" + iconcode + ".png";
@@ -424,7 +437,7 @@ class Home extends React.Component {
       dailyForecasts.push({
         temperature: temperatures,
         humidity: forecastData.map(item => item.main.humidity),
-        labels: forecastData.map(item => this.getLabels(new Date(item.dt_txt)))
+        labels: forecastData.map(item => this.getLabels(new Date(item.dt_txt)) + '@' + item.dt_txt.slice(11, 16))
       });
     }
 
@@ -552,9 +565,14 @@ class Home extends React.Component {
           <p className={`${localStorage.getItem("darkMode") === "true" ? "darkModeBG" : ''}`}><span>Dashboard for {this.getCurrentDayAndDate()}</span></p>
         </div>
 
+        <div className={`locationWidget ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
+          <h2>{this.props.farmDetails.name}</h2>
+          <p><i className="fa-solid fa-clock"></i>{this.displayTime()}</p>
+        </div>
+
         <div onClick={() => this.props.displayScreen("weather")} id="weatherWidget" className={`Col2Card ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
           <div className="weatherWigetTop">
-            <p id="wigetLocation"><i id="widgetPin" className="fa-solid fa-location-dot"></i></p>
+          <p id="wigetLocation"><i id="widgetPin" className="fa-solid fa-location-dot"></i></p>
             <img id="widgetWeatherIcon" src="" alt="Weather icon" />
           </div>
         
@@ -566,16 +584,28 @@ class Home extends React.Component {
             <p id="widgetHumidity"><i className="fa-solid fa-droplet"></i></p>
           </div>
 
-
         </div>
 
         <div id='alertWidget' onClick={() => this.props.displayScreen("weather")} className={`col4Card ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
-          <p>5 Day Weather Forecast</p>
+          <h2>5 Day Weather Forecast</h2>
           <canvas id="homeChart" height='25%' width='100px'></canvas>
         </div>
 
         <div className={`${localStorage.getItem("darkMode") === "true" ? "darkModeBG" : ''}`} id="homeMap">
 
+        </div>
+
+        <div id='taskWidget' onClick={() => this.props.displayScreen("tasks")} className={`Col2Card ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
+          <h2>Current Tasks</h2>
+          <div className="taskCount">
+            <p>Not Started: <span>{this.state.todoCount}</span></p>
+          </div>
+          <div className="taskCount">
+            <p>In Progress: <span>{this.state.inProgressCount}</span></p>
+          </div>
+          <div className="taskCount">
+            <p>Completed: <span>{this.state.completedCount}</span></p>
+          </div>
         </div>
 
       </>

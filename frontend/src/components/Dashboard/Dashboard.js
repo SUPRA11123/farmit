@@ -422,6 +422,7 @@ class Dashboard extends React.Component {
 
     toggleAlertMenu() {
         document.getElementById('alertMenu').classList.toggle('hidden');
+        document.getElementById('notification').classList.toggle('hidden');
         document.getElementById('alertMenu').classList.toggle('alertMenuAnimation');
         const alertBell = document.getElementById('alertBell');
         alertBell.classList.toggle('fa-bell');
@@ -453,7 +454,7 @@ class Dashboard extends React.Component {
         }
 
         return (
-            <div id='appContainer' className='screen'>
+            <div id='appContainer' className={`screen ${localStorage.getItem("darkMode") === "true" ? "darkModeBG" : ''}`}>
 
                 <aside id="navContainer" className={`${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''} navContainer`}>
                     <div id='navTop' className='navTop'>
@@ -523,7 +524,6 @@ class Dashboard extends React.Component {
                     <section id='scrollUtility'>
 
                         <section className='alertContainer'>
-                            <i id="openSettings" onClick={() => this.setState({ currentDashboardScreen: "settings" })} className={`fa-solid fa-gear ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}></i>
                             <div class="notification-container">
                                 <i onClick={this.toggleAlertMenu} id='alertBell' className={`fa-regular fa-bell ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}></i>
                                 <span id='notification' class="notification">{this.state.alerts.length}</span>
@@ -552,36 +552,36 @@ class Dashboard extends React.Component {
 
                     <h2>Alerts</h2>
                     <div id="alertsContainer" className='alertsContainer'>
-  {this.state.alerts.map((alert, index) => {
-    const matchingSensor = this.state.sensorsOwned.find(
-      (sensor) => sensor.name === alert.sensorId
-    );
+                    {this.state.alerts.map((alert, index) => {
+                        const matchingSensor = this.state.sensorsOwned.find(
+                        (sensor) => sensor.name === alert.sensorId
+                        );
 
-    const key = `${index}-${alert.type}`;
+                        const key = `${index}-${alert.type}`;
 
-    return (
-      <div className="alertCard" key={key}>
-        {alert.type === 'humidity' && (
-          <>
-            <i class="fa-solid fa-circle-exclamation"></i>
-            <h2>{alert.message}</h2>
-          </>
-        )}
-        {alert.type === 'temperature' && (
-          <>
-            <i class="fa-solid fa-circle-exclamation"></i>
-            <h2>{alert.message}</h2>
-          </>
-        )}
-        {alert.type === 'weather' && (
-          <>
-            <i class="fa-solid fa-cloud-sun"></i>
-            <h2>{alert.message}</h2>
-          </>
-        )}
-      </div>
-    );
-  })}
+                        return (
+                        <div className="alertCard" key={key}>
+                            {alert.type === 'humidity' && (
+                            <>
+                                <i class="fa-solid fa-circle-exclamation"></i>
+                                <h2>{alert.message}</h2>
+                            </>
+                            )}
+                            {alert.type === 'temperature' && (
+                            <>
+                                <i class="fa-solid fa-circle-exclamation"></i>
+                                <h2>{alert.message}</h2>
+                            </>
+                            )}
+                            {alert.type === 'weather' && (
+                            <>
+                                <i class="fa-solid fa-cloud-sun"></i>
+                                <h2>{alert.message}</h2>
+                            </>
+                            )}
+                        </div>
+                        );
+                    })}
 
 
 

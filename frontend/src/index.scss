@@ -53,6 +53,7 @@ body {
         display: flex;
         justify-content: center;
         align-items: center;
+        
 
         #mapContainer {
             position: absolute;
@@ -409,15 +410,14 @@ body {
 .alertContainer {
     position: absolute;
     z-index: 99;
-    right: 10px;
-    width: 7.5%;
+    right: 0;
     height: 10%;
     display: flex;
     justify-content: space-around;
     align-items: center;
 
     i {
-        font-size: 3vh;
+        font-size: 4vh;
         color: $darkGrey;       
         border-radius: 5px;
         padding: 5px;
@@ -601,9 +601,40 @@ body {
     }
 }
 
+.locationWidget {
+    position: absolute;
+    top: 52.5%;
+    height: 15%;
+    width: 30%;
+    border-radius: 15px;
+    background-color: $grey;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    h2 {
+        font-size: 2.5vh;
+        color: $green;
+        margin: 0;
+
+        i {
+            color: $red;
+        }
+    }
+
+    p {
+        color: $darkGrey;
+        margin: 0;
+        margin-top: 5px;
+    }
+
+}
+
 .Col2Card:hover {
     outline: 2px solid $darkGrey;
     cursor: pointer;
+    h1 {color: $green !important;}
 }
 
 .Col2Card {
@@ -639,7 +670,7 @@ body {
         margin: 0;
         font-weight: bold;
         span {
-            color: $yellow;
+            position: absolute;
             font-weight: normal;
         }
     }
@@ -673,9 +704,10 @@ body {
     background-color: $grey;
 
 
-    p {
+    h2 {
         margin: 0;
         width: 100%;
+        font-size: 2.5vh;
         text-align: center;
         margin-top: 2.5%;
         color: $darkGrey;
@@ -683,25 +715,62 @@ body {
 
     #homeChart {
         position: absolute;
-        bottom: 5%;
+        bottom: 10%;
         width: 90% !important;
         margin-left: 5%;
         margin-top: 2.5%;
     }
 }
 
+#taskWidget {
+    top: 70%;
+    height: 27.5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    h2 {
+        text-align: center;
+        width: 100%;
+        font-size: 2.5vh;
+        color: $darkGrey;
+        
+    }
+
+    .taskCount {
+        position: relative;
+        height: 10%;
+        margin: 2.5%;
+        border-radius: 5px;
+
+        p {
+            margin: 0;
+
+            span {
+                font-weight: bold;
+                color: $green;
+            }
+        }
+    }
+}
+
+#taskWidget:hover {
+    h2 {color: $green !important;}
+}
+
 .col4Card:hover {
     outline: 2px solid $darkGrey;
     cursor: pointer;
+    h2{color: $green !important;}
 }
 
 
 #homeMap {
     position: absolute;
-    top: 55%;
+    left: 32.5%;
+    top: 52.5%;
     width: 67.5%;
-    width: 30%;
-    height: 40%;
+    height: 45%;
     border-radius: 15px;
     cursor: pointer;
 }

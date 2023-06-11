@@ -29,6 +29,7 @@ class Tasks extends React.Component {
         this.getMember = this.getMember.bind(this);
         this.cancelTask = this.cancelTask.bind(this);
         this.getField = this.getField.bind(this);
+        this.deleteTask = this.deleteTask.bind(this);
 
     }
 
@@ -58,8 +59,6 @@ class Tasks extends React.Component {
     }
 
     getTasks() {
-
-        console.log(this.props.user);
 
         axios.get("http://localhost:8000/gettasksbyfarm/" + this.props.farmDetails.id + "/")
             .then(response => {
@@ -101,6 +100,10 @@ class Tasks extends React.Component {
 
         const toDo = document.getElementById('toDoTasksContainer');
         toDo.innerHTML = '';
+        const inProgress = document.getElementById('inProgressTasksContainer');
+        inProgress.innerHTML = '';
+        const completed = document.getElementById('completedTasksContainer');
+        completed.innerHTML = '';
 
         if (tasks.length > 0 && (this.props.user.role == "owner" || this.props.user.role == "field manager") ) {
 
@@ -119,7 +122,10 @@ class Tasks extends React.Component {
 
                 const taskMember = document.createElement('span');
                 const member = this.getMember(task.farmer);
-                taskMember.innerHTML = "<i class='fa-regular fa-user'></i>  " + member.name + " <i class='fa-regular fa-map'></i> " + fieldName.name;
+                taskMember.innerHTML = "<i class='fa-regular fa-user'></i>  " + member.name;
+
+                const taskField = document.createElement('span');
+                taskField.innerHTML = "<i class='fa-regular fa-map'></i> " + fieldName.name;
 
                 const taskSettings = document.createElement('i');
                 taskSettings.classList.add('fa-solid', 'fa-ellipsis-vertical', 'taskSettings');
@@ -128,9 +134,16 @@ class Tasks extends React.Component {
                 taskSettings2.classList.add('taskSettings')
                 taskSettings2.innerHTML = '<i class="taskDelete fa-regular fa-trash-can"></i>';
 
+                const iconElement = taskSettings2.querySelector('.taskDelete');
+
+                iconElement.addEventListener('click', () => {
+                    this.deleteTask(task.id);
+                });
+
                 div.appendChild(taskTitle);
                 div.appendChild(taskDescription);
                 div.appendChild(taskMember);
+                div.appendChild(taskField)
                 div.appendChild(taskSettings2);
 
                 if (task.status === 'To do') {
@@ -178,16 +191,32 @@ class Tasks extends React.Component {
                 taskSettings2.classList.add('taskSettings')
                 taskSettings2.innerHTML = '<i class="taskProgress fa-solid fa-circle-chevron-right"></i>';
 
+                const iconElement = taskSettings2.querySelector('.taskProgress');
+
                 div.appendChild(taskTitle);
                 div.appendChild(taskDescription);
                 div.appendChild(taskMember);
                 div.appendChild(taskSettings2);
 
                 if (task.status === 'To do') {
+
+                    iconElement.addEventListener('click', () => {
+                        this.updateTask(task.id, 'In progress');
+                    });
+
                     toDo.appendChild(div);
+
                 } else if (task.status === 'In progress') {
+
+                    iconElement.addEventListener('click', () => {
+                        this.updateTask(task.id, 'Completed');
+                    });
+
                     document.getElementById('inProgressTasksContainer').appendChild(div);
                 } else {
+
+                    taskSettings2.innerHTML = '';
+
                     document.getElementById('completedTasksContainer').appendChild(div);
                 }
 
@@ -267,6 +296,37 @@ class Tasks extends React.Component {
             this.getTasks();
             document.getElementById("taskBoard").classList.remove('hidden');
             document.getElementById("addTask").classList.add('hidden');
+
+        }
+        ).catch(error => {
+            console.log(error);
+        }
+        );
+    }
+
+    deleteTask(id) {
+        console.log(id);
+
+        axios
+            .delete(URL + "deletetask/" + id + "/")
+            .then((res) => {
+              this.getTasks();
+            }
+            )
+            .catch((err) => {
+              console.log(err);
+            }
+            );
+
+    }
+
+    updateTask(id, status) {
+    
+        axios.put(URL + "updatetaskstatus/" + id + "/", {
+            status: status,
+        }).then(response => {
+
+            this.getTasks();
 
         }
         ).catch(error => {
