@@ -26,8 +26,6 @@ class Maps extends React.Component {
     async componentDidMount() {
 
         const markers = [];
-
-
         // check if any field already exists
         var fields;
         const role = this.props.user.role;
@@ -1037,6 +1035,29 @@ class Maps extends React.Component {
         }
     }
 
+    showFieldTable(){
+        document.getElementById('fieldTable').classList.remove('hidden');
+        document.getElementById('addNewField').classList.remove('hidden');
+        document.getElementById('addNewSensor').classList.add('hidden');
+        document.getElementById('sensorTable').classList.add("hidden");
+        document.getElementById('fieldSwitch').classList.add("fieldsSensorsBtnActive");
+        document.getElementById('sensorSwitch').classList.remove("fieldsSensorsBtnActive");
+    }
+
+    showSensorTable(){
+        document.getElementById('fieldTable').classList.add('hidden');
+        document.getElementById('addNewField').classList.add('hidden');
+        document.getElementById('addNewSensor').classList.remove('hidden');
+        document.getElementById('sensorTable').classList.remove("hidden");
+        document.getElementById('fieldSwitch').classList.remove("fieldsSensorsBtnActive");
+        document.getElementById('sensorSwitch').classList.add("fieldsSensorsBtnActive");
+    }
+
+    showSensorForm() {
+        document.getElementById('sensorTable').classList.add('hidden');
+        document.getElementById('createSensor').classList.remove('hidden');
+    }
+
     render() {
 
         const { modalOpen } = this.state;
@@ -1053,6 +1074,20 @@ class Maps extends React.Component {
                         sensorData={this.state.sensorData} largeMap={this.largeMap}
                     />
                 )}
+
+                <div className="fieldsSensorsContainer">
+                    <button onClick={this.showFieldTable} id="fieldSwitch" className="fieldsSensorsBtn fieldsSensorsBtnActive"><i className="fa-regular fa-map"></i> My Fields</button>
+                    <button onClick={this.showSensorTable} id="sensorSwitch" className="fieldsSensorsBtn"><i className="fa-solid fa-wifi"></i> My Sensors</button>
+
+                    {this.props.user.role === 'farmer' || this.props.user.role === 'field manager' ? null :
+                    <>
+                        <button onClick={this.showFieldForm} id="addNewField" className='fieldsSensorsBtn'> <i className="fa-solid fa-plus"></i></button>
+                        <button onClick={this.showSensorForm} id="addNewSensor" className='hidden fieldsSensorsBtn'> <i className="fa-solid fa-plus"></i></button>
+                    </>
+                    }
+
+                </div>
+
                 <div className="fieldsTableConatiner">
 
                     <h2 className="hidden" id="addFieldsHeader">Use the rectangle/polygon tool to draw the field onto map</h2>
@@ -1066,32 +1101,50 @@ class Maps extends React.Component {
                         <input id="loginInBtn" type="submit" value="Create Field" />
                     </form>
 
+                    <form id="createSensor" className="hidden" onSubmit={this.createSensor}>
+                        <label htmlFor="sensorID">Sensor ID</label>
+                        <input autocomplete="off" required type="text" name="sensorID" id="sensorId" placeholder="enter ID" />
+                        <label htmlFor="sensorLong">Longitude</label>
+                        <input autocomplete="off" required type="text" name="sensorLong" id="sensorLong" placeholder="enter longitude"/>
+                        <label htmlFor="sensorLat">Latitude</label>
+                        <input autocomplete="off" required type="text" name="sensorLat" id="sensorLat" placeholder="enter latitude"/>
+                        <input id="loginInBtn" type="submit" value="Create Field" />
+                    </form>
+
                     <div id="add"></div>
 
                     <table id='fieldTable' className={`fieldsTable ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
                         <thead>
                             <tr>
-                                <th><h2>Field</h2></th>
+                                <th><h2>Name</h2></th>
                                 <th><h2>Land Area</h2></th>
                                 <th><h2>Crop</h2></th>
                             </tr>
                         </thead>
                         <tbody>
-
                             <tr>
                                 <td colSpan={4}>
 
-
-                                    {this.props.user.role === 'farmer' || this.props.user.role === 'field manager' ? null :
-
-
-                                        <button onClick={this.showFieldForm} id="addNewField" className={`fieldsTableBtn`}> <i className="fa-solid fa-plus"></i> Add Field</button>
-                                    }
+                                    
                                 </td>
                             </tr>
-
                         </tbody>
                     </table>
+
+                    <table id='sensorTable' className={`fieldsTable hidden ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
+                        <thead>
+                            <tr>
+                                <th><h2>ID</h2></th>
+                                <th><h2>Latitude</h2></th>
+                                <th><h2>Longitude</h2></th>
+                                <th><h2>Field</h2></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        
+                        </tbody>
+                    </table>
+
                 </div>
 
             </>

@@ -390,18 +390,38 @@ class Home extends React.Component {
 
   getTasks() {
 
-    axios.get(URL + "gettasksbyfarm/" + this.props.farmDetails.id + "/")
-        .then(response => {
-            const tasks = response.data;
-            this.setState({ tasks: tasks });
-            const todoCount = tasks.filter(task => task.status === "To do").length;
-            const inProgressCount = tasks.filter(task => task.status === "In progress").length;
-            const completedCount = tasks.filter(task => task.status === "Completed").length;
-            this.setState({ todoCount, inProgressCount, completedCount });
-        })
-        .catch(error => {
-            console.log(error);
-        });
+    if(this.props.user.role == "owner" || this.props.user.role == "field manager") {
+      axios.get(URL + "gettasksbyfarm/" + this.props.farmDetails.id + "/")
+      .then(response => {
+          const tasks = response.data;
+          this.setState({ tasks: tasks });
+          const todoCount = tasks.filter(task => task.status === "To do").length;
+          const inProgressCount = tasks.filter(task => task.status === "In progress").length;
+          const completedCount = tasks.filter(task => task.status === "Completed").length;
+          this.setState({ todoCount, inProgressCount, completedCount });
+      })
+      .catch(error => {
+          console.log(error);
+      });
+    } else {
+
+      axios.get(URL + "gettasksbyassignee/" + this.props.user.id + "/")
+      .then(response => {
+          document.getElementById("taskWidgetHeader").innerHTML = "My Current Tasks"
+          const tasks = response.data;
+          this.setState({ tasks: tasks });
+          const todoCount = tasks.filter(task => task.status === "To do").length;
+          const inProgressCount = tasks.filter(task => task.status === "In progress").length;
+          const completedCount = tasks.filter(task => task.status === "Completed").length;
+          this.setState({ todoCount, inProgressCount, completedCount });
+      })
+      .catch(error => {
+          console.log(error);
+      });
+
+    }
+
+   
 
 }
 
@@ -596,7 +616,7 @@ class Home extends React.Component {
         </div>
 
         <div id='taskWidget' onClick={() => this.props.displayScreen("tasks")} className={`Col2Card ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
-          <h2>Current Tasks</h2>
+          <h2 id="taskWidgetHeader">Current Tasks</h2>
           <div className="taskCount">
             <p>Not Started: <span>{this.state.todoCount}</span></p>
           </div>

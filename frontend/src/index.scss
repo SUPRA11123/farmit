@@ -21,6 +21,7 @@ $yellow: #FFE000;
 
 .hidden {
     visibility: hidden;
+    display: none;
 }
 
 
@@ -930,6 +931,45 @@ body {
     
 }
 
+.fieldsSensorsContainer {
+    position: absolute;
+    width: 45%;
+    right: 0;
+    top: 10%;
+    height: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    .fieldsSensorsBtn {
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 2vh;
+    margin-right: 10px;
+    color: $darkGrey;
+    }
+
+    .fieldsSensorsBtn:hover{
+        cursor: pointer;
+    }
+
+    .fieldsSensorsBtnActive {
+        color: $green;
+        border: 1px solid $green;
+    }
+
+    #addNewField, #addNewSensor {
+        position: absolute;
+        right: 0;
+        background-color: $green;
+        i {
+            color: white;
+        }
+    }
+
+}
+
 .fieldsTableConatiner::-webkit-scrollbar{
     display: none;
 }
@@ -938,8 +978,8 @@ body {
     position: absolute;
     width: 45%;
     right: 0;
-    top: 10%;
-    height: 87.5%;
+    top: 20%;
+    height: 77.5%;
     font-family: $font1;
     border-radius: 15px;
     border: 2px solid #D9D9D9;
@@ -948,7 +988,7 @@ body {
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;
 
-    #createField {
+    #createField, #createSensor {
         top: 0;
         width: 100%;
         height: 100%;
@@ -1035,7 +1075,7 @@ body {
     width: 100%;
     background-color: #F4F4F4;
     border-collapse: collapse;
-    position: relative;
+    position: absolute;
     top: 0;
     border-radius: 15px 15px 0 0;
   
@@ -2206,6 +2246,17 @@ body {
     #homeMap::before {
         background-color: #636363 !important;
     }
+    #navContainerMobile {
+        #navTop {
+            background-color: #2a2a2a !important;
+        }
+        ul {
+            border-bottom: 2px solid $green;
+        }
+        #navListMobile ul li{
+            background-color: #3d3d3d !important;
+        }
+    }
     
 }
 
@@ -2383,7 +2434,6 @@ body {
             height: 90%;
             top: 10%;
             width: 100%;
-            z-index: 99;
             background-color: $grey;
         }
 
@@ -2391,12 +2441,19 @@ body {
             color: white;
             font-size: 3vh;
             margin-left: 25px;
+            z-index: 200;
         }
        
         #navTop {
             height: 10%;
-            background-color: $green;
             img {display: none;}
+            h1 {
+                position: absolute;
+                font-size: 2.5vh;
+                color: white;
+                width: 100%;
+                text-align: center;
+            }
         }
         ul {
             -webkit-user-select: none;    
@@ -2437,18 +2494,23 @@ body {
         }
     }
 
+    .navActive {
+        box-shadow: none;
+    }
+
     #utilityContainer {
         left: 0;
         top: 10%;
         width: 100%;
-        overflow: hidden;
-        background-color: white;
+        overflow-y: scroll;
+      
     }
 
     .fixedUtility {
         background-color: white;
         width: 95%;
         left: 2.5%;
+        margin-bottom: 20%;
         
 
         h2 {
@@ -2463,20 +2525,80 @@ body {
 
     #scrollUtility {
         width: 100%;
-        background-color: white;
         left: 0;
         top: 0;
+        overflow-y: scroll;
     }
 
     //DASHBOARD STYLES
 
+    .alertContainer {
+        position: fixed;
+        top: 0;
+        right: 5%;
+        z-index: 500;
+
+        i {
+            font-size: 3vh;
+        }
+    }
+
+    #alertMenu {
+        top: 10%;
+        width: 100% !important;
+        right: 0;
+        border-radius: 0 0 15px 15px;
+
+        .alertCard {
+            width: 95%;
+        }
+    }
+
+    .locationWidget {
+        display: none;
+    }
+
+    .homeBackground {
+        width: 90%;
+        left: 5%;
+        align-items: flex-start;
+
+        p {
+            font-size: 2.5vh;
+            
+            span {
+                position: relative;
+                font-size: 2vh;
+            }
+        }
+    }
+
     #weatherWidget {
-        width: 95%;
-        left: 2.5%;
+        width: 90%;
+        left: 5%;
+        top: 10%;
+        height: 25%;
     }
 
     #alertWidget {
-        top: 100%;
+        display: none;
+    }
+
+    #homeMap {
+        top: 37.5%;
+        width: 90%;
+        left: 5%;
+        height: 30%;
+    }
+
+    #taskWidget {
+        top: 70%;
+        width: 90%;
+        left: 5%;
+        height: 20%;
+        h2 {
+            margin-bottom: 0;
+        }
     }
 
     //WEATHER STYLES 

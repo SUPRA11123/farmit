@@ -500,11 +500,12 @@ class Dashboard extends React.Component {
                 </aside>
 
                 <aside id='navContainerMobile'>
-                    <div id='navTop'>
+                    <div id='navTop' className={`${localStorage.getItem("darkMode") === "true" ? "darkModeBG" : ''}`}>
                         <i onClick={this.expandMobileNav} id='mobileNavBtn' className="fa-solid fa-bars"></i>
+                        <h1>Agrosensor</h1>
                         <img src={require('../../resources/img/roundLogo.png')} draggable="false" alt="Agrosensor logo" />
                     </div>
-                    <nav id='navListMobile' className='hidden'>
+                    <nav id='navListMobile' className={`hidden ${localStorage.getItem("darkMode") === "true" ? "darkModeBG" : ''}`}>
                         <ul>
                             <li onClick={() => this.setState({ currentDashboardScreen: "dashboard" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "dashboard" ? "navActive" : ""}><p>Dashboard<i className="fa-solid fa-table-cells-large"></i></p></li>
                             <li onClick={() => this.setState({ currentDashboardScreen: "maps" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "maps" ? "navActive" : ""}><p>My Fields<i className="fa-regular fa-map"></i></p></li>
