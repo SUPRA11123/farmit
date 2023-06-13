@@ -377,11 +377,16 @@ class Dashboard extends React.Component {
         });
     }
 
-    changeUtility(util) { this.setState({ currentDashboardScreen: util }); }
+    changeUtility(util) { 
+        this.setState({ currentDashboardScreen: util }); 
+    }
 
     displaySettings() { document.getElementById('fixedUtility').classList.add("expandFixed"); }
 
-    displayDashboardScreen(screen) { this.setState({ currentDashboardScreen: screen }); }
+    displayDashboardScreen(screen) { 
+        
+        this.setState({ currentDashboardScreen: screen });
+     }
 
     changeTheme(x) { this.setState({ isDarkMode: x }) }
 
@@ -403,11 +408,18 @@ class Dashboard extends React.Component {
             });
     }
 
-    expandMobileNav() { document.getElementById("navListMobile").classList.toggle('hidden'); }
+    expandMobileNav() { 
+
+        document.getElementById("navListMobile").classList.toggle('hidden'); 
+        document.getElementById("mobileNavBtn").classList.toggle("fa-bars");
+        document.getElementById("mobileNavBtn").classList.toggle("fa-xmark");
+    }
 
     handleMobileClick() {
         if (window.innerWidth < 600) {
             document.getElementById("navListMobile").classList.add('hidden');
+            document.getElementById("mobileNavBtn").classList.toggle("fa-bars");
+            document.getElementById("mobileNavBtn").classList.toggle("fa-xmark");
         }
     }
 
@@ -502,20 +514,20 @@ class Dashboard extends React.Component {
                 <aside id='navContainerMobile'>
                     <div id='navTop' className={`${localStorage.getItem("darkMode") === "true" ? "darkModeBG" : ''}`}>
                         <i onClick={this.expandMobileNav} id='mobileNavBtn' className="fa-solid fa-bars"></i>
-                        <h1>Agrosensor</h1>
+                        <h1>AGRO<span>SENSOR</span></h1>
                         <img src={require('../../resources/img/roundLogo.png')} draggable="false" alt="Agrosensor logo" />
                     </div>
                     <nav id='navListMobile' className={`hidden ${localStorage.getItem("darkMode") === "true" ? "darkModeBG" : ''}`}>
                         <ul>
-                            <li onClick={() => this.setState({ currentDashboardScreen: "dashboard" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "dashboard" ? "navActive" : ""}><p>Dashboard<i className="fa-solid fa-table-cells-large"></i></p></li>
-                            <li onClick={() => this.setState({ currentDashboardScreen: "maps" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "maps" ? "navActive" : ""}><p>My Fields<i className="fa-regular fa-map"></i></p></li>
+                            <li onClick={() => this.setState({ currentDashboardScreen: "dashboard" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "dashboard" ? "navActive" : ""}><p><i className="fa-solid fa-table-cells-large"></i> Dashboard</p></li>
+                            <li onClick={() => this.setState({ currentDashboardScreen: "maps" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "maps" ? "navActive" : ""}><p><i className="fa-regular fa-map"></i> Fields</p></li>
+                            <li onClick={() => this.setState({ currentDashboardScreen: "tasks" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "tasks" ? "navActive" : ""}><p><i className="fa-solid fa-bullseye"></i> Tasks</p></li>
                             {this.state.user.role === 'owner' && (
-                                <li onClick={() => this.setState({ currentDashboardScreen: "team" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "team" ? "navActive" : ""}><p>Tasks<i className="fa-solid fa-people-group"></i></p></li>
+                                <li onClick={() => this.setState({ currentDashboardScreen: "team" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "team" ? "navActive" : ""}><p><i className="fa-solid fa-people-group"></i> Team</p></li>
                             )}
-                            <li onClick={() => this.setState({ currentDashboardScreen: "predictions" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "predictions" ? "navActive" : ""}><p>Predictions<i className="fa-solid fa-bullhorn"></i></p></li>
-                            <li onClick={() => this.setState({ currentDashboardScreen: "weather" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "weather" ? "navActive" : ""}><p>Weather<i className="fa-solid fa-cloud-sun"></i></p></li>
-                            <li onClick={() => this.setState({ currentDashboardScreen: "settings" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "settings" ? "navActive" : ""}><p>Settings<i className="fa-solid fa-gear"></i></p></li>
-                            <li id='logout' onClick={this.handleLogout}><p>Logout<i className="fa-solid fa-arrow-right-from-bracket"></i></p></li>
+                            <li onClick={() => this.setState({ currentDashboardScreen: "predictions" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "predictions" ? "navActive" : ""}><p><i className="fa-solid fa-leaf"></i> Fruit-scan</p></li>
+                            <li onClick={() => this.setState({ currentDashboardScreen: "weather" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "weather" ? "navActive" : ""}><p><i className="fa-solid fa-cloud-sun"></i> Weather</p></li>
+                            <li onClick={() => this.setState({ currentDashboardScreen: "settings" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "settings" ? "navActive" : ""}><p><i className="fa-solid fa-gear"></i> Settings</p></li>
                         </ul>
                     </nav>
                 </aside>

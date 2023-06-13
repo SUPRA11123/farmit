@@ -94,6 +94,7 @@ class Weather extends React.Component {
                 suggestedMin: 0, 
                 suggestedMax: 40,
                 ticks: {
+                  color: labelColor, 
                   callback: function (value) {
                     if (this.state.statSelector === "humidity") {
                       return value + '%';
@@ -243,11 +244,11 @@ class Weather extends React.Component {
             <div className={`lineChartContainer ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
         
               <select name="statSelector" id="statSelector" className={`${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`} onChange={this.handleChange}>
-                <option value="temperature">Temperature</option>
+                <option value="temperature">Temperature <i className="fa-solid fa-sun"></i></option>
                 <option value="humidity">Humidity</option>
               </select>   
 
-              <canvas id="myChart" height='30%' width='100px'></canvas>
+              <canvas id="myChart" height='20%' width='100px'></canvas>
 
               <ul className={`daySelector ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
                   <li><button onClick={() => this.setForecast(0)} className="daySelectorActive" id="dayBtn0">Today</button></li>
