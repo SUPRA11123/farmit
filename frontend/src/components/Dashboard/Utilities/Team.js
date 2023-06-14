@@ -387,17 +387,6 @@ class Team extends React.Component {
                     <input required type="text" id="name" name="name" className="form-control" placeholder="Name" />
 
 
-                    <label htmlFor="email">Email</label>
-                    <input required type="text" id="email" name="email" className="form-control" placeholder="Email" />
-
-
-                    <label htmlFor="password">Password</label>
-                    <input required type="password" id="password" name="password" className="form-control" placeholder="Password" />
-
-
-                    <label htmlFor="confirmPassword">Confirm Password</label>
-                    <input required type="password" id="confirmPassword" name="confirmPassword" className="form-control" placeholder="Confirm Password" />
-
                     <label htmlFor="role">Role</label>
                     <select defaultValue="" id="role" name="role" className="form-control" onChange={this.handleRoleChange} required>
                         <option value="" selected disabled>Select a role</option>
@@ -420,6 +409,19 @@ class Team extends React.Component {
                         <p style={{ color: "red" }}>Passwords do not match</p>
                     )}
 
+
+                    <label htmlFor="email">Email</label>
+                    <input required type="text" id="email" name="email" className="form-control" placeholder="Email" />
+
+
+                    <label htmlFor="password">Password</label>
+                    <input required type="password" id="password" name="password" className="form-control" placeholder="Password" />
+
+
+                    <label htmlFor="confirmPassword">Confirm Password</label>
+                    <input required type="password" id="confirmPassword" name="confirmPassword" className="form-control" placeholder="Confirm Password" />
+
+
                     <button id="addMember" type="submit" disabled={!this.isFormValid()}>
                         Create User
                     </button>
@@ -434,11 +436,6 @@ class Team extends React.Component {
 
                     <label htmlFor="name">Name</label>
                     <input required type="text" id="editName" name="editName" className="form-control" placeholder="Name" disabled />
-
-
-                    <label htmlFor="email">Email</label>
-                    <input required type="text" id="editEmail" name="editEmail" className="form-control" placeholder="Email" disabled />
-
 
                     <label htmlFor="role">Role</label>
                     <select defaultValue={role} id="editRole" name="editRole" className="form-control" onChange={this.handleRoleChangeOnEdit}>
@@ -458,6 +455,10 @@ class Team extends React.Component {
                             </select>
                         </>
                     )}
+
+
+                    <label htmlFor="email">Email</label>
+                    <input required type="text" id="editEmail" name="editEmail" className="form-control" placeholder="Email" disabled />
 
                     <button id="editMember" type="submit" disabled={!this.isEditFormValid()}>
                         Edit User

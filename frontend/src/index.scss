@@ -957,14 +957,19 @@ body {
     }
 
     .fieldsSensorsBtnActive {
-        color: $green;
         border: 1px solid $green;
+        color: black;
+
+        i {
+            color: $green;
+        }
     }
 
     #addNewField, #addNewSensor {
         position: absolute;
         right: 0;
         background-color: $green;
+        color: white;
         i {
             color: white;
         }
@@ -1063,12 +1068,28 @@ body {
         position: absolute;
         font-size: 2.5vh;
         z-index: 0;
-        color: black;
-        height: 15%;
+        color: $darkGrey;
+        font-weight: normal;
+        height: 100%;
         width: 90%;
         left: 5%;
-        top: 15%;
+        top: 0;
         text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+    }
+}
+
+#sensorTable {
+    thead tr th h2 {
+        margin: 10%;
+    }
+
+    tbody tr td {
+        width: 50%;
+        padding-left: 5%;
     }
 }
 
@@ -1158,8 +1179,17 @@ body {
  #add{
  
     position: absolute;
+    top: 0;
+    height: 100%;
     width: 100%;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    button {
+        margin: 5px;
+    }
 
  }
 
@@ -1388,7 +1418,7 @@ body {
     align-items: center;
     background-color: white;
     backdrop-filter: none;
-    color: $darkGrey;
+    color: black;
     border: 2px solid $darkGrey;
     padding-bottom: 2.5%;
 
@@ -1417,6 +1447,9 @@ body {
     input, select, button {
         width: 60%;
         font-family: $font1;
+        border-radius: 5px;
+        padding: 5px;
+        border: 1px solid black;
      
     }
 
@@ -1457,7 +1490,7 @@ body {
     justify-content: center;
     align-items: center;
     background-color: white;
-    color: $darkGrey;
+    color: black;
     z-index: 202;
     border: 2px solid $darkGrey;
 
@@ -1477,6 +1510,9 @@ body {
     input, select, button {
         width: 60%;
         font-size: 2.5vh;
+        border-radius: 5px;
+        padding: 5px;
+        border: 1px solid black;
     }
 
     button {
@@ -1485,6 +1521,7 @@ body {
 
     label {
         margin: 5px;
+        margin-top: 20px;
         width: 60%;
         text-align: left;
         
@@ -2314,6 +2351,10 @@ body {
         color: $green !important;
     }
 
+    #sensorId, #createSensorBtn, #fieldName, #cropType, #createFieldBtn {
+        color: black !important;
+    }
+
     //{` ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}
 }
 
@@ -2448,6 +2489,11 @@ body {
             width: 100%;
             z-index: 100;
             animation: slideInFromTop 0.2s ease-in-out forwards;
+
+            ul {
+                height: 100%;
+            }
+
         }
 
         #mobileNavBtn {
@@ -2482,6 +2528,7 @@ body {
             list-style-type: none;
             color: $darkGrey;
             text-align: center;
+            justify-content: space-evenly;
     
             li p {
                 font-size: 2.5vh;
@@ -2754,8 +2801,8 @@ body {
         border-radius: 0;
 
         .taskColumn {
-            width: 96%;
-            left: 2%;
+            width: 90%;
+            left: 5%;
             height: 30%;
             margin-bottom: 5%;
             border-radius: 0;
@@ -2850,6 +2897,17 @@ body {
         button {
             margin-top: 0;
         }
+    }
+
+    //SETTINGS STYLES 
+
+    .settingsContainer {
+        z-index: 1;
+        text-align: center;
+        height: 80%;
+        width: 90%;
+        left: 5%;
+        top: 5%;
     }
 
   }

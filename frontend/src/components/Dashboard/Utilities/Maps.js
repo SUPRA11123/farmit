@@ -1200,33 +1200,35 @@ class Maps extends React.Component {
                     />
                 )}
 
+                {this.props.user.role === 'farmer' || this.props.user.role === 'field manager' ? null :
+
+                <>
+                
                 <div className="fieldsSensorsContainer">
-                    <button onClick={this.showFieldTable} id="fieldSwitch" className="fieldsSensorsBtn fieldsSensorsBtnActive"><i className="fa-regular fa-map"></i> My Fields</button>
-                    <button onClick={this.showSensorTable} id="sensorSwitch" className="fieldsSensorsBtn"><i className="fa-solid fa-wifi"></i> My Sensors</button>
-
-                    {this.props.user.role === 'farmer' || this.props.user.role === 'field manager' ? null :
-                        <>
-                            <button onClick={this.showFieldForm} id="addNewField" className='fieldsSensorsBtn'> <i className="fa-solid fa-plus"></i></button>
-                            <button onClick={this.showSensorForm} id="addNewSensor" className='hidden fieldsSensorsBtn'> <i className="fa-solid fa-plus"></i></button>
-                        </>
-                    }
-
+                    <button onClick={this.showFieldTable} id="fieldSwitch" className={`fieldsSensorsBtn fieldsSensorsBtnActive ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}><i className="fa-regular fa-map"></i> My Fields</button>
+                    <button onClick={this.showSensorTable} id="sensorSwitch" className={`fieldsSensorsBtn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}><i className="fa-solid fa-wifi"></i> My Sensors</button>
+                    <button onClick={this.showFieldForm} id="addNewField" className='fieldsSensorsBtn'> <i className="fa-solid fa-plus"></i> Field</button>
+                    <button onClick={this.showSensorForm} id="addNewSensor" className='hidden fieldsSensorsBtn'> <i className="fa-solid fa-plus"></i> Sensor</button>
                 </div>
+
+                </>
+
+                }
 
                 <div className="fieldsTableConatiner">
 
                     <h2 className="hidden" id="addFieldsHeader">Use the rectangle/polygon tool to draw the field onto map</h2>
                     <button onClick={this.showFieldForm} id="cancelNewField" className={`fieldsTableBtn hidden ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}><i className='fa-solid fa-xmark'></i> Cancel</button>
 
-                    <form id="createField" className="hidden" onSubmit={this.createField}>
+                    <form id="createField" className={`hidden ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`} onSubmit={this.createField}>
                         <label htmlFor="name">Field Name</label>
                         <input autocomplete="off" required type="text" name="name" id="fieldName" placeholder="enter name" />
                         <label htmlFor="name">Crop</label>
                         <input autocomplete="off" required type="text" name="crop_type" id="cropType" placeholder="select type" />
-                        <input id="loginInBtn" type="submit" value="Create Field" />
+                        <input id="createFieldBtn" type="submit" value="Create Field" />
                     </form>
 
-                    <form id="createSensor" class="hidden" onSubmit={this.createSensor}>
+                    <form id="createSensor" className={`hidden ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`} onSubmit={this.createSensor}>
                         <label htmlFor="sensorID">Sensor ID</label>
                         <input autocomplete="off" required type="text" name="sensorID" id="sensorId" placeholder="enter ID" />
                         <label htmlFor="sensorLat">Latitude</label>
@@ -1236,7 +1238,7 @@ class Maps extends React.Component {
                         <label htmlFor="sensorField">Field</label>
                         <input autoComplete="off" required type="text" name="sensorField" id="sensorField" placeholder="select field" disabled />
                         <input type="hidden" name="sensorFieldId" id="sensorFieldId" />
-                        <input id="loginInBtn" type="submit" value="Create sensor" />
+                        <input id="createSensorBtn" type="submit" value="Create sensor" />
                     </form>
 
                     <div id="add"></div>

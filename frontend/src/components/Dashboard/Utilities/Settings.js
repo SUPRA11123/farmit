@@ -44,7 +44,7 @@ class Settings extends React.Component {
 
             localStorage.setItem("darkMode", false);
         }
-        document.getElementById('navContainer').classList.add('smallNav');
+       
     }
 
     addTheme() {
@@ -181,13 +181,11 @@ class Settings extends React.Component {
                     <h2>General</h2>
                     <hr></hr>
 
-                    <button className="settingsBtn" onClick={this.showTandC}><i className="fa-solid fa-file-contract"></i> Terms & Conditions</button><br/>
-
                     <label className="toggle">
                         <span className="toggle-label">Dark Mode: </span>
                         <input id="themeSelector" onChange={this.changeTheme} className="toggle-checkbox" type="checkbox" />
                         <div className="toggle-switch"></div>
-                    </label><br/>
+                    </label>
                     
                     <label className="toggle">
                         <span className="toggle-label">Language: </span> 
@@ -196,6 +194,8 @@ class Settings extends React.Component {
                             <option value="Portuguese">Portuguese</option>
                         </select>
                     </label>
+
+                    <button className="settingsBtn" onClick={this.showTandC}><i className="fa-solid fa-file-contract"></i> Terms & Conditions</button>
                     
                 </section>
 
