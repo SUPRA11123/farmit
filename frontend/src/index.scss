@@ -2639,11 +2639,15 @@ body {
         gap: 5px;
 
         div, #sunsetSunrise {
-            width: 45%;
+            width: 49%;
         }
 
         div h2, div p {
             font-size: 3vw;
+        }
+
+        div {
+            margin: 0;
         }
 
 
@@ -2651,22 +2655,28 @@ body {
 
     .lineChartContainer {
         position: relative;
-        top: 5%;
+        top: 7.5%;
+        height: 40%;
+        width: 90%;
+        left: 5%;
 
         #myChart {
-            top: 5%;
+            margin-top: 40%;
         }
     }
 
     .daySelector {
-        position: relative;
-        top: 25%;
-        width: 95%;
-        left: 2.5%;
+        position: absolute;
+        top: 100%;
+        width: 100%;
         padding: 5% 0 5% 0;
 
         li button {
             font-size: 3vw;
+        }
+
+        li button {
+            font-size: 1vh;
         }
 
     
@@ -2798,6 +2808,47 @@ body {
 
         #teamTable tbody tr td {
             font-size: 1.5vh;
+        }
+    }
+
+    //PREDICTIONS STYLES
+
+    .imageInput {
+        top: 55%;
+        width: 90%;
+        left: 5%;
+        height: 35%;
+        overflow-x: scroll;
+    }
+
+    .imageOutput {
+        position: absolute;
+        width: 90%;
+        left: 5%;
+        top: 2.5%;
+        height: 50%;
+
+        .largePreview {
+            margin-top: 15%;
+        }
+    }
+
+    #thumbnailContainer {
+        display: flex;
+        flex-direction: row;
+        overflow-x: scroll;
+
+    }
+
+    .predictionsBtns {
+        width: 100%;
+        top: 42.5%;
+    }
+
+    .imageInputHeader {
+        height: 15%;
+        button {
+            margin-top: 0;
         }
     }
 

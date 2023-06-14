@@ -46,6 +46,14 @@ class Weather extends React.Component {
       }, () => {
         this.updateChart();
       });
+
+      if (forecastData[0].length <= 1) {
+        this.setState({day: 1});
+        const firstLi = document.querySelector("#daySelector li:first-child");
+        firstLi.classList.add('hidden');
+        document.getElementById("dayBtn1").classList.add('daySelectorActive');
+      }
+
     }
     
       
@@ -250,7 +258,7 @@ class Weather extends React.Component {
 
               <canvas id="myChart" height='20%' width='100px'></canvas>
 
-              <ul className={`daySelector ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
+              <ul id="daySelector" className={`daySelector ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
                   <li><button onClick={() => this.setForecast(0)} className="daySelectorActive" id="dayBtn0">Today</button></li>
                   <li><button onClick={() => this.setForecast(1)} id="dayBtn1">{this.getDay(1)}</button></li>
                   <li><button onClick={() => this.setForecast(2)} id="dayBtn2">{this.getDay(2)}</button></li>
