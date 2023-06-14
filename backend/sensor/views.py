@@ -15,5 +15,13 @@ def getSensors(request, id):
     else:
         return JsonResponse([], safe=False)
     
+@api_view(['POST'])
+def create_sensor(request):
+    serializer = SensorSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return JsonResponse(serializer.data, safe=False)
+    return JsonResponse(serializer.errors, safe=False)
+
 
 # Create your views here.

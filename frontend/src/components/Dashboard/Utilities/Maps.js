@@ -21,6 +21,10 @@ class Maps extends React.Component {
             sensor_longitude: null,
             markers: [],
         };
+
+        this.showSensorTable = this.showSensorTable.bind(this);
+        this.createSensor = this.createSensor.bind(this);
+
     }
 
     async componentDidMount() {
@@ -203,7 +207,7 @@ class Maps extends React.Component {
                     });
 
                     rectangle.addListener("click", (event) => {
-                        this.showClickedCoordinates(event.latLng);
+                        this.showClickedCoordinates(event.latLng, field);
                     });
 
                     const lat = (parseFloat(coordinates[0]) + parseFloat(coordinates[2])) / 2;
@@ -360,7 +364,7 @@ class Maps extends React.Component {
                     });
 
                     polygon.addListener("click", (event) => {
-                        this.showClickedCoordinates(event.latLng);
+                        this.showClickedCoordinates(event.latLng, field);
                     });
 
 
@@ -427,9 +431,37 @@ class Maps extends React.Component {
     }
 
 
-    showClickedCoordinates(latLng) {
+    showClickedCoordinates(latLng, field) {
         const { lat, lng } = latLng.toJSON();
         console.log(`Clicked coordinates: Latitude: ${lat}, Longitude: ${lng}`);
+
+        console.log(field);
+
+        // get sensors form by document id
+        const createSensorForm = document.getElementById("createSensor");
+
+
+        // if sensors form is visible, send the coordinates to the form
+
+        if (createSensorForm.classList.contains("hidden")) {
+            console.log("form is hidden");
+        } else {
+            console.log("form is visible");
+
+            // set the coordinates in the form
+            document.getElementById("sensorLat").value = lat;
+            document.getElementById("sensorLong").value = lng;
+            document.getElementById("sensorField").value = field.name;
+
+            document.getElementById("sensorFieldId").value = field.id;
+
+
+
+        }
+
+
+
+
     }
 
 
@@ -1035,7 +1067,9 @@ class Maps extends React.Component {
         }
     }
 
-    showFieldTable(){
+    showFieldTable() {
+
+        document.getElementById("createSensor").classList.add("hidden");
         document.getElementById('fieldTable').classList.remove('hidden');
         document.getElementById('addNewField').classList.remove('hidden');
         document.getElementById('addNewSensor').classList.add('hidden');
@@ -1044,14 +1078,105 @@ class Maps extends React.Component {
         document.getElementById('sensorSwitch').classList.remove("fieldsSensorsBtnActive");
     }
 
-    showSensorTable(){
+    showSensorTable() {
         document.getElementById('fieldTable').classList.add('hidden');
         document.getElementById('addNewField').classList.add('hidden');
         document.getElementById('addNewSensor').classList.remove('hidden');
         document.getElementById('sensorTable').classList.remove("hidden");
         document.getElementById('fieldSwitch').classList.remove("fieldsSensorsBtnActive");
         document.getElementById('sensorSwitch').classList.add("fieldsSensorsBtnActive");
+
+        axios.get(URL + "getsensors/" + this.props.farmDetails.id + "/")
+            .then((response) => {
+                console.log(response);
+
+                const sensorData = response.data;
+
+                const tableBody = document.getElementById('sensorTable').getElementsByTagName('tbody')[0];
+
+                tableBody.innerHTML = '';
+
+                sensorData.forEach((sensor) => {
+
+
+                    // Create a new row element
+                    const row = document.createElement('tr');
+
+                    // Create table cells for each sensor property and populate the data
+                    const cell1 = document.createElement('td');
+
+                    axios.get(URL + "getfieldbyid/" + sensor.field + "/")
+                        .then((response) => {
+                            console.log(response);
+                            cell1.textContent = response.data.name;
+                            row.appendChild(cell1);
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        }
+                        );
+
+                    const cell2 = document.createElement('td');
+                    cell2.textContent = sensor.name;
+                    row.appendChild(cell2);
+
+
+                    // Append the row to the table body
+                    tableBody.appendChild(row);
+                });
+
+
+
+
+            }
+            )
+            .catch((error) => {
+                console.log(error);
+            }
+            );
+
+
+
+
+
     }
+
+    createSensor(event) {
+        event.preventDefault();
+
+        const sensorID = document.getElementById('sensorId').value;
+        const sensorLat = document.getElementById('sensorLat').value;
+        const sensorLong = document.getElementById('sensorLong').value;
+        const sensorField = document.getElementById('sensorFieldId').value;
+
+        axios.post(URL + "createsensor/", {
+            name: sensorID,
+            latitude: sensorLat,
+            longitude: sensorLong,
+            farm: this.props.farmDetails.id,
+            field: sensorField
+        })
+            .then((response) => {
+                console.log(response);
+
+                document.getElementById('sensorId').value = '';
+                document.getElementById('sensorLat').value = '';
+                document.getElementById('sensorLong').value = '';
+                document.getElementById('sensorFieldId').value = '';
+
+                // hide the form
+                document.getElementById('createSensor').classList.add('hidden');
+
+                this.showSensorTable();
+
+                this.props.sensorCreated();
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+    }
+
 
     showSensorForm() {
         document.getElementById('sensorTable').classList.add('hidden');
@@ -1080,10 +1205,10 @@ class Maps extends React.Component {
                     <button onClick={this.showSensorTable} id="sensorSwitch" className="fieldsSensorsBtn"><i className="fa-solid fa-wifi"></i> My Sensors</button>
 
                     {this.props.user.role === 'farmer' || this.props.user.role === 'field manager' ? null :
-                    <>
-                        <button onClick={this.showFieldForm} id="addNewField" className='fieldsSensorsBtn'> <i className="fa-solid fa-plus"></i></button>
-                        <button onClick={this.showSensorForm} id="addNewSensor" className='hidden fieldsSensorsBtn'> <i className="fa-solid fa-plus"></i></button>
-                    </>
+                        <>
+                            <button onClick={this.showFieldForm} id="addNewField" className='fieldsSensorsBtn'> <i className="fa-solid fa-plus"></i></button>
+                            <button onClick={this.showSensorForm} id="addNewSensor" className='hidden fieldsSensorsBtn'> <i className="fa-solid fa-plus"></i></button>
+                        </>
                     }
 
                 </div>
@@ -1101,14 +1226,17 @@ class Maps extends React.Component {
                         <input id="loginInBtn" type="submit" value="Create Field" />
                     </form>
 
-                    <form id="createSensor" className="hidden" onSubmit={this.createSensor}>
+                    <form id="createSensor" class="hidden" onSubmit={this.createSensor}>
                         <label htmlFor="sensorID">Sensor ID</label>
                         <input autocomplete="off" required type="text" name="sensorID" id="sensorId" placeholder="enter ID" />
-                        <label htmlFor="sensorLong">Longitude</label>
-                        <input autocomplete="off" required type="text" name="sensorLong" id="sensorLong" placeholder="enter longitude"/>
                         <label htmlFor="sensorLat">Latitude</label>
-                        <input autocomplete="off" required type="text" name="sensorLat" id="sensorLat" placeholder="enter latitude"/>
-                        <input id="loginInBtn" type="submit" value="Create Field" />
+                        <input autocomplete="off" required type="text" name="sensorLat" id="sensorLat" placeholder="enter latitude" disabled />
+                        <label htmlFor="sensorLong">Longitude</label>
+                        <input autocomplete="off" required type="text" name="sensorLong" id="sensorLong" placeholder="enter longitude" disabled />
+                        <label htmlFor="sensorField">Field</label>
+                        <input autoComplete="off" required type="text" name="sensorField" id="sensorField" placeholder="select field" disabled />
+                        <input type="hidden" name="sensorFieldId" id="sensorFieldId" />
+                        <input id="loginInBtn" type="submit" value="Create sensor" />
                     </form>
 
                     <div id="add"></div>
@@ -1125,7 +1253,7 @@ class Maps extends React.Component {
                             <tr>
                                 <td colSpan={4}>
 
-                                    
+
                                 </td>
                             </tr>
                         </tbody>
@@ -1135,13 +1263,11 @@ class Maps extends React.Component {
                         <thead>
                             <tr>
                                 <th><h2>ID</h2></th>
-                                <th><h2>Latitude</h2></th>
-                                <th><h2>Longitude</h2></th>
                                 <th><h2>Field</h2></th>
                             </tr>
                         </thead>
                         <tbody>
-                        
+
                         </tbody>
                     </table>
 

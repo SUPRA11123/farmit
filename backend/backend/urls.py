@@ -48,6 +48,7 @@ urlpatterns = [
     path('gettasksbyassignee/<int:id>/', task_views.get_tasks_by_assignee),
     path('edituser/<int:id>/', views.editUser),  
     path('getsensors/<int:id>/', sensor_views.getSensors),
+    path('createsensor/', sensor_views.create_sensor),
     path('scan/', include(('parseImage.urls', 'parseImage'), namespace="parseImage")),
     path('deletetask/<int:id>/', task_views.delete_task),
     path('updatetaskstatus/<int:id>/', task_views.update_task_status),

@@ -48,6 +48,7 @@ class Dashboard extends React.Component {
         this.changeTheme = this.changeTheme.bind(this);
         this.getTheme = this.getTheme.bind(this);
         this.myDivRef = React.createRef();
+        this.sensorCreated = this.sensorCreated.bind(this);
 
     }
 
@@ -319,7 +320,7 @@ class Dashboard extends React.Component {
                     reject(error);
                 },
                 complete: () => {
-
+                    
                     // Set the sensor data in the state
                     const sensorArray = Object.values(sensors);
                     this.setState({ sensors: sensorArray });
@@ -362,7 +363,7 @@ class Dashboard extends React.Component {
         return new Promise((resolve, reject) => {
             axios.get(URL + "getsensors/" + this.state.farmDetails.id + "/")
                 .then(response => {
-                    // console.log(response.data);
+                    console.log(response.data);
                     this.setState({ sensorsOwned: response.data }, () => {
                         resolve(); // Resolve the promise after setState is finished
 
@@ -377,16 +378,16 @@ class Dashboard extends React.Component {
         });
     }
 
-    changeUtility(util) { 
-        this.setState({ currentDashboardScreen: util }); 
+    changeUtility(util) {
+        this.setState({ currentDashboardScreen: util });
     }
 
     displaySettings() { document.getElementById('fixedUtility').classList.add("expandFixed"); }
 
-    displayDashboardScreen(screen) { 
-        
+    displayDashboardScreen(screen) {
+
         this.setState({ currentDashboardScreen: screen });
-     }
+    }
 
     changeTheme(x) { this.setState({ isDarkMode: x }) }
 
@@ -408,9 +409,9 @@ class Dashboard extends React.Component {
             });
     }
 
-    expandMobileNav() { 
+    expandMobileNav() {
 
-        document.getElementById("navListMobile").classList.toggle('hidden'); 
+        document.getElementById("navListMobile").classList.toggle('hidden');
         document.getElementById("mobileNavBtn").classList.toggle("fa-bars");
         document.getElementById("mobileNavBtn").classList.toggle("fa-xmark");
     }
@@ -450,6 +451,16 @@ class Dashboard extends React.Component {
         alertCards.forEach((card) => {
             card.classList.toggle('alertCardAnimation');
         });
+    }
+
+    async sensorCreated(){
+
+        console.log("Sensor created");
+
+        await this.getSensors();
+
+        this.sensorLocationQuery();
+
     }
 
 
@@ -552,6 +563,8 @@ class Dashboard extends React.Component {
                             changeTheme={this.changeTheme} getTheme={this.getTheme}
                             sensors={this.state.sensors}
                             logout={this.handleLogout}
+                            sensorCreated={this.sensorCreated}
+
                         />
 
 
@@ -565,36 +578,74 @@ class Dashboard extends React.Component {
 
                     <h2>Alerts</h2>
                     <div id="alertsContainer" className='alertsContainer'>
-                    {this.state.alerts.map((alert, index) => {
-                        const matchingSensor = this.state.sensorsOwned.find(
-                        (sensor) => sensor.name === alert.sensorId
-                        );
+                        {this.state.alerts.map((alert, index) => {
 
-                        const key = `${index}-${alert.type}`;
 
-                        return (
-                        <div className="alertCard" key={key}>
-                            {alert.type === 'humidity' && (
-                            <>
-                                <i class="fa-solid fa-circle-exclamation"></i>
-                                <h2>{alert.message}</h2>
-                            </>
-                            )}
-                            {alert.type === 'temperature' && (
-                            <>
-                                <i class="fa-solid fa-circle-exclamation"></i>
-                                <h2>{alert.message}</h2>
-                            </>
-                            )}
-                            {alert.type === 'weather' && (
-                            <>
-                                <i class="fa-solid fa-cloud-sun"></i>
-                                <h2>{alert.message}</h2>
-                            </>
-                            )}
-                        </div>
-                        );
-                    })}
+                            const matchingSensor = this.state.sensorsOwned.find(
+                                (sensor) => sensor.name === alert.sensorId
+                            );
+
+                            const key = `${index}-${alert.type}`;
+
+
+                            if (alert.type === 'weather') {
+                                return (
+                                    <div className="alertCard" key={key}>
+                                        <i className="fa-solid fa-cloud-sun"></i>
+                                        <h2>{alert.message}</h2>
+                                    </div>
+                                );
+                            }
+
+                            if (this.state.user.role === "field manager") {
+                                if (matchingSensor && this.state.fields.some(field => field.id === matchingSensor.field)) {
+                                    return (
+                                        <div className="alertCard" key={key}>
+                                            {alert.type === 'humidity' && (
+                                                <>
+                                                    <i class="fa-solid fa-circle-exclamation"></i>
+                                                    <h2>{alert.message}</h2>
+                                                </>
+                                            )}
+                                            {alert.type === 'temperature' && (
+                                                <>
+                                                    <i class="fa-solid fa-circle-exclamation"></i>
+                                                    <h2>{alert.message}</h2>
+                                                </>
+                                            )}
+
+                                        </div>
+                                    );
+                                }
+
+
+
+                            } else {
+                                return (
+                                    <div className="alertCard" key={key}>
+                                        {alert.type === 'humidity' && (
+                                            <>
+                                                <i class="fa-solid fa-circle-exclamation"></i>
+                                                <h2>{alert.message}</h2>
+                                            </>
+                                        )}
+                                        {alert.type === 'temperature' && (
+                                            <>
+                                                <i class="fa-solid fa-circle-exclamation"></i>
+                                                <h2>{alert.message}</h2>
+                                            </>
+                                        )}
+
+                                    </div>
+                                );
+
+
+                            }
+
+                            return null;
+
+                        })}
+
 
 
 
