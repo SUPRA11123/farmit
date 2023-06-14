@@ -83,6 +83,18 @@ class Dashboard extends React.Component {
         this.weatherData = data;
         this.setState({ weatherData: data })
 
+
+        if (this.state.user.role === "field manager") {
+            axios.get(URL + "getfieldsbymanager/" + this.state.user.id + "/")
+                .then((response) => {
+                    this.setState({ fields: response.data });
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+        }
+
+
         // get the weather forecast
 
         const url2 = `https://api.openweathermap.org/data/2.5/forecast?lat=${farmDetails.latitude}&lon=${farmDetails.longitude}&units=${this.UNIT}&appid=${this.WEATHER_API_KEY}`;
@@ -136,6 +148,9 @@ class Dashboard extends React.Component {
 
         await this.getSensors();
 
+
+      
+
         // only call sensorLocationQuery if there are sensors
 
         if (this.state.sensorsOwned.length > 0) {
@@ -178,6 +193,7 @@ class Dashboard extends React.Component {
 
         const sensors = {};
 
+      
 
         const fetchSensorLocationData = new Promise((resolve, reject) => {
             queryApi.queryRows(sensorLocationQuery, {
@@ -190,13 +206,33 @@ class Dashboard extends React.Component {
                     // Extract the sensor ID from the topic. It's the 4th part of the topic
                     const sensorId = topic.split("/")[3];
 
+                    // get the sensor object from the sensorsOwned array
+                    const sensorFound = this.state.sensorsOwned.find((sensor) => sensor.name === sensorId);
+
+                    var match;
+                    
+                    if (this.state.user.role === "field manager"){
+                        this.state.fields.forEach((field) => {
+                            if (sensorFound.field === field.id) {
+                              // Match found between sensor and field IDs
+                              // Do something with the matched sensor and field
+                               match = true;
+                            }
+                          });
+                    }else{
+                        match = true;
+                    }
+                       
+                      
+            
+
                     if (_field === "decoded_payload_temperature") {
                         sensors[sensorId] = { ...sensors[sensorId], temperature: _value, sensorId };
 
                         // if the temperature has been above 30 degrees Celsius in the past 24 hours, send an alert.
                         // if there's already an alert for this sensor, then don't send another alert
 
-                        if (_value > 30 && !this.state.alerts.find((alert) => alert.sensorId === sensorId && alert.temperature === "high")) {
+                        if (_value > 30 && !this.state.alerts.find((alert) => alert.sensorId === sensorId && alert.temperature === "high") && match) {
                             const alertMessage = `High temperature was detected in sensor ${sensorId} in the past 24 hours! Take necessary measures to cool the environment.`;
 
                             // Create an object with the alert details
@@ -220,7 +256,7 @@ class Dashboard extends React.Component {
 
                             // Wait for the state to be updated before continuing
                             await setStatePromise;
-                        } else if (_value < 10 && !this.state.alerts.find((alert) => alert.sensorId === sensorId && alert.temperature === "low")) {
+                        } else if (_value < 10 && !this.state.alerts.find((alert) => alert.sensorId === sensorId && alert.temperature === "low") && match) {
                             const alertMessage = `Low temperature was detected in sensor ${sensorId} in the past 24 hours! Take necessary measures to warm the environment.`;
 
                             // Create an object with the alert details
@@ -255,7 +291,7 @@ class Dashboard extends React.Component {
                         // if for the past 24 hours, the humidity has been above 80%, then send an alert. 
                         // if there's already an alert for this sensor, then don't send another alert
 
-                        if (_value > 60 && !this.state.alerts.find((alert) => alert.sensorId === sensorId && alert.humidity === "high")) {
+                        if (_value > 60 && !this.state.alerts.find((alert) => alert.sensorId === sensorId && alert.humidity === "high") && match) {
                             const alertMessage = `High soil moisture was detected in sensor ${sensorId} in the past 24 hours! Make sure to maintain optimal soil moisture levels.`;
 
                             // Create an object with the alert details
@@ -280,7 +316,7 @@ class Dashboard extends React.Component {
                             // Wait for the state to be updated before continuing
                             await setStatePromise;
                         }
-                        else if (_value < 40 && !this.state.alerts.find((alert) => alert.sensorId === sensorId && alert.humidity === "low")) {
+                        else if (_value < 40 && !this.state.alerts.find((alert) => alert.sensorId === sensorId && alert.humidity === "low") && match) {
                             const alertMessage = `Low soil moisture was detected in sensor ${sensorId} in the past 24 hours! Make sure to water the plants appropriately.`;
 
                             // Create an object with the alert details
@@ -455,7 +491,6 @@ class Dashboard extends React.Component {
 
     async sensorCreated(){
 
-        console.log("Sensor created");
 
         await this.getSensors();
 

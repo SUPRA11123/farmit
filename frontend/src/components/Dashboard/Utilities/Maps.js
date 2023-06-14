@@ -395,6 +395,7 @@ class Maps extends React.Component {
     componentDidUpdate(prevProps) {
         if (prevProps.sensors !== this.props.sensors) {
 
+
             // get all the markers from state
             const markers = this.state.markers;
 
@@ -424,9 +425,8 @@ class Maps extends React.Component {
                 });
             });
 
-
-
             this.setState({ markers: markers });
+
         }
     }
 
