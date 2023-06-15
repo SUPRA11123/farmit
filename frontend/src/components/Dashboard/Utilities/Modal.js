@@ -179,7 +179,15 @@ class Modal extends React.Component {
 
     const fetchTestData = queryApi.queryRows(testQuery, {
       next: (row, tableMeta) => {
-        const time = row[4];
+        const time = new Date(row[4]).toLocaleString(undefined, {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false,
+        }).replace(',', '');
         const variable = row[6] === "decoded_payload_temperature" ? "temperature" : "humidity";
         const value = row[5];
 
