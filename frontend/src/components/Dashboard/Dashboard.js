@@ -137,6 +137,26 @@ class Dashboard extends React.Component {
             message: `The temperature could reach over ${(biggestTemperatureRegistered).toFixed(0)}°C on ${biggestTemperatureRegisteredDayName}!`,
         }
 
+        // get current date and day of the week
+
+        const currentDate = new Date();
+
+        const currentDayName = currentDate.toLocaleString('en-us', { weekday: 'long' });
+
+
+
+        // get tomorrow's day of the week
+
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+
+        const tomorrowDayName = tomorrow.toLocaleString('en-us', { weekday: 'long' });
+
+
+        if (biggestTemperatureRegisteredDayName === tomorrowDayName) {
+            alert.message = `The temperature could reach over ${(biggestTemperatureRegistered).toFixed(0)}°C tomorrow!`;
+        }
+
        
 
 
