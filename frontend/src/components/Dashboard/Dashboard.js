@@ -116,7 +116,7 @@ class Dashboard extends React.Component {
         let biggestTemperatureRegisteredDayName = "";
 
 
-        for (let i = 0; i < iterationLimit; i++) {
+        for (let i = 1; i < iterationLimit; i++) {
             const temperature = data2.list[i].main.temp;
             const date = new Date(data2.list[i].dt_txt);
             const dayName = date.toLocaleString('en-us', { weekday: 'long' });
@@ -136,6 +136,28 @@ class Dashboard extends React.Component {
             type: "weather",
             message: `The temperature could reach over ${(biggestTemperatureRegistered).toFixed(0)}°C on ${biggestTemperatureRegisteredDayName}!`,
         }
+
+        // get current date and day of the week
+
+        const currentDate = new Date();
+
+        const currentDayName = currentDate.toLocaleString('en-us', { weekday: 'long' });
+
+
+
+        // get tomorrow's day of the week
+
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+
+        const tomorrowDayName = tomorrow.toLocaleString('en-us', { weekday: 'long' });
+
+
+        if (biggestTemperatureRegisteredDayName === tomorrowDayName) {
+            alert.message = `The temperature could reach over ${(biggestTemperatureRegistered).toFixed(0)}°C tomorrow!`;
+        }
+
+       
 
 
         this.setState({ alerts: [alert] });
