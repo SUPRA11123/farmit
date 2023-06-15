@@ -2280,12 +2280,13 @@ body {
 }
 
 .darkModeBG {
-    background-color: #3d3d3d;
+    background-color: #3d3d3d !important;
     h2, p {color: white !important;}
     #homeMap::before {
         background-color: #636363 !important;
     }
     #navContainerMobile {
+        background-color: #3d3d3d !important;
         #navTop {
             background-color: #2a2a2a !important;
         }
@@ -2489,6 +2490,7 @@ body {
             width: 100%;
             z-index: 100;
             animation: slideInFromTop 0.2s ease-in-out forwards;
+            background-color: white;
 
             ul {
                 height: 100%;

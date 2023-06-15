@@ -143,7 +143,7 @@ class Predictions extends React.Component {
         <section className='imageInput'>
           <div className={`imageInputHeader ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
             {showClearButton && (
-              <button className="imageClearBtn" onClick={this.clearAllImages}>
+              <button className={`imageClearBtn ${localStorage.getItem('darkMode') === 'true' ? 'darkMode' : ''}`} onClick={this.clearAllImages}>
                 <i className="fa-solid fa-delete-left"></i>
                 <span className="clearAllText">Clear All</span>
               </button>
@@ -220,9 +220,7 @@ class Predictions extends React.Component {
           {showProcessButton && (
             <button
               id='processImgs'
-              className={`${
-                localStorage.getItem('darkMode') === 'true' ? 'darkMode' : ''
-              }`}
+              className={`${localStorage.getItem('darkMode') === 'true' ? 'darkMode' : ''}`}
               onClick={this.processImages}
               disabled={!hasUploadedImages}
             >
