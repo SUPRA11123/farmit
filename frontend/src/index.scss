@@ -2754,7 +2754,7 @@ body {
     //FIELDS STYLES
 
     .smallMap {
-        height: 45% !important;
+        height: 35% !important;
     }
 
     .title2 {
@@ -2767,19 +2767,31 @@ body {
         z-index: 4;
         width: 90%;
         left: 5%;
-        top: 50%;
-        height: 40%;
+        top: 40%;
+        height: 50%;
         animation-delay: 0ms;
 
         .body {
             width: 100%;
+            margin-left: 0;
+            height: 70%;
+            margin-top: 5%;
+
+            .zoomOptions {
+                width: 100%;
+                justify-content: center;
+            }
         }
 
         .timerange-dropdown {
-            display: none;
+           
         }
 
         .resetZoomButton {
+         
+        }
+
+        .exportButton {
             display: none;
         }
     }
