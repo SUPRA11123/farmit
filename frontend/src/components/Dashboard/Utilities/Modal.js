@@ -109,6 +109,8 @@ class Modal extends React.Component {
 
   exportDataToCSV = () => {
     // Show the date inputs
+    document.getElementById('sensorGraph').classList.add("hidden");
+    document.getElementById('zoomOptions').classList.add("hidden");
     this.setState({ showDateInputs: true });
   };
 
@@ -147,9 +149,15 @@ class Modal extends React.Component {
 
 
   handleExportCSV = () => {
+
     const { startDate, endDate } = this.state;
     // Perform the CSV export with the selected start and end dates
 
+    const formattedStartDate = new Date(startDate).toISOString().slice(0, -5) + "Z";
+    const formattedEndDate = new Date(endDate).toISOString().slice(0, -5) + "Z";
+
+    console.log(formattedStartDate);
+    console.log(formattedEndDate);
 
     // get data from influxdb
     const influxDB = new InfluxDB({
@@ -162,7 +170,7 @@ class Modal extends React.Component {
 
     const testQuery = `
     from(bucket: "test")
-    |> range(start: ${startDate}, stop: ${endDate})
+    |> range(start: ${formattedStartDate}, stop: ${formattedEndDate})
     |> filter(fn: (r) => r["_measurement"] == "mqtt_consumer")
     |> filter(fn: (r) => r["_field"] == "decoded_payload_temperature" or r["_field"] == "decoded_payload_humidity")
   `;
@@ -388,36 +396,39 @@ class Modal extends React.Component {
         </div>
         <div className="body">
 
-        <select value={this.selectedTimeOption} onChange={this.handleTimeRangeChange} className="timerange-dropdown">
-            {timeOptions.map((option) => (
-              <option key={option.value} value={option.value}>{option.label}</option>
-            ))}
-          </select>
-
-          <button className="resetZoomButton" onClick={this.resetZoom}>Reset Zoom</button>
-
-          <canvas ref={this.chartRef} style={{ height: "250px", width: "95%" }} />
+          <canvas id="sensorGraph" ref={this.chartRef} style={{ height: "250px", width: "95%" }} />
         
 
           <br />
           {showDateInputs && (
-            <div>
+            <form id="exportSensorDataForm" onSubmit={this.handleExportCSV}>
               <label htmlFor="startDate">Start Date:</label>
-              <input type="text" id="startDate" value={startDate} onChange={this.handleStartDateChange} />
-              <br />
+              <input type="datetime-local" id="startDate"  value={startDate} onChange={this.handleStartDateChange} required/>
+              <br /><br />
               <label htmlFor="endDate">End Date:</label>
-              <input type="text" id="endDate" value={endDate} onChange={this.handleEndDateChange} />
-              <br />
-              <button onClick={this.handleExportCSV}>Export</button>
-            </div>
-          )}
-          {!showDateInputs && (
-            <div className="exportButton">
-              <button onClick={this.exportDataToCSV}>CSV <i class="fa-sharp fa-solid fa-download"></i></button>
-            </div>
+              <input type="datetime-local" id="endDate" value={endDate} onChange={this.handleEndDateChange} required />
+              <br /><br />
+              <input type="submit" value="Export data" />
+            </form>
           )}
 
+          <div id="zoomOptions" className="zoomOptions">
+            <select value={this.selectedTimeOption} onChange={this.handleTimeRangeChange} className="timerange-dropdown">
+              {timeOptions.map((option) => (
+                <option key={option.value} value={option.value}>{option.label}</option>
+              ))}
+            </select>
+
+            <button className="resetZoomButton" onClick={this.resetZoom}>Reset Zoom</button>
+            {!showDateInputs && (
+              <div className="exportButton">
+                <button onClick={this.exportDataToCSV}><i class="fa-sharp fa-solid fa-download"></i> Download</button>
+              </div>
+            )}
+          </div>
+        
         </div>
+    
       </div>
     );
   }

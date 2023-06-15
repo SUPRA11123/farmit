@@ -1211,7 +1211,7 @@ body {
 }
 
 .smallMap {
-    height: 40% !important;
+    height: 30% !important;
 }
 
 //TEAM STYLES
@@ -1752,9 +1752,9 @@ body {
 
   .modalContainer {
     position: absolute;
-    top: 52.5%;
+    top: 42.5%;
     width: 52.5%;
-    height: 45%;
+    height: 55%;
     border-radius: 15px;
     background-color: white;
     border: 2px solid #D9D9D9;
@@ -1765,11 +1765,22 @@ body {
     animation-delay: 0.5s; 
 
     .body {
-        width: 85%;
-        height: 100%;
+        width: 90%;
+        margin-left: 5%;
+        height: 80%;
         display: flex;
         align-items: flex-end;
         justify-content: center;
+
+        .zoomOptions {
+            position: absolute;
+            bottom: 0;
+            height: 10%;
+            width: 80%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
     }
    
   }
@@ -1801,6 +1812,18 @@ body {
 
 .highlighted {
     background-color: $blue; /* Customize the highlighting style as desired */
+}
+
+#exportSensorDataForm {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 40%;
+    text-align: center;
+
+    label {
+        margin-bottom: 20px;
+    }
 }
 
 //PREDICTIONS STYLES
@@ -2371,46 +2394,43 @@ body {
   
 
 .exportButton {
-    display: none;
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
+    display: inline;
+    position: absolute;
+    right: 0;
   }
   
   .exportButton button {
-    background-color: #4CAF50;
+    background-color: $green;
     color: white;
-    padding: 10px 20px;
     border: none;
     border-radius: 4px;
+    padding: 5px 10px;
     cursor: pointer;
-    font-size: 16px;
   }
 
   .timerange-dropdown{
-    position: absolute;
-    right: 2%;
-    top: 50%;
-    transform: translateY(-50%);
+    position: relative;
     background-color: rgba(255, 255, 255, 0.8);
     border-radius: 5px;
     // make it more beautiful
     z-index: 20;
+    margin-right: 2px;
   }
     .resetZoomButton {
        // put on the bottom right corner
-         position: absolute;
-            top: 55%;
-            right: 2%;
-            background-color: #4CAF50;
-            color: white;
-            border-radius: 5px;
-            border: none;
+        position: relative;
+        background-color: $grey;
+        border-radius: 5px;
+        border: none;
+        padding: 5px 10px;
+        margin-left: 2px;
+        color: $darkGrey;
 
       }
       
       .resetZoomButton:hover {
-        background-color: #0056b3;
+        color: black;
+        cursor: pointer;
       }
    
 
