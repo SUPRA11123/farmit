@@ -157,10 +157,42 @@ class Dashboard extends React.Component {
             alert.message = `The temperature could reach over ${(biggestTemperatureRegistered).toFixed(0)}°C tomorrow!`;
         }
 
-       
-
-
         this.setState({ alerts: [alert] });
+
+
+        axios.get(URL + "gettasksbyassignee/" + this.state.user.id + "/")
+            .then((response) => {
+                // get the count of tasks
+                const tasks = response.data;
+
+
+                // only count the tasks that are not completed
+                const tasksCount = tasks.filter((task) => task.status !== "Completed").length;
+
+
+
+                if (tasksCount > 0) {
+                    const tasksAlert = {
+                        type: "tasks",
+                        message: `You have ${tasksCount} tasks assigned to you!`,
+                    };
+
+                    // Add tasks alert to the alerts array
+                    this.setState((prevState) => ({
+                        alerts: [...prevState.alerts, tasksAlert],
+                    }));
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+
+
+
+
+
+
 
 
         // get sensors from farm
@@ -171,7 +203,7 @@ class Dashboard extends React.Component {
         await this.getSensors();
 
 
-      
+
 
         // only call sensorLocationQuery if there are sensors
 
@@ -215,7 +247,7 @@ class Dashboard extends React.Component {
 
         const sensors = {};
 
-      
+
 
         const fetchSensorLocationData = new Promise((resolve, reject) => {
             queryApi.queryRows(sensorLocationQuery, {
@@ -232,21 +264,21 @@ class Dashboard extends React.Component {
                     const sensorFound = this.state.sensorsOwned.find((sensor) => sensor.name === sensorId);
 
                     var match;
-                    
-                    if (this.state.user.role === "field manager"){
+
+                    if (this.state.user.role === "field manager") {
                         this.state.fields.forEach((field) => {
                             if (sensorFound.field === field.id) {
-                              // Match found between sensor and field IDs
-                              // Do something with the matched sensor and field
-                               match = true;
+                                // Match found between sensor and field IDs
+                                // Do something with the matched sensor and field
+                                match = true;
                             }
-                          });
-                    }else{
+                        });
+                    } else {
                         match = true;
                     }
-                       
-                      
-            
+
+
+
 
                     if (_field === "decoded_payload_temperature") {
                         sensors[sensorId] = { ...sensors[sensorId], temperature: _value, sensorId };
@@ -378,7 +410,7 @@ class Dashboard extends React.Component {
                     reject(error);
                 },
                 complete: () => {
-                    
+
                     // Set the sensor data in the state
                     const sensorArray = Object.values(sensors);
                     this.setState({ sensors: sensorArray });
@@ -511,7 +543,7 @@ class Dashboard extends React.Component {
         });
     }
 
-    async sensorCreated(){
+    async sensorCreated() {
 
 
         await this.getSensors();
@@ -638,6 +670,7 @@ class Dashboard extends React.Component {
                         {this.state.alerts.map((alert, index) => {
 
 
+
                             const matchingSensor = this.state.sensorsOwned.find(
                                 (sensor) => sensor.name === alert.sensorId
                             );
@@ -647,15 +680,72 @@ class Dashboard extends React.Component {
 
                             if (alert.type === 'weather') {
                                 return (
-                                    <div className="alertCard" key={key}>
-                                        <i className="fa-solid fa-cloud-sun"></i>
+                                    <div
+                                        className={`alertCard ${this.state.currentDashboardScreen === "weather" ? "navActive" : ""
+                                            }`}
+                                        key={key}
+                                        onClick={() =>
+                                            {
+                                                this.setState({ currentDashboardScreen: "weather" }, this.handleMobileClick);
+                                                this.toggleAlertMenu()
+                                            }
+                                        }
+                                    >
+                                         <i className="fa-solid fa-cloud-sun"></i>
                                         <h2>{alert.message}</h2>
                                     </div>
                                 );
+                               
+                            }
+                            if (
+                                (this.state.user.role === "field manager" ||
+                                    this.state.user.role === "farmer") &&
+                                alert.type === "tasks"
+                            ) {
+                                return (
+                                    <div
+                                        className={`alertCard ${this.state.currentDashboardScreen === "tasks" ? "navActive" : ""
+                                            }`}
+                                        key={key}
+                                        onClick={() =>
+                                            {
+                                                this.setState({ currentDashboardScreen: "tasks" }, this.handleMobileClick);
+                                                this.toggleAlertMenu()
+                                            }
+                                        }
+                                    >
+                                        <i className="fas fa-tasks"></i>
+                                        <h2>{alert.message}</h2>
+                                    </div>
+                                );
+
                             }
 
-                            if (this.state.user.role === "field manager") {
-                                if (matchingSensor && this.state.fields.some(field => field.id === matchingSensor.field)) {
+
+                                if (this.state.user.role === "field manager") {
+                                    if (matchingSensor && this.state.fields.some(field => field.id === matchingSensor.field)) {
+                                        return (
+                                            <div className="alertCard" key={key}>
+                                                {alert.type === 'humidity' && (
+                                                    <>
+                                                        <i class="fa-solid fa-circle-exclamation"></i>
+                                                        <h2>{alert.message}</h2>
+                                                    </>
+                                                )}
+                                                {alert.type === 'temperature' && (
+                                                    <>
+                                                        <i class="fa-solid fa-circle-exclamation"></i>
+                                                        <h2>{alert.message}</h2>
+                                                    </>
+                                                )}
+
+                                            </div>
+                                        );
+                                    }
+
+
+
+                                } else {
                                     return (
                                         <div className="alertCard" key={key}>
                                             {alert.type === 'humidity' && (
@@ -673,35 +763,13 @@ class Dashboard extends React.Component {
 
                                         </div>
                                     );
+
+
                                 }
 
+                                return null;
 
-
-                            } else {
-                                return (
-                                    <div className="alertCard" key={key}>
-                                        {alert.type === 'humidity' && (
-                                            <>
-                                                <i class="fa-solid fa-circle-exclamation"></i>
-                                                <h2>{alert.message}</h2>
-                                            </>
-                                        )}
-                                        {alert.type === 'temperature' && (
-                                            <>
-                                                <i class="fa-solid fa-circle-exclamation"></i>
-                                                <h2>{alert.message}</h2>
-                                            </>
-                                        )}
-
-                                    </div>
-                                );
-
-
-                            }
-
-                            return null;
-
-                        })}
+                            })}
 
 
 
