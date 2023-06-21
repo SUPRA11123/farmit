@@ -52,4 +52,5 @@ urlpatterns = [
     path('scan/', include(('parseImage.urls', 'parseImage'), namespace="parseImage")),
     path('deletetask/<int:id>/', task_views.delete_task),
     path('updatetaskstatus/<int:id>/', task_views.update_task_status),
+    path('newscan/', include(('predict.urls', 'predict'), namespace="predict")),
     ]

@@ -36,7 +36,7 @@ class Home extends React.Component {
     const map = new window.google.maps.Map(document.getElementById("homeMap"), {
       mapTypeId: "satellite",
       center: { lat: this.props.farmDetails.latitude, lng: this.props.farmDetails.longitude },
-      zoom: 14,
+      zoom: 17,
       streetViewControl: false,
       mapTypeControl: false,
       fullscreenControl: false,
@@ -481,6 +481,10 @@ class Home extends React.Component {
     const forecastLabels = this.state.forecastLabels;
     const ctx = document.getElementById('homeChart').getContext('2d');
 
+    const evenIndices = forecastData.map((_, index) => index).filter(index => index % 2 === 0);
+    const reducedForecastData = evenIndices.map(index => forecastData[index]);
+    const reducedForecastLabels = evenIndices.map(index => forecastLabels.flat()[index]);
+
     if (this.myChart) {
       this.myChart.destroy();
     }
@@ -491,14 +495,20 @@ class Home extends React.Component {
     this.myChart = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: forecastLabels.flat(),
+        labels: reducedForecastLabels.flat(),
         datasets: [{
           label: 'Temperature',
-          data: forecastData,
+          data: reducedForecastData,
           borderColor: '#0ba837',
           tension: 0,
-          backgroundColor: '#BAECB8',
-          pointStyle: 'rectRounded',
+          backgroundColor: ctx => {
+            const gradient = ctx.chart.ctx.createLinearGradient(0, 0, 0, ctx.chart.height);
+            gradient.addColorStop(0, '#0ba837'); // Start color
+            gradient.addColorStop(1, '#BAECB8'); // End color with 0 opacity
+            return gradient;
+          },
+          pointStyle: 'circle',
+          pointRadius: 4,
           fill: true,
           lineTension: 0.4,
         }],
@@ -513,6 +523,7 @@ class Home extends React.Component {
           y: {
             grid: {
               display: true,
+              color: 'rgba(0, 0, 0, 0.1)',
             },
             suggestedMin: 0,
             suggestedMax: 40,
@@ -526,12 +537,14 @@ class Home extends React.Component {
           },
           x: {
             grid: {
-              display: false,
+              display: true,
+              color: 'rgba(0, 0, 0, 0.1)',
             },
             ticks: {
               maxRotation: 0,
               minRotation: 0,
               color: labelColor,
+              maxTicksLimit: 10,
             },
           },
         },
@@ -606,7 +619,7 @@ class Home extends React.Component {
 
         </div>
 
-        <div id='alertWidget' onClick={() => this.props.displayScreen("weather")} className={`col4Card ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
+        <div id='alertWidget' onClick={() => this.props.displayScreen("weather")} className={`animate__slideInUp col4Card ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
           <h2>5 Day Weather Forecast</h2>
           <canvas id="homeChart" height='25%' width='100px'></canvas>
         </div>

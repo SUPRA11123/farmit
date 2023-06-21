@@ -1,6 +1,7 @@
 import React from 'react';
 import EXIF from 'exif-js';
 import axios from "axios";
+import { Chart } from 'chart.js/auto';
 
 const URL = process.env.REACT_APP_URL;
 
@@ -16,6 +17,12 @@ class Predictions extends React.Component {
 
     this.processImages = this.processImages.bind(this);
     this.clearAllImages = this.clearAllImages.bind(this);
+    this.scanImages = this.scanImages.bind(this);
+    this.chartRef = React.createRef();
+  }
+
+  componentDidMount() {
+    this.createBarChart();
   }
 
   handleFileUpload = (event) => {
@@ -63,6 +70,49 @@ class Predictions extends React.Component {
     };
 
     reader.readAsDataURL(imageFile);
+  }
+
+  scanImages() {
+
+    const { selectedImages } = this.state;
+
+    const formData = new FormData();
+  
+    selectedImages.forEach((imageFile, index) => {
+      formData.append('fileup', imageFile);
+    });
+
+    const getCSRFToken = () => {
+      const name = 'csrftoken=';
+      const decodedCookie = decodeURIComponent(document.cookie);
+      const cookieArray = decodedCookie.split(';');
+      for (let i = 0; i < cookieArray.length; i++) {
+        let cookie = cookieArray[i];
+        while (cookie.charAt(0) === ' ') {
+          cookie = cookie.substring(1);
+        }
+        if (cookie.indexOf(name) === 0) {
+          return cookie.substring(name.length, cookie.length);
+        }
+      }
+      return null;
+    };
+    
+    const csrfToken = getCSRFToken();
+
+    axios.post('http://localhost:8000/newscan/results/', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'X-CSRFToken': csrfToken,
+      },
+    
+    })
+      .then((response) => {
+        console.log(response.data); // Handle the response here
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   processImages() {
@@ -126,6 +176,41 @@ class Predictions extends React.Component {
       selectedImageDate: null,
     });
   }
+
+  createBarChart() {
+    const ctx = this.chartRef.current.getContext('2d');
+
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Green', 'Red', 'Blue'],
+        datasets: [
+          {
+            label: 'Bars',
+            data: [74, 89, 81],
+            backgroundColor: ['#52AF4E', '#D82C2C', '#6100FF'],
+            barBorderRadius: 5,
+    
+          },
+        ],
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+      },
+    });
+    
+    
+    
+  }
   
   render() {
     const {
@@ -148,7 +233,6 @@ class Predictions extends React.Component {
                 <span className="clearAllText">Clear All</span>
               </button>
             )}
-            <h2 id='imageInputH2'>Input</h2>
           </div>
   
           {hasUploadedImages && (
@@ -195,7 +279,6 @@ class Predictions extends React.Component {
   
         <section id='imageOutput' className='imageOutput'>
           <div className={`imageInputHeader ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
-            <h2>Preview Image</h2>
           </div>
           
           {selectedImage ? (
@@ -213,6 +296,18 @@ class Predictions extends React.Component {
           ) : (
             <p>No image selected</p>
           )}
+          <div className='predictionDataContainer'>
+
+            <div className='barChartContainer'>
+              <h2>Maturity Levels</h2>
+              <canvas width="90%" ref={this.chartRef}></canvas>
+            </div>
+
+            <div className='countContainer'>
+
+            </div>
+
+          </div>
           {/* Render output here */}
         </section>
   
@@ -221,10 +316,10 @@ class Predictions extends React.Component {
             <button
               id='processImgs'
               className={`${localStorage.getItem('darkMode') === 'true' ? 'darkMode' : ''}`}
-              onClick={this.processImages}
+              onClick={this.scanImages}
               disabled={!hasUploadedImages}
             >
-              Process Images
+              Scan
             </button>
           )}
   

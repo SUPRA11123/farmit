@@ -46,7 +46,7 @@ class Maps extends React.Component {
         const map = new window.google.maps.Map(document.getElementById("map"), {
             mapTypeId: "satellite",
             center: { lat: this.props.farmDetails.latitude, lng: this.props.farmDetails.longitude },
-            zoom: 14,
+            zoom: 17,
             streetViewControl: false,
             mapTypeControl: false,
             fullscreenControl: false,
@@ -80,7 +80,7 @@ class Maps extends React.Component {
 
         centreMap.addEventListener("click", () => {
             map.setCenter(marker.getPosition());
-            map.setZoom(14);
+            map.setZoom(17);
         });
 
         if (fields.length > 0) {
@@ -232,7 +232,7 @@ class Maps extends React.Component {
 
                     row.addEventListener("click", () => {
                         map.setCenter({ lat: lat, lng: lng });
-                        map.setZoom(14);
+                        map.setZoom(18);
                     });
 
 

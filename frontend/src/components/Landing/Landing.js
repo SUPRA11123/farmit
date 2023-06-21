@@ -129,6 +129,7 @@ class Landing extends React.Component {
 
     var farmMap = document.getElementById("mapContainer");
     farmMap.classList.remove("hidden");
+    document.getElementById('landingGraphic').classList.add('hidden');
 
     document.getElementById("mapPrompt").classList.remove("hidden");
 
@@ -313,7 +314,7 @@ class Landing extends React.Component {
             
             <input id="accountNext" type="submit" value="Next" />
 
-            <p><span onClick={this.toLogin}>Login to a account</span></p>
+            <p><span onClick={this.toLogin}>Login to an account</span></p>
 
           </form>
 
@@ -363,13 +364,16 @@ class Landing extends React.Component {
 
             <input id="loginInBtn" type="submit" value="Login" />
 
-            <p><span onClick={this.toRegister}>Register your account</span></p>
+            <p>Already have an account? <span onClick={this.toRegister}> Log in</span></p>
 
           </form>
 
         </main>
 
         <aside>
+
+        <img id="landingGraphic" src={require('../../resources/img/vectorsmall.png')} alt="Agrosensor graphic" />
+
           <div className="hidden" id='mapContainer'>
             <Map markerPosition={{ lat: this.state.marker.markerLat, lng: this.state.marker.markerLong }} onClick={this.handleMapClick} center={{ lat: this.state.country.countryLat, lng: this.state.country.countryLong }}></Map>
           </div>

@@ -21,7 +21,7 @@ $yellow: #FFE000;
 
 .hidden {
     visibility: hidden;
-    display: none;
+    display: none !important;
 }
 
 
@@ -44,8 +44,6 @@ body {
 
 #landingContainer {
 
-    background-color: $green;
-
     aside {
         position: absolute;
         right: 0;
@@ -54,6 +52,13 @@ body {
         display: flex;
         justify-content: center;
         align-items: center;
+
+        img {
+            position: absolute;
+            right: -7.5%;
+            bottom: -15%;
+            z-index: -1;
+        }
         
 
         #mapContainer {
@@ -73,7 +78,6 @@ body {
     color: black;
     font-family: $font1;
     overflow: hidden;
-    background-color: white;
 
     img {
         position: absolute;
@@ -97,9 +101,16 @@ body {
         transform: translate(-50%, -50%);
 
         p { 
-            text-align: center;
-            color: #0AA837;
-            cursor: pointer;
+            margin-top: 10%;
+            text-align: left;
+            font-weight: bold;
+            font-size: 1.5vh;
+            color: #B0B0B0;
+            span {
+                color: #0AA837;
+                cursor: pointer;
+                margin-left: 10px;
+            }
         }
 
         p :hover {
@@ -108,7 +119,8 @@ body {
 
        label {
         font-size: 2vh;
-        margin-top: 10%;
+        margin-top: 5%;
+        font-weight: 300;
        }
 
         input[type=email], input[type=password], input[type=text], select  {
@@ -116,9 +128,10 @@ body {
             font-size: 2vh;
             padding: 12px 20px;
             margin-top: 2.5%;
-            margin-bottom: 5%;
+            margin-bottom: 2.5%;
             box-sizing: border-box;
-            border-radius: 5px;
+            border-radius: 10px;
+            border: 1px solid #B0B0B0;
         }
 
         input[type=text]:focus{
@@ -530,15 +543,16 @@ body {
         animation-delay: 0.5s; 
       }
       
-      @keyframes fadeIn {
-        0% {
-          opacity: 0;
-        }
-        100% {
-          opacity: 1;
-        }
-      }
 }
+
+@keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
 
 .alertMenuAnimation {
     animation: expandAlertMenu 0.5s ease forwards;
@@ -613,6 +627,9 @@ body {
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    animation: fadeIn 1s forwards;
+    animation-delay: 0.5s;
+    opacity: 0;
 
     h2 {
         font-size: 2.5vh;
@@ -632,10 +649,35 @@ body {
 
 }
 
+@keyframes slide-up {
+    0% {
+      top: 20%;
+      opacity: 0;
+    }
+    100% {
+      top: 15%;
+      opacity: 1;
+    }
+  }
+
+#taskWidget {
+    background-color: $grey;
+}
+
+#alertWidget {
+    animation: slide-up 1s forwards;
+}
+
+#weatherWidget {
+    background: rgb(190,217,255);
+    background: linear-gradient(0deg, rgba(190,217,255,1) 0%, rgba(66,143,255,1) 100%);
+    animation: slide-up 1s forwards;
+}
+
 .Col2Card:hover {
     outline: 2px solid $darkGrey;
     cursor: pointer;
-    h1 {color: $green !important;}
+    h1 {color: black !important;}
 }
 
 .Col2Card {
@@ -644,13 +686,15 @@ body {
     left: 0%;
     width: 30%;
     height: 35%;
-    background-color: $grey;
+    background-color: white;
     border-radius: 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: $darkGrey;
+    
+    
+    
 
     #widgetPin {
         color: $red;
@@ -666,13 +710,14 @@ body {
     }
 
     h1 {
-        color: black;
+        color: white;
         font-size: 8vh;
         margin: 0;
         font-weight: bold;
         span {
             position: absolute;
             font-weight: normal;
+            color: white;
         }
     }
 
@@ -711,7 +756,7 @@ body {
         font-size: 2.5vh;
         text-align: center;
         margin-top: 2.5%;
-        color: $darkGrey;
+        color: black;
     }
 
     #homeChart {
@@ -729,12 +774,15 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    animation: fadeIn 1s forwards;
+    animation-delay: 0.5s;
+    opacity: 0;
 
     h2 {
         text-align: center;
         width: 100%;
         font-size: 2.5vh;
-        color: $darkGrey;
+        color: black;
         
     }
 
@@ -774,6 +822,9 @@ body {
     height: 45%;
     border-radius: 15px;
     cursor: pointer;
+    animation: fadeIn 1s forwards;
+    animation-delay: 0.5s;
+    opacity: 0;
 }
 
 #homeMap:hover {
@@ -824,9 +875,10 @@ body {
     width: 100%;
     left: 0%;
     margin-bottom: 2%;
-    background-color: $grey;
+    background: rgb(190,217,255);
+    background: linear-gradient(0deg, rgba(190,217,255,1) 0%, rgba(66,143,255,1) 100%);
     border-radius: 5px;
-    color: $green;
+    color: white;
     font-size: 2vh;
     display: flex;
     align-items: center;
@@ -840,7 +892,7 @@ body {
     ul {
         margin-right: 2.5%;
         list-style: none;
-        color: $darkGrey;
+        color: white;
     }
 }
 
@@ -994,6 +1046,7 @@ body {
     overflow-x: visible;
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;
+    z-index: 30;
 
     #createField, #createSensor {
         top: 0;
@@ -1006,6 +1059,7 @@ body {
         align-items: center;
         flex-direction: column;
         font-family: $font1;
+        
 
 
         label {
@@ -1178,7 +1232,7 @@ body {
 
  #add{
  
-    position: absolute;
+    
     top: 0;
     height: 100%;
     width: 100%;
@@ -1186,6 +1240,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 20;
 
     button {
         margin: 5px;
@@ -1268,6 +1323,7 @@ body {
         margin-right: 10px;
         margin-top: 0;
         background-color: #D9D9D9;
+        overflow-y: hidden;
 
         h2 {
             position: absolute;
@@ -1308,8 +1364,7 @@ body {
             top: 5%;
             overflow-y: scroll;
             border-radius: 15px;
-            margin: 5px;
-            margin-top: 0;
+            margin-top: 5%;
         }
 
         .taskContainer:first-child {
@@ -1328,14 +1383,17 @@ body {
             margin: 5%;
             border-radius: 5px;
             background-color: white;
-            padding-bottom: 5%;
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            padding-bottom: 5px;
+            margin-bottom: 2.5%;
+            margin-top: 2.5%;
             
 
             h3 {
                 padding-top: 5%;
                 margin: 10px;
-                font-size: 2vh;
+                margin-bottom: 0;
+                font-size: 2.5vh;
+                font-weight: normal;
             }
 
             span {
@@ -1348,16 +1406,17 @@ body {
 
             p {
                 margin: 10px;
+                margin-top: 2px;
                 font-size: 1.75vh;
                 color: $green;
-                margin-bottom: 7.5%;
+                margin-bottom: 10%;
             }
 
             .taskSettings {
-                font-size: 3vh;
+                font-size: 2.5vh;
                 position: absolute;
-                right: 5%;
-                top: 10%;
+                right: 2.5%;
+                top: 5%;
                 color: $darkGrey;
                 cursor: pointer;
 
@@ -1832,8 +1891,8 @@ body {
     position: absolute;
     left: 0;
     top: 10%;
-    height: 87.5%;
-    width: 35%;
+    height: 75%;
+    width: 40%;
     border: 2px solid #D9D9D9;
     border-radius: 15px;
     overflow: hidden;
@@ -1846,8 +1905,7 @@ body {
     h2 {
         font-size: 2.5vh;
         font-family: $font1;
-        width: 100%;
-        text-align: center;
+        text-align: left;
     }
 
     #uploadImgs {
@@ -1855,8 +1913,8 @@ body {
         font-size: 2.5vh;
         font-family: $font1;
         border: none;
-        background-color: $grey;
-        color: black;
+        background-color: $green;
+        color: white;
         border-radius: 5px;
         padding: 10px 20px;
         margin-bottom: 2.5%;
@@ -1867,11 +1925,6 @@ body {
 
     }
 
-    #uploadImgs:hover {
-        color: $green;
-    }
-
-
 }
 
 .imageInputHeader {
@@ -1880,12 +1933,9 @@ body {
     top: 0;
     width: 100%;
     border-radius: 15px 15px 0 0;
-    background-color: $grey;
-    border-bottom: 2px solid #D9D9D9;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
-
     
 }
 
@@ -1922,8 +1972,8 @@ body {
     position: absolute;
     top: 10%;
     right: 0;
-    height: 87.5%;
-    width: 62.5%;
+    height: 75%;
+    width: 57.5%;
     border: 2px solid #D9D9D9;
     border-radius: 25px;
     display: flex;
@@ -1934,8 +1984,10 @@ body {
     h2 {
         font-size: 2.5vh;
         font-family: $font1;
-        width: 100%;
-        text-align: center;
+        text-align: left;
+        width: 95%;
+        margin-left: 5%;
+        font-weight: normal;
     }
 
 }
@@ -1985,6 +2037,8 @@ body {
 }
 
 .largePreview {
+    position: absolute;
+    top: 5%;
     height: 60%;
     object-fit:cover;
     border-radius: 15px;
@@ -2029,6 +2083,7 @@ body {
     object-fit: cover;
     cursor: pointer;
     filter:grayscale(1);
+    border-radius: 5px;
   }
 
   .thumbnail:hover {
@@ -2037,6 +2092,43 @@ body {
   
   .thumbnail.selected {
     filter: none;
+  }
+
+  .predictionDataContainer {
+    position: absolute;
+    width: 100%;
+    height: 30%;
+    bottom: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+
+    .barChartContainer {
+        height: 90%;
+        width: 30%;
+        background-color: $grey;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        flex-direction: column;
+
+        h2 {
+            font-size: 1.8vh;
+            font-weight: normal;
+            margin: 0;
+            width: 100%;
+            text-align: center;
+        }
+    }
+
+    .countContainer {
+        height: 90%;
+        width: 60%;
+        background-color: $grey;
+        border-radius: 15px;
+    }
   }
 
 //SETTINGS STYLES
@@ -2662,7 +2754,7 @@ body {
     #weatherWidget {
         width: 90%;
         left: 5%;
-        top: 10%;
+        top: 10% !important;
         height: 25%;
     }
 
@@ -2694,7 +2786,6 @@ body {
         width: 95%;
         left: 2.5%;
         background-color: $grey;
-        color: $green;
     }
 
     .weatheDataContainer { 

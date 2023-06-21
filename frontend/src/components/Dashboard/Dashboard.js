@@ -556,7 +556,7 @@ class Dashboard extends React.Component {
                                 <i className="fa-solid fa-bullseye"></i>
                                 <p>Tasks</p>
                             </li>
-                            {this.state.user.role === 'owner' && (
+                            {this.state.user.role != 'farmer' && (
                                 <li onClick={() => this.setState({ currentDashboardScreen: "team" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "team" ? "navActive" : ""}>
                                     <i className="fa-solid fa-people-group"></i>
                                     <p>Team</p>

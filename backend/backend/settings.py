@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     'sensor',
     'parseImage',
     'rest_framework',
-    'corsheaders'
+    'corsheaders',
+    'predict'
     
 ]
 
@@ -154,5 +155,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
+    'http://localhost:8000'
     #'https://farm.agrosensor.org'
+]
+
+CORS_ALLOWED_METHODS = [
+    'GET',
+    'POST',
+    'PUT',
+    'DELETE',
+]
+
+CORS_ALLOWED_HEADERS = [
+    'Authorization',
+    'Content-Type',
 ]
