@@ -185,7 +185,7 @@ def yolov5_view(request):
         # If it's not a POST request, render the form template
         return render(request, 'upload.html')
     # Assuming you have a form with an 'image' field for file upload
-    uploaded_files = request.FILES.getlist('images')
+    uploaded_files = request.FILES.getlist('fileup')
     fs = FileSystemStorage()
     # Load the YOLOv5 model
     model = torch.hub.load('ultralytics/yolov5', 'custom', path='best.pt')
@@ -271,6 +271,8 @@ def yolov5_view(request):
             
         
         image_paths.append(image_path)
+
+        print(image_paths)
                     # Save the image in the output directory
         
         
@@ -280,4 +282,14 @@ def yolov5_view(request):
         #results_green=print(results_count['name'].value_counts()['Green'])
 
     # Return the results to the template
-    return render(request, 'results.html', {'predictions_list':predictions_list,'total_classes': total_classes,'class_counts':class_counts,'class_counts_total':class_counts_total,'blue_count':int(blue_count),'image_paths':image_paths})
+    # get the whole path until results.html
+    current_path = os.getcwd()
+
+    file_path = current_path.replace('\\', '/')
+    print(file_path)
+
+    # add predict/templates/results.html to the path
+    file_path = file_path + '/predict/templates/results.html'
+    
+    
+    return render(request, file_path, {'predictions_list':predictions_list,'total_classes': total_classes,'class_counts':class_counts,'class_counts_total':class_counts_total,'blue_count':int(blue_count),'image_paths':image_paths})

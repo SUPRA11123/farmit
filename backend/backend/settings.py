@@ -61,12 +61,13 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    #'django.middleware.csrf.CsrfViewMiddleware',
 ]
+
 
 ROOT_URLCONF = 'backend.urls'
 
@@ -147,26 +148,23 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [ ("resources", os.path.join(BASE_DIR, 'static/parseImage/')), ]
-# Default primary key field type
+STATICFILES_DIRS = [
+    ("parseImage", os.path.join(BASE_DIR, 'static/parseImage/')),
+]# Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
-    'http://localhost:8000'
     #'https://farm.agrosensor.org'
 ]
 
-CORS_ALLOWED_METHODS = [
-    'GET',
-    'POST',
-    'PUT',
-    'DELETE',
+CORS_ALLOW_HEADERS = [
+    'access-control-allow-origin',
+    'authorization',
 ]
 
-CORS_ALLOWED_HEADERS = [
-    'Authorization',
-    'Content-Type',
-]
+CORS_ORIGIN_ALLOW_ALL = True
+
+

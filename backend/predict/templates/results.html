@@ -1,0 +1,24 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Results</title>
+    <style>
+        .output-image {
+            max-width: 500px;
+            max-height: 500px;
+        }
+    </style>
+</head>
+<body>
+    <h1>YOLOv5 Model Results</h1>
+    {% with total_images=predictions_list|length %}
+    <h3>Total Images: {{ total_images }}</h3>
+{% endwith %}
+
+    <h3>Total Berries detected: {{ total_classes }}</h3>
+    <h3>Total Blue Berries detected: {{ class_counts_total }}</h3>
+
+</body>
+</html>
+
