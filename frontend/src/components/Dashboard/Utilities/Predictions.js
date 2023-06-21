@@ -74,40 +74,20 @@ class Predictions extends React.Component {
   }
 
   scanImages() {
-
     const { selectedImages } = this.state;
-
+  
     const formData = new FormData();
   
     selectedImages.forEach((imageFile, index) => {
       formData.append('fileup', imageFile);
     });
-
-    const getCSRFToken = () => {
-      const name = 'csrftoken=';
-      const decodedCookie = decodeURIComponent(document.cookie);
-      const cookieArray = decodedCookie.split(';');
-      for (let i = 0; i < cookieArray.length; i++) {
-        let cookie = cookieArray[i];
-        while (cookie.charAt(0) === ' ') {
-          cookie = cookie.substring(1);
-        }
-        if (cookie.indexOf(name) === 0) {
-          return cookie.substring(name.length, cookie.length);
-        }
-      }
-      return null;
-    };
-    
-    const csrfToken = getCSRFToken();
-
-    axios.post('http://localhost:8000/newscan/results/', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        'X-CSRFToken': csrfToken,
-      },
-    
-    })
+  
+    axios
+      .post('http://localhost:8000/newscan/results/', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
       .then((response) => {
         console.log(response.data); // Handle the response here
       })
