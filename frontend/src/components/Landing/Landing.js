@@ -34,7 +34,9 @@ class Landing extends React.Component {
       marker: {
         markerLat: 0,
         markerLong: 0
-      }
+      },
+      zoom: 5 
+      
     };
   }
   
@@ -47,6 +49,10 @@ class Landing extends React.Component {
     window.removeEventListener('beforeunload', this.handleUnload);
     window.removeEventListener('unload', this.handleUnload);
   }
+
+  handleZoomChange = (newZoom) => {
+    this.setState({ zoom: newZoom });
+  };
   
   handleUnload = async () => {
     const farmInfoForm = document.getElementById('farmInfo');
@@ -146,22 +152,27 @@ class Landing extends React.Component {
   }
 
   handleMapClick = (t, map, coord) => {
-
     const lat = t.latLng.lat();
     const lng = t.latLng.lng();
-
-    this.setState({
-      marker: { markerLat: lat, markerLong: lng },
-      country: { countryLat: lat, countryLong: lng }
-    });
-
+  
+    this.setState(prevState => ({
+      marker: {
+        markerLat: lat,
+        markerLong: lng
+      },
+      country: {
+        countryLat: prevState.country.countryLat,
+        countryLong: prevState.country.countryLong
+      }
+    }));
+  
     if (document.getElementById("farmName").value) {
       document.getElementById("farmNext").classList.add("submitActive");
     } else {
       document.getElementById("farmNext").classList.remove("submitActive");
     }
-
-  }
+  };
+  
 
   checkAccountComplete() {
 
@@ -314,7 +325,7 @@ class Landing extends React.Component {
             
             <input id="accountNext" type="submit" value="Next" />
 
-            <p><span onClick={this.toLogin}>Login to an account</span></p>
+            <p>Already have an account? <span onClick={this.toLogin}> Login</span></p>
 
           </form>
 
@@ -364,7 +375,7 @@ class Landing extends React.Component {
 
             <input id="loginInBtn" type="submit" value="Login" />
 
-            <p>Already have an account? <span onClick={this.toRegister}> Log in</span></p>
+            <p>Dont have an account? <span onClick={this.toRegister}> Regsiter</span></p>
 
           </form>
 
@@ -375,7 +386,7 @@ class Landing extends React.Component {
         <img id="landingGraphic" src={require('../../resources/img/vectorsmall.png')} alt="Agrosensor graphic" />
 
           <div className="hidden" id='mapContainer'>
-            <Map markerPosition={{ lat: this.state.marker.markerLat, lng: this.state.marker.markerLong }} onClick={this.handleMapClick} center={{ lat: this.state.country.countryLat, lng: this.state.country.countryLong }}></Map>
+            <Map zoom={this.state.zoom} markerPosition={{ lat: this.state.marker.markerLat, lng: this.state.marker.markerLong }} onClick={this.handleMapClick} center={{ lat: this.state.country.countryLat, lng: this.state.country.countryLong }} onZoomChange={this.handleZoomChange}></Map>
           </div>
         </aside>
 

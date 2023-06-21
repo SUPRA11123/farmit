@@ -28,7 +28,7 @@ function MyComponent(props){
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={props.center}
-        zoom={5}
+        zoom={props.zoom}
         onLoad={onLoad}
         onUnmount={onUnmount}
         key={props.center.lat + props.center.lng}

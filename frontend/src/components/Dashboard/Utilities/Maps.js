@@ -232,7 +232,7 @@ class Maps extends React.Component {
 
                     row.addEventListener("click", () => {
                         map.setCenter({ lat: lat, lng: lng });
-                        map.setZoom(18);
+                        map.setZoom(17);
                     });
 
 
@@ -379,7 +379,7 @@ class Maps extends React.Component {
 
                     row.addEventListener("click", () => {
                         map.setCenter(polygonCenter);
-                        map.setZoom(14);
+                        map.setZoom(17);
                     });
                 }
 
@@ -739,7 +739,7 @@ class Maps extends React.Component {
 
                         row.addEventListener("click", () => {
                             map.setCenter(polygonCenter);
-                            map.setZoom(14);
+                            map.setZoom(17);
                         });
 
                     }).catch((err) => {
@@ -941,7 +941,7 @@ class Maps extends React.Component {
 
                         row.addEventListener("click", () => {
                             map.setCenter({ lat: lat, lng: lng });
-                            map.setZoom(14);
+                            map.setZoom(17);
                         });
 
                     }).catch((err) => {
@@ -1190,7 +1190,7 @@ class Maps extends React.Component {
         return (
             <>
 
-                <button onClick={this.centreToMap} id="centreToMap" className='fieldsTableBtn'><i className="fa-solid fa-location-crosshairs"></i></button>
+                <button onClick={this.centreToMap} id="centreToMap" className='fieldsTableBtn'><i className="fa-solid fa-house"></i></button>
                 <div id="map">
 
                 </div>

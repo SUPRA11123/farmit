@@ -552,6 +552,35 @@ class Dashboard extends React.Component {
 
     }
 
+    getHeader() {
+        switch(this.state.currentDashboardScreen){
+            case "dashboard":
+                return null;
+                break;
+            case "maps":
+                return "My Fields"   
+                break;
+            case "tasks":
+                return "Current Tasks"   
+                break;
+            case "team":
+                return "My Team"   
+                break;
+            case "weather":
+                return "Weather Forecast"   
+                break;
+            case "predictions":
+                return "Fruit-Scan"   
+                break;
+             case "settings":
+                return "Settings"   
+                break;
+            default:
+                return "error";
+                break;     
+        }
+    }
+
 
     render() {
 
@@ -633,7 +662,7 @@ class Dashboard extends React.Component {
                 </aside>
 
                 <main ref={this.divRef} id='utilityContainer' className={`utilityContainer ${localStorage.getItem("darkMode") === "true" ? "darkModeBG" : ''}`}>
-
+                    <h2 id='screenHeader'>{this.getHeader()}</h2>
                     <section id='scrollUtility'>
 
                         <section className='alertContainer'>

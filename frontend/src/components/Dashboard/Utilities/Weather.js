@@ -252,8 +252,8 @@ class Weather extends React.Component {
             <div className={`lineChartContainer ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
         
               <select name="statSelector" id="statSelector" className={`${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`} onChange={this.handleChange}>
-                <option value="temperature">Temperature <i className="fa-solid fa-sun"></i></option>
-                <option value="humidity">Humidity</option>
+                <option value="temperature">Air Temperature <i className="fa-solid fa-sun"></i></option>
+                <option value="humidity">Air Humidity</option>
               </select>   
 
               <canvas id="myChart" height='20%' width='100px'></canvas>

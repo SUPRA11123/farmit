@@ -2,6 +2,7 @@ import React from 'react';
 import EXIF from 'exif-js';
 import axios from "axios";
 import { Chart } from 'chart.js/auto';
+import 'chartjs-plugin-datalabels';
 
 const URL = process.env.REACT_APP_URL;
 
@@ -179,7 +180,7 @@ class Predictions extends React.Component {
 
   createBarChart() {
     const ctx = this.chartRef.current.getContext('2d');
-
+  
     new Chart(ctx, {
       type: 'bar',
       data: {
@@ -190,27 +191,38 @@ class Predictions extends React.Component {
             data: [74, 89, 81],
             backgroundColor: ['#52AF4E', '#D82C2C', '#6100FF'],
             barBorderRadius: 5,
-    
           },
         ],
       },
       options: {
         scales: {
           y: {
-            beginAtZero: true,
+            display: false,
           },
         },
         plugins: {
           legend: {
             display: false,
           },
+          datalabels: {
+            anchor: 'end',
+            align: 'top',
+            font: {
+              weight: 'bold',
+            },
+            color: 'black',
+            display: (context) => {
+              return context.dataset.data[context.dataIndex] > 0; // Display label only if data value is greater than 0
+            },
+            formatter: (value) => {
+              return value; // Customize the label formatting if needed
+            },
+          },
         },
       },
     });
-    
-    
-    
   }
+  
   
   render() {
     const {
@@ -304,6 +316,22 @@ class Predictions extends React.Component {
             </div>
 
             <div className='countContainer'>
+
+              <div className='countBox'>
+
+                <p>Total</p>
+
+                <h3>198</h3>
+
+              </div>
+
+              <div className='countBox'>
+
+                <p>Weight</p>
+
+                <h3>43 KG</h3>
+
+              </div>
 
             </div>
 
