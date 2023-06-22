@@ -160,11 +160,4 @@ CORS_ORIGIN_WHITELIST = [
     #'https://farm.agrosensor.org'
 ]
 
-CORS_ALLOW_HEADERS = [
-    'access-control-allow-origin',
-    'authorization',
-]
-
-CORS_ORIGIN_ALLOW_ALL = True
-
 
