@@ -345,7 +345,7 @@ class Dashboard extends React.Component {
                         // if for the past 24 hours, the humidity has been above 80%, then send an alert. 
                         // if there's already an alert for this sensor, then don't send another alert
 
-                        if (_value > 60 && !this.state.alerts.find((alert) => alert.sensorId === sensorId && alert.humidity === "high") && match) {
+                        if (_value > 40 && !this.state.alerts.find((alert) => alert.sensorId === sensorId && alert.humidity === "high") && match) {
                             const alertMessage = `High soil moisture was detected in sensor ${sensorId} in the past 24 hours! Make sure to maintain optimal soil moisture levels.`;
 
                             // Create an object with the alert details
@@ -370,7 +370,7 @@ class Dashboard extends React.Component {
                             // Wait for the state to be updated before continuing
                             await setStatePromise;
                         }
-                        else if (_value < 40 && !this.state.alerts.find((alert) => alert.sensorId === sensorId && alert.humidity === "low") && match) {
+                        else if (_value < 60 && !this.state.alerts.find((alert) => alert.sensorId === sensorId && alert.humidity === "low") && match) {
                             const alertMessage = `Low soil moisture was detected in sensor ${sensorId} in the past 24 hours! Make sure to water the plants appropriately.`;
 
                             // Create an object with the alert details
@@ -553,31 +553,31 @@ class Dashboard extends React.Component {
     }
 
     getHeader() {
-        switch(this.state.currentDashboardScreen){
+        switch (this.state.currentDashboardScreen) {
             case "dashboard":
                 return null;
                 break;
             case "maps":
-                return "My Fields"   
+                return "My Fields"
                 break;
             case "tasks":
-                return "Current Tasks"   
+                return "Current Tasks"
                 break;
             case "team":
-                return "My Team"   
+                return "My Team"
                 break;
             case "weather":
-                return "Weather Forecast"   
+                return "Weather Forecast"
                 break;
             case "predictions":
-                return "Fruit-Scan"   
+                return "Fruit-Scan"
                 break;
-             case "settings":
-                return "Settings"   
+            case "settings":
+                return "Settings"
                 break;
             default:
                 return "error";
-                break;     
+                break;
         }
     }
 
@@ -713,18 +713,17 @@ class Dashboard extends React.Component {
                                         className={`alertCard ${this.state.currentDashboardScreen === "weather" ? "navActive" : ""
                                             }`}
                                         key={key}
-                                        onClick={() =>
-                                            {
-                                                this.setState({ currentDashboardScreen: "weather" }, this.handleMobileClick);
-                                                this.toggleAlertMenu()
-                                            }
+                                        onClick={() => {
+                                            this.setState({ currentDashboardScreen: "weather" }, this.handleMobileClick);
+                                            this.toggleAlertMenu()
+                                        }
                                         }
                                     >
-                                         <i className="fa-solid fa-cloud-sun"></i>
+                                        <i className="fa-solid fa-cloud-sun"></i>
                                         <h2>{alert.message}</h2>
                                     </div>
                                 );
-                               
+
                             }
                             if (
                                 (this.state.user.role === "field manager" ||
@@ -736,11 +735,10 @@ class Dashboard extends React.Component {
                                         className={`alertCard ${this.state.currentDashboardScreen === "tasks" ? "navActive" : ""
                                             }`}
                                         key={key}
-                                        onClick={() =>
-                                            {
-                                                this.setState({ currentDashboardScreen: "tasks" }, this.handleMobileClick);
-                                                this.toggleAlertMenu()
-                                            }
+                                        onClick={() => {
+                                            this.setState({ currentDashboardScreen: "tasks" }, this.handleMobileClick);
+                                            this.toggleAlertMenu()
+                                        }
                                         }
                                     >
                                         <i className="fas fa-tasks"></i>
@@ -751,32 +749,17 @@ class Dashboard extends React.Component {
                             }
 
 
-                                if (this.state.user.role === "field manager") {
-                                    if (matchingSensor && this.state.fields.some(field => field.id === matchingSensor.field)) {
-                                        return (
-                                            <div className="alertCard" key={key}>
-                                                {alert.type === 'humidity' && (
-                                                    <>
-                                                        <i class="fa-solid fa-circle-exclamation"></i>
-                                                        <h2>{alert.message}</h2>
-                                                    </>
-                                                )}
-                                                {alert.type === 'temperature' && (
-                                                    <>
-                                                        <i class="fa-solid fa-circle-exclamation"></i>
-                                                        <h2>{alert.message}</h2>
-                                                    </>
-                                                )}
-
-                                            </div>
-                                        );
-                                    }
-
-
-
-                                } else {
+                            if (this.state.user.role === "field manager") {
+                                if (matchingSensor && this.state.fields.some(field => field.id === matchingSensor.field)) {
                                     return (
-                                        <div className="alertCard" key={key}>
+                                        <div className={`alertCard ${this.state.currentDashboardScreen === "maps" ? "navActive" : ""
+                                            }`} key={key}
+                                            onClick={() => {
+                                                this.setState({ currentDashboardScreen: "maps" }, this.handleMobileClick);
+                                                this.toggleAlertMenu()
+                                            }
+                                            }
+                                        >
                                             {alert.type === 'humidity' && (
                                                 <>
                                                     <i class="fa-solid fa-circle-exclamation"></i>
@@ -792,13 +775,42 @@ class Dashboard extends React.Component {
 
                                         </div>
                                     );
-
-
                                 }
 
-                                return null;
 
-                            })}
+
+                            } else {
+                                return (
+                                    <div className={`alertCard ${this.state.currentDashboardScreen === "maps" ? "navActive" : ""
+                                            }`} key={key}
+                                            onClick={() => {
+                                                this.setState({ currentDashboardScreen: "maps" }, this.handleMobileClick);
+                                                this.toggleAlertMenu()
+                                            }
+                                            }
+                                        >
+                                        {alert.type === 'humidity' && (
+                                            <>
+                                                <i class="fa-solid fa-circle-exclamation"></i>
+                                                <h2>{alert.message}</h2>
+                                            </>
+                                        )}
+                                        {alert.type === 'temperature' && (
+                                            <>
+                                                <i class="fa-solid fa-circle-exclamation"></i>
+                                                <h2>{alert.message}</h2>
+                                            </>
+                                        )}
+
+                                    </div>
+                                );
+
+
+                            }
+
+                            return null;
+
+                        })}
 
 
 
@@ -839,7 +851,6 @@ class Dashboard extends React.Component {
 
 
 
-                        <button id='clearAllAlerts'><i className="fa-solid fa-trash"></i> Clear All</button>
 
                     </div>
 
