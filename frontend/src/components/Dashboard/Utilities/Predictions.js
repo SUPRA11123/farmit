@@ -18,6 +18,7 @@ class Predictions extends React.Component {
       totalRed: 0,
       totalBlue: 0,
       totalGreen: 0,
+      percentage: 0,
     };
 
     this.processImages = this.processImages.bind(this);
@@ -143,7 +144,10 @@ class Predictions extends React.Component {
         document.getElementById("GreenCount").innerHTML = greenNumber;
         document.getElementById("RedCount").innerHTML = redNumber;
 
-        this.setState({totalAll: totalBerries.innerHTML, totalRed: redNumber, totalGreen: greenNumber, totalBlue: blueNumber });
+        const totalAll = parseFloat(totalBerries.innerHTML);
+        const bluePercentage = (blueNumber / totalAll) * 100;
+
+        this.setState({totalAll: totalBerries.innerHTML, totalRed: redNumber, totalGreen: greenNumber, totalBlue: blueNumber, percentage: bluePercentage.toFixed(0) });
 
         document.getElementById('predictionDataContainer').classList.remove('hidden');
         document.getElementById('processImgs').classList.add('hidden');
@@ -373,7 +377,7 @@ class Predictions extends React.Component {
 
                 <p>Total Mature</p>
 
-                <h3>{this.state.totalBlue}</h3>
+                <h3>{this.state.percentage}%</h3>
 
               </div>
 
