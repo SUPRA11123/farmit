@@ -14,6 +14,10 @@ class Predictions extends React.Component {
       previewImages: [],
       selectedImage: null,
       selectedImageDate: null,
+      totalAll: 0,
+      totalRed: 0,
+      totalBlue: 0,
+      totalGreen: 0,
     };
 
     this.processImages = this.processImages.bind(this);
@@ -24,6 +28,31 @@ class Predictions extends React.Component {
 
   componentDidMount() {
     this.createBarChart();
+  }
+
+  updateChart() {
+    const { totalGreen, totalRed, totalBlue } = this.state;
+
+    if (!this.chartRef.current || !totalGreen || !totalRed || !totalBlue) {
+      return;
+    }
+
+    const chart = this.chartRef.current.chart;
+
+    // Update the chart data and options
+    chart.data.datasets[0].data = [totalGreen, totalRed, totalBlue];
+    chart.update();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    // Check if the relevant state values have changed
+    if (
+      prevState.totalGreen !== this.state.totalGreen ||
+      prevState.totalRed !== this.state.totalRed ||
+      prevState.totalBlue !== this.state.totalBlue
+    ) {
+      this.updateChart();
+    }
   }
 
   handleFileUpload = (event) => {
@@ -74,6 +103,7 @@ class Predictions extends React.Component {
   }
 
   scanImages() {
+    document.getElementById('processImgs').innerHTML = "<i class='fas fa-spinner fa-spin'></i>";
     const { selectedImages } = this.state;
   
     const formData = new FormData();
@@ -90,6 +120,33 @@ class Predictions extends React.Component {
       })
       .then((response) => {
         console.log(response.data); // Handle the response here
+        const tempDiv = document.createElement("div");
+        tempDiv.innerHTML = response.data;
+        const totalBerries = tempDiv.querySelector("#total");
+        const typeBerries = tempDiv.querySelector("#types");
+
+        const text = typeBerries.innerHTML;
+
+        const blueRegex = /Blue\s+(\d+\.\d+)/;
+        const greenRegex = /Green\s+(\d+\.\d+)/;
+        const redRegex = /Red\s+(\d+\.\d+)/;
+
+        const blueMatch = text.match(blueRegex);
+        const greenMatch = text.match(greenRegex);
+        const redMatch = text.match(redRegex);
+
+        const blueNumber = blueMatch ? parseFloat(blueMatch[1]) : null;
+        const greenNumber = greenMatch ? parseFloat(greenMatch[1]) : null;
+        const redNumber = redMatch ? parseFloat(redMatch[1]) : null;
+
+        document.getElementById("BlueCount").innerHTML = blueNumber;
+        document.getElementById("GreenCount").innerHTML = greenNumber;
+        document.getElementById("RedCount").innerHTML = redNumber;
+
+        this.setState({totalAll: totalBerries.innerHTML, totalRed: redNumber, totalGreen: greenNumber, totalBlue: blueNumber });
+
+        document.getElementById('predictionDataContainer').classList.remove('hidden');
+        document.getElementById('processImgs').classList.add('hidden');
       })
       .catch((error) => {
         console.error(error);
@@ -156,19 +213,18 @@ class Predictions extends React.Component {
       selectedImage: null,
       selectedImageDate: null,
     });
+    document.getElementById('predictionDataContainer').classList.add('hidden');
   }
-
   createBarChart() {
     const ctx = this.chartRef.current.getContext('2d');
-  
-    new Chart(ctx, {
+    const chart = new Chart(ctx, {
       type: 'bar',
       data: {
         labels: ['Green', 'Red', 'Blue'],
         datasets: [
           {
             label: 'Bars',
-            data: [74, 89, 81],
+            data: [this.state.totalGreen, this.state.totalRed, this.state.totalBlue],
             backgroundColor: ['#52AF4E', '#D82C2C', '#6100FF'],
             barBorderRadius: 5,
           },
@@ -201,7 +257,9 @@ class Predictions extends React.Component {
         },
       },
     });
+    this.chartRef.current.chart = chart;
   }
+  
   
   
   render() {
@@ -275,33 +333,47 @@ class Predictions extends React.Component {
           
           {selectedImage ? (
             <>
+            <div className='largePreviewContainer'>
+
             <img
               className='largePreview'
               src={selectedImage}
               alt='Large preview of uploaded image'
             />
-             {selectedImageDate && (
-                <p className='imageDate'>Date taken: {selectedImageDate}</p>
-              )}
+            
+            </div>
+          
+           
             <p id='countMaturity' className='hidden'>Count: ??? <br></br>Maturity: ???</p>
             </>
           ) : (
-            <p>No image selected</p>
+            <p></p>
           )}
-          <div className='predictionDataContainer'>
+          <div id='predictionDataContainer' className='predictionDataContainer hidden'>
 
             <div className='barChartContainer'>
+
               <h2>Maturity Levels</h2>
+
+              <div className='maturityContainer'>
+                <span id='GreenCount'>0</span>
+                <span id='RedCount'>0</span>
+                <span id='BlueCount'>0</span>
+              </div>
+
               <canvas width="90%" ref={this.chartRef}></canvas>
+
             </div>
 
             <div className='countContainer'>
 
+              <h2>Count</h2>
+
               <div className='countBox'>
 
-                <p>Total</p>
+                <p>Total Mature</p>
 
-                <h3>198</h3>
+                <h3>{this.state.totalBlue}</h3>
 
               </div>
 
@@ -309,7 +381,7 @@ class Predictions extends React.Component {
 
                 <p>Weight</p>
 
-                <h3>43 KG</h3>
+                <h3>{((this.state.totalBlue)*0.3).toFixed(0)}g</h3>
 
               </div>
 
