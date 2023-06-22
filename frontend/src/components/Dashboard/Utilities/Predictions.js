@@ -19,6 +19,7 @@ class Predictions extends React.Component {
       totalBlue: 0,
       totalGreen: 0,
       percentage: 0,
+      fields: [],
     };
 
     this.processImages = this.processImages.bind(this);
@@ -29,6 +30,16 @@ class Predictions extends React.Component {
 
   componentDidMount() {
     this.createBarChart();
+
+    axios.get("http://localhost:8000/getfieldsbyid/" + this.props.farmDetails.id + "/")
+    .then(response => {
+        const fields = response.data;
+        this.setState({ fields: fields });
+
+    })
+    .catch(error => {
+        console.log(error);
+    });
   }
 
   updateChart() {
@@ -39,8 +50,6 @@ class Predictions extends React.Component {
     }
 
     const chart = this.chartRef.current.chart;
-
-    // Update the chart data and options
     chart.data.datasets[0].data = [totalGreen, totalRed, totalBlue];
     chart.update();
   }
@@ -147,6 +156,12 @@ class Predictions extends React.Component {
         const totalAll = parseFloat(totalBerries.innerHTML);
         const bluePercentage = (blueNumber / totalAll) * 100;
 
+        if(bluePercentage > 70) {
+          document.getElementById('predictionResult').innerHTML = "Field is ready to harvest <i id='thumbsUp' class='fa-solid fa-thumbs-up'></i>";
+        } else {
+          document.getElementById('predictionResult').innerHTML = "Field is not ready to harvest <i id='thumbsDown' class='fa-solid fa-thumbs-down'></i>";
+        }
+
         this.setState({totalAll: totalBerries.innerHTML, totalRed: redNumber, totalGreen: greenNumber, totalBlue: blueNumber, percentage: bluePercentage.toFixed(0) });
 
         document.getElementById('predictionDataContainer').classList.remove('hidden');
@@ -218,6 +233,8 @@ class Predictions extends React.Component {
       selectedImageDate: null,
     });
     document.getElementById('predictionDataContainer').classList.add('hidden');
+    const selectElement = document.getElementById('scanFields');
+    selectElement.selectedIndex = 0;
   }
   createBarChart() {
     const ctx = this.chartRef.current.getContext('2d');
@@ -287,6 +304,31 @@ class Predictions extends React.Component {
                 <span className="clearAllText">Clear All</span>
               </button>
             )}
+
+            <select defaultValue="" id="scanFields">
+              {this.state.fields.length > 0 ? (
+                  <>
+                      <option value="" disabled>Select a field</option>
+                      {this.state.fields.map((field) => {
+                          // Check if the selected member is a field manager and the field is assigned to them
+                          if (true) {
+                              return (
+                                  <option key={field.id} value={field.id}>{field.name}</option>
+                              );
+                          }
+                          // If not a field manager, show all fields
+                          else if (this.state.selectedAssignee.role !== "field manager") {
+                              return (
+                                  <option key={field.id} value={field.id}>{field.name}</option>
+                              );
+                          }
+                          return null;
+                      })}
+                  </>
+              ) : (
+                  <option value="" disabled>No fields available</option>
+              )}
+            </select>
           </div>
   
           {hasUploadedImages && (
@@ -388,6 +430,8 @@ class Predictions extends React.Component {
                 <h3>{((this.state.totalBlue)*0.3).toFixed(0)}g</h3>
 
               </div>
+
+              <h4 id='predictionResult'>null</h4>
 
             </div>
 

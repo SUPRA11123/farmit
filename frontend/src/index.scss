@@ -2092,7 +2092,11 @@ body {
     transition: 1s;
   }
 
- 
+  #scanFields {
+    margin-top: 2.5%;
+    border-radius: 5px;
+    padding: 5px 2px;
+  }
   
   .thumbnail {
     width: 100%;
@@ -2163,6 +2167,23 @@ body {
             margin: 0;
             width: 100%;
             text-align: center;
+        }
+    }
+
+    #predictionResult {
+        font-size: 1.8vh;
+        font-weight: normal;
+        position: absolute;
+        width: 60%;
+        bottom: 0;
+        text-align: center;
+
+        #thumbsUp {
+            color: $green;
+        }
+
+        #thumbsDown {
+            color: $red;
         }
     }
 
