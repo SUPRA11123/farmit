@@ -23,6 +23,8 @@ class Home extends React.Component {
     };
   }
 
+  //On load, retrieve each sensor and field from DB, then add them to the Google map
+
   async componentDidMount() {
 
     this.getTasksByAsignee(this.props.user.id);
@@ -69,15 +71,10 @@ class Home extends React.Component {
       this.props.displayScreen("maps");
     });
 
-
-
-
     // get the fields for the farm
 
     var fields;
     const role = this.props.user.role;
-
-
 
     if (role === "field manager") {
       fields = await this.getFieldsByManager(this.props.user.id);
@@ -305,6 +302,7 @@ class Home extends React.Component {
     }
   }
 
+  //Get a specific managers fields from DB via their ID
 
   getFieldsByManager(id) {
     return axios
@@ -319,6 +317,8 @@ class Home extends React.Component {
       );
   }
 
+  //Get a team members specific task from DB via their ID
+
   getTasksByAsignee(id) {
     return axios
       .get(URL + "gettasksbyassignee/" + id + "/")
@@ -331,6 +331,8 @@ class Home extends React.Component {
       }
       );
   }
+
+  //Get the current fields from DB via farm ID
 
   getFields(id) {
     return axios
@@ -345,6 +347,8 @@ class Home extends React.Component {
       );
   }
 
+  //Determine if coordinate is within a drawn rectangle field
+
   isPointInsideRectangle(point, rectangleBounds) {
     var [north, east, south, west] = rectangleBounds;
 
@@ -355,6 +359,8 @@ class Home extends React.Component {
       point.latitude <= north
     );
   }
+
+  //Determine if coordinate is within a drawn polygon field
 
   isPointInsidePolygon(point, coordinates) {
 
@@ -378,7 +384,7 @@ class Home extends React.Component {
     return inside;
   }
 
-
+  //Display the current time
 
   displayTime() {
     var x = new Date();
@@ -387,6 +393,8 @@ class Home extends React.Component {
     var date = ' ' + x.getHours() + ":" + zero + x.getMinutes();
     return date;
   }
+
+  //Retrieve the current tasks from DB via the farm ID
 
   getTasks() {
 
@@ -424,6 +432,8 @@ class Home extends React.Component {
    
 
 }
+
+  //Store API call into array and retrieve appropriate icon 
 
   populateWeather(data) {
     var iconcode = data.weather[0].icon;
@@ -471,10 +481,14 @@ class Home extends React.Component {
     });
   }
 
+  //Create short weekday labels for graph
+
   getLabels(day) {
     let weekday = ["Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat"];
     return weekday[day.getDay()];
   }
+
+  //Create a line chart to visualize forecasted temperature data
 
   updateChart() {
     const forecastData = this.state.forecastData;
@@ -552,9 +566,13 @@ class Home extends React.Component {
     });
   }
 
+  //convert wind speed to KM/s
+
   convertToKM(speed) {
     return (speed * 3.6).toFixed(2);
   }
+
+  //Serve a welcome message based on the current time
 
   getWelcomeMessage() {
     var today = new Date();
@@ -568,6 +586,8 @@ class Home extends React.Component {
       return "Good evening ";
     }
   }
+
+  //Compute the current date, adding the suffix 
 
   getCurrentDayAndDate() {
     const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];

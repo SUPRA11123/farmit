@@ -67,6 +67,13 @@ body {
             width: 100%;
             height: 100%;
         }
+
+        #toGeoLocation {
+            position: fixed;
+            top: 10%;
+            left: 10%;
+            z-index: 20;
+        }
     }
 }
 
@@ -1314,11 +1321,6 @@ body {
     border-radius: 15px;
     display: flex;
     flex-direction: row;
-  
-
-    .taskColumn:hover > h2 {
-        color: $green;
-    }
 
     .taskContainer::-webkit-scrollbar{
         display: none;
@@ -1337,23 +1339,35 @@ body {
 
         h2 {
             position: absolute;
-            width: 100%;
+            width: 40%;
             font-size: 2.5vh;
             font-family: $font1;
             font-weight: bold;
-            color: #3d3d3d;
-            margin: 0;
+            color: white;
+            margin: 5% 10% 0 5%;
             z-index: 5;
-            padding: 2.5% 0 2.5% 0;
-            background-color: $grey;
-            border-radius: 15px 15px 0 0;
+            padding: 1% 0 1% 0;
+            border-radius: 15px;
             text-align: center;
+        }
+
+
+        .blue {
+            background-color: $blue;
+        }
+
+        .red {
+            background-color: $red;
+        }
+
+        .green {
+            background-color: $green;
         }
 
         #addNewTask {
             position: absolute;
             font-size: 2.5vh;
-            right: 5%;
+            right: -125%;
             color: white;
             cursor: pointer;
             background-color: $green;
@@ -1411,6 +1425,10 @@ body {
                 padding-bottom: 2.5%;
                 font-size: 1.75vh;
                 color: $darkGrey;
+
+                i {
+                    color: $green;
+                }
                 
             }
 
@@ -1418,7 +1436,7 @@ body {
                 margin: 10px;
                 margin-top: 2px;
                 font-size: 1.75vh;
-                color: $green;
+           
                 margin-bottom: 10%;
             }
 
@@ -1430,8 +1448,15 @@ body {
                 color: $darkGrey;
                 cursor: pointer;
 
+                .taskDelete {
+                    color: $darkGrey;
+                    background-color: $grey;
+                    padding: 10px;
+                    border-radius: 5px;
+                }
+
                 .taskDelete:hover {
-                    color: $red
+                    color: $red;
                 }
 
                 .taskProgress {
@@ -3038,6 +3063,7 @@ body {
                 background-color: transparent;
                 border-radius: 0;
             }
+
 
             .taskCard {
                 width: 90%;

@@ -50,9 +50,7 @@ class Landing extends React.Component {
     window.removeEventListener('unload', this.handleUnload);
   }
 
-  handleZoomChange = (newZoom) => {
-    this.setState({ zoom: newZoom });
-  };
+ 
   
   handleUnload = async () => {
     const farmInfoForm = document.getElementById('farmInfo');
@@ -70,6 +68,10 @@ class Landing extends React.Component {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  handleZoomChange = (newZoom) => {
+    this.setState({ zoom: newZoom });
   };
 
   handleNext(event) {
@@ -295,6 +297,25 @@ class Landing extends React.Component {
     }
   }
 
+  languageText = {
+    en: {
+      title: "Delete Account",
+      label: "To delete your Agrosensor account, you are required to enter your password:",
+      password: "Password",
+      changetext: "Dont have an account?",
+      changeBtn: "Register",
+      deleteButton: "Delete Account"
+    },
+    pt: {
+      title: "Excluir Conta",
+      label: "Para excluir sua conta do Agrosensor, você precisa digitar sua senha:",
+      passwordPlaceholder: "Senha",
+      deleteButton: "Excluir Conta"
+    },
+    // Add more languages and their respective text content here
+  };
+  
+
 
   render() {
 
@@ -325,7 +346,7 @@ class Landing extends React.Component {
             
             <input id="accountNext" type="submit" value="Next" />
 
-            <p>Already have an account? <span onClick={this.toLogin}> Login</span></p>
+            <p>Already have an account? <span onClick={this.toLogin}>Login</span></p>
 
           </form>
 
@@ -375,7 +396,7 @@ class Landing extends React.Component {
 
             <input id="loginInBtn" type="submit" value="Login" />
 
-            <p>Dont have an account? <span onClick={this.toRegister}> Regsiter</span></p>
+            <p>Dont have an account? <span onClick={this.toRegister}>Register</span></p>
 
           </form>
 

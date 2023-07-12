@@ -156,7 +156,7 @@ class Predictions extends React.Component {
         const totalAll = parseFloat(totalBerries.innerHTML);
         const bluePercentage = (blueNumber / totalAll) * 100;
 
-        if(bluePercentage > 70) {
+        if(bluePercentage > 80) {
           document.getElementById('predictionResult').innerHTML = "Field is ready to harvest <i id='thumbsUp' class='fa-solid fa-thumbs-up'></i>";
         } else {
           document.getElementById('predictionResult').innerHTML = "Field is not ready to harvest <i id='thumbsDown' class='fa-solid fa-thumbs-down'></i>";

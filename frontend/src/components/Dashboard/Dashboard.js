@@ -345,7 +345,7 @@ class Dashboard extends React.Component {
                         // if for the past 24 hours, the humidity has been above 80%, then send an alert. 
                         // if there's already an alert for this sensor, then don't send another alert
 
-                        if (_value > 40 && !this.state.alerts.find((alert) => alert.sensorId === sensorId && alert.humidity === "high") && match) {
+                        if (_value > 78 && !this.state.alerts.find((alert) => alert.sensorId === sensorId && alert.humidity === "high") && match) {
                             const alertMessage = `High soil moisture was detected in sensor ${sensorId} in the past 24 hours! Make sure to maintain optimal soil moisture levels.`;
 
                             // Create an object with the alert details
@@ -370,7 +370,7 @@ class Dashboard extends React.Component {
                             // Wait for the state to be updated before continuing
                             await setStatePromise;
                         }
-                        else if (_value < 60 && !this.state.alerts.find((alert) => alert.sensorId === sensorId && alert.humidity === "low") && match) {
+                        else if (_value < 40 && !this.state.alerts.find((alert) => alert.sensorId === sensorId && alert.humidity === "low") && match) {
                             const alertMessage = `Low soil moisture was detected in sensor ${sensorId} in the past 24 hours! Make sure to water the plants appropriately.`;
 
                             // Create an object with the alert details

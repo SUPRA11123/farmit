@@ -356,7 +356,7 @@ class Tasks extends React.Component {
                     <div id='taskOverlay' className="overlayDarken hidden"></div>
 
                     <div className={`taskColumn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
-                        <h2 className="taskColumnHeader">
+                        <h2 className="taskColumnHeader blue">
                             {this.props.user.role === "owner" || this.props.user.role === "field manager"
                             ? "To Do"
                             : "My Tasks"}
@@ -375,7 +375,7 @@ class Tasks extends React.Component {
 
 
                     <div className={`taskColumn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
-                        <h2 className="taskColumnHeader">In Progress</h2>
+                        <h2 className="taskColumnHeader red">In Progress</h2>
 
                         <div id='inProgressTasksContainer' className='taskContainer'>
 
@@ -383,7 +383,7 @@ class Tasks extends React.Component {
                     </div>
 
                     <div className={`taskColumn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
-                        <h2 className="taskColumnHeader">Completed</h2>
+                        <h2 className="taskColumnHeader green">Completed</h2>
 
                         <div id='completedTasksContainer' className='taskContainer'>
 

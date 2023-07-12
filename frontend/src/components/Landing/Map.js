@@ -24,8 +24,14 @@ function MyComponent(props){
     setMap(null)
   }, [])
 
+  const mapOptions = {
+    fullscreenControl: false, // Disable full-screen control
+    streetViewControl: false // Disable street view
+  };
+
   return isLoaded ? (
       <GoogleMap
+        options={mapOptions}
         mapContainerStyle={containerStyle}
         center={props.center}
         zoom={props.zoom}
@@ -33,6 +39,9 @@ function MyComponent(props){
         onUnmount={onUnmount}
         key={props.center.lat + props.center.lng}
         onClick={props.onClick}
+        onZoomChange={props.handleZoomChange}
+        markerPosition={props.markerPosition}
+        
       >
         <Marker 
         position={props.markerPosition} 

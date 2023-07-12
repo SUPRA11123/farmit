@@ -1183,6 +1183,11 @@ class Maps extends React.Component {
         document.getElementById('createSensor').classList.remove('hidden');
     }
 
+    hideSensorForm() {
+        document.getElementById('sensorTable').classList.remove('hidden');
+        document.getElementById('createSensor').classList.add('hidden');
+    }
+
     render() {
 
         const { modalOpen } = this.state;
@@ -1239,6 +1244,7 @@ class Maps extends React.Component {
                         <input autoComplete="off" required type="text" name="sensorField" id="sensorField" placeholder="select field" disabled />
                         <input type="hidden" name="sensorFieldId" id="sensorFieldId" />
                         <input id="createSensorBtn" type="submit" value="Create sensor" />
+                        <button onClick={this.hideSensorForm} id="cancelSensorBtn">Cancel</button>
                     </form>
 
                     <div id="add"></div>
