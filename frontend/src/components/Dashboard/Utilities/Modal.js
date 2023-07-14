@@ -56,7 +56,6 @@ class Modal extends React.Component {
   }
 
   fetchData() {
-    // Create a new InfluxDB instance
     const influxDB = new InfluxDB({
       url: "https://eu-central-1-1.aws.cloud2.influxdata.com",
       token: "WWs7Muam9CP-Y65yjsLgz9VVuzS9mfuwWmlFgJJjiLTKjPUdZGXdTpfQtG0ULZ5a2iy8z54rfbS5nPtUb6qWKg==",
@@ -135,10 +134,10 @@ class Modal extends React.Component {
         this.fetchData();
       }
     }, 100);
-  
 
-    
-    
+
+
+
   };
 
   resetZoom = () => {
@@ -228,6 +227,8 @@ class Modal extends React.Component {
 
         link.click();
         // Perform further operations with the data here
+
+        // wait for the export to finish and then return to the graph
       },
     });
 
@@ -238,6 +239,13 @@ class Modal extends React.Component {
 
     // After exporting, reset the state and hide the date inputs
     this.setState({ startDate: "", endDate: "", showDateInputs: false });
+
+
+    // wait for the csv file to be downloaded and then return to the graph
+    document.getElementById('sensorGraph').classList.remove("hidden");
+    document.getElementById('zoomOptions').classList.remove("hidden");
+
+
   };
 
   updateChart(data) {
@@ -259,7 +267,7 @@ class Modal extends React.Component {
     const labelColor = darkMode ? '#ffffff' : '#8D8D8D';
 
 
-    
+
 
 
     if (!this.myChart) {
@@ -267,15 +275,15 @@ class Modal extends React.Component {
       const chartRef = this.chartRef.current;
       const myChartRef = chartRef.getContext("2d");
 
-// limit the data points to 20 independent of the time range
-  //     const maxDataPoints = 20;
-  //     const stepSize = Math.ceil(time.length / maxDataPoints);
+      // limit the data points to 20 independent of the time range
+      //     const maxDataPoints = 20;
+      //     const stepSize = Math.ceil(time.length / maxDataPoints);
 
-  //     const downsampledTime = time.filter((_, index) => index % stepSize === 0);
-  // const downsampledTemperatureData = temperatureData.filter((_, index) => index % stepSize === 0);
-  // const downsampledHumidityData = humidityData.filter((_, index) => index % stepSize === 0);
+      //     const downsampledTime = time.filter((_, index) => index % stepSize === 0);
+      // const downsampledTemperatureData = temperatureData.filter((_, index) => index % stepSize === 0);
+      // const downsampledHumidityData = humidityData.filter((_, index) => index % stepSize === 0);
 
-      
+
 
       this.myChart = new Chart(myChartRef, {
         type: "line",
@@ -313,7 +321,7 @@ class Modal extends React.Component {
                   enabled: true,
                 },
 
-             
+
                 mode: 'xy',
               }
             },
@@ -401,17 +409,19 @@ class Modal extends React.Component {
         </div>
         <div className="title2">
           <h1>Temperature and Humidity Values From Sensor {this.props.sensorData.sensorId}</h1>
+
         </div>
         <div className="body">
 
+
           <canvas id="sensorGraph" ref={this.chartRef} style={{ height: "250px", width: "95%" }} />
-        
+
 
           <br />
           {showDateInputs && (
             <form id="exportSensorDataForm" onSubmit={this.handleExportCSV}>
               <label htmlFor="startDate">Start Date:</label>
-              <input type="datetime-local" id="startDate"  value={startDate} onChange={this.handleStartDateChange} required/>
+              <input type="datetime-local" id="startDate" value={startDate} onChange={this.handleStartDateChange} required />
               <br /><br />
               <label htmlFor="endDate">End Date:</label>
               <input type="datetime-local" id="endDate" value={endDate} onChange={this.handleEndDateChange} required />
@@ -434,9 +444,9 @@ class Modal extends React.Component {
               </div>
             )}
           </div>
-        
+
         </div>
-    
+
       </div>
     );
   }

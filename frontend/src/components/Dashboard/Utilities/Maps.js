@@ -121,20 +121,23 @@ class Maps extends React.Component {
                     var cell3 = row.insertCell(2);
                     cell3.innerHTML = "<span>" + field.crop_type + "</span>";
 
-                    var cell4 = row.insertCell(3);
-                    cell4.innerHTML = '<div class="delete-container"></i><button class="deleteField-button">Delete</button></div>';
+                    if (this.props.user.role === "owner") {
+                        var cell4 = row.insertCell(3);
+                        cell4.innerHTML = '<div class="delete-container"></i><button class="deleteField-button">Delete</button></div>';
 
-                    cell4.addEventListener('click', () => {
-                        axios.delete(URL + "deletefield/" + field.id + "/")
-                            .then((response) => {
-                                console.log(response);
-                                row.remove();
-                                rectangle.setMap(null);
-                            })
-                            .catch((error) => {
-                                console.log(error);
-                            });
-                    });
+
+                        cell4.addEventListener('click', () => {
+                            axios.delete(URL + "deletefield/" + field.id + "/")
+                                .then((response) => {
+                                    console.log(response);
+                                    row.remove();
+                                    rectangle.setMap(null);
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
+                        });
+                    }
 
                     this.props.sensors.forEach((sensor) => {
 
@@ -279,20 +282,23 @@ class Maps extends React.Component {
                     var cell3 = row.insertCell(2);
                     cell3.innerHTML = "<span>" + field.crop_type + "</span>";
 
-                    var cell4 = row.insertCell(3);
-                    cell4.innerHTML = '<div class="delete-container"></i><button class="deleteField-button">Delete</button></div>';
+                   
+                    if (this.props.user.role === "owner") {
+                        var cell4 = row.insertCell(3);
+                        cell4.innerHTML = '<div class="delete-container"></i><button class="deleteField-button">Delete</button></div>';
 
-                    cell4.addEventListener('click', () => {
-                        axios.delete(URL + "deletefield/" + field.id + "/")
-                            .then((response) => {
-                                console.log(response);
-                                row.remove();
-                                polygon.setMap(null);
-                            })
-                            .catch((error) => {
-                                console.log(error);
-                            });
-                    });
+                        cell4.addEventListener('click', () => {
+                            axios.delete(URL + "deletefield/" + field.id + "/")
+                                .then((response) => {
+                                    console.log(response);
+                                    row.remove();
+                                    polygon.setMap(null);
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
+                        });
+                    }
 
 
                     const polygonCoordinates = coordinates.map((coord) => {
@@ -712,19 +718,21 @@ class Maps extends React.Component {
                         cell1.innerHTML = "<span>" + fieldName + "</span>";
                         cell2.innerHTML = "<span>" + area + "</span> m<sup>2";
                         cell3.innerHTML = "<span>" + cropType + "</span>";
-                        cell4.innerHTML = '<div class="delete-container"></i><button class="deleteField-button">Delete</button></div>';
+                        if (this.props.user.role === "owner") {
+                            cell4.innerHTML = '<div class="delete-container"></i><button class="deleteField-button">Delete</button></div>';
 
-                        cell4.addEventListener('click', () => {
-                            axios.delete(URL + "deletefield/" + res.data.id + "/")
-                                .then((response) => {
-                                    console.log(response);
-                                    row.remove();
-                                    polygon.setMap(null);
-                                })
-                                .catch((error) => {
-                                    console.log(error);
-                                });
-                        });
+                            cell4.addEventListener('click', () => {
+                                axios.delete(URL + "deletefield/" + res.data.id + "/")
+                                    .then((response) => {
+                                        console.log(response);
+                                        row.remove();
+                                        polygon.setMap(null);
+                                    })
+                                    .catch((error) => {
+                                        console.log(error);
+                                    });
+                            });
+                        }
 
 
                         polygon.isComplete = true;
@@ -926,20 +934,22 @@ class Maps extends React.Component {
                         cell1.innerHTML = "<span>" + fieldName + "</span>";
                         cell2.innerHTML = "<span>" + area + "</span> m<sup>2";
                         cell3.innerHTML = "<span>" + cropType + "</span>";
-                        cell4.innerHTML = '<div class="delete-container"></i><button class="deleteField-button">Delete</button></div>';
+                        if (this.props.user.role === "owner") {
+                            cell4.innerHTML = '<div class="delete-container"></i><button class="deleteField-button">Delete</button></div>';
 
-                        cell4.addEventListener('click', () => {
-                            axios.delete(URL + "deletefield/" + res.data.id + "/")
-                                .then((response) => {
-                                    console.log(response);
-                                    row.remove();
-                                    rectangle.setMap(null);
+                            cell4.addEventListener('click', () => {
+                                axios.delete(URL + "deletefield/" + res.data.id + "/")
+                                    .then((response) => {
+                                        console.log(response);
+                                        row.remove();
+                                        rectangle.setMap(null);
 
-                                })
-                                .catch((error) => {
-                                    console.log(error);
-                                });
-                        });
+                                    })
+                                    .catch((error) => {
+                                        console.log(error);
+                                    });
+                            });
+                        }
 
                         rectangle.isComplete = true;
 
@@ -1211,16 +1221,16 @@ class Maps extends React.Component {
 
                 {this.props.user.role === 'farmer' || this.props.user.role === 'field manager' ? null :
 
-                <>
-                
-                <div className="fieldsSensorsContainer">
-                    <button onClick={this.showFieldTable} id="fieldSwitch" className={`fieldsSensorsBtn fieldsSensorsBtnActive ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}><i className="fa-regular fa-map"></i> My Fields</button>
-                    <button onClick={this.showSensorTable} id="sensorSwitch" className={`fieldsSensorsBtn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}><i className="fa-solid fa-wifi"></i> My Sensors</button>
-                    <button onClick={this.showFieldForm} id="addNewField" className='fieldsSensorsBtn'> <i className="fa-solid fa-plus"></i> Field</button>
-                    <button onClick={this.showSensorForm} id="addNewSensor" className='hidden fieldsSensorsBtn'> <i className="fa-solid fa-plus"></i> Sensor</button>
-                </div>
+                    <>
 
-                </>
+                        <div className="fieldsSensorsContainer">
+                            <button onClick={this.showFieldTable} id="fieldSwitch" className={`fieldsSensorsBtn fieldsSensorsBtnActive ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}><i className="fa-regular fa-map"></i> My Fields</button>
+                            <button onClick={this.showSensorTable} id="sensorSwitch" className={`fieldsSensorsBtn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}><i className="fa-solid fa-wifi"></i> My Sensors</button>
+                            <button onClick={this.showFieldForm} id="addNewField" className='fieldsSensorsBtn'> <i className="fa-solid fa-plus"></i> Field</button>
+                            <button onClick={this.showSensorForm} id="addNewSensor" className='hidden fieldsSensorsBtn'> <i className="fa-solid fa-plus"></i> Sensor</button>
+                        </div>
+
+                    </>
 
                 }
 

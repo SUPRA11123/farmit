@@ -1806,6 +1806,18 @@ body {
     z-index: 199;
 }
 
+.no-sensors-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.no-sensors-message h1 {
+    text-align: center;
+}
+
+
 .highlighted {
     background-color: yellow;
     /* Customize the highlighting style as desired */

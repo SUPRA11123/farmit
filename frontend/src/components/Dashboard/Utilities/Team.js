@@ -16,6 +16,7 @@ class Team extends React.Component {
             team: [],
             passwordMatchError: false,
             showForm: false,
+            selectedFields: []
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleEditMember = this.handleEditMember.bind(this);
@@ -76,13 +77,13 @@ class Team extends React.Component {
     handleKeyDown = (event) => {
         if (event.keyCode === 27) {
 
-    // if addMember form is open, close it
+            // if addMember form is open, close it
             if (!document.getElementById("addTeamMember").classList.contains('hidden')) {
                 this.cancelMember();
             } else {
                 this.cancelEditMember();
             }
-           
+
         }
     };
 
@@ -247,10 +248,24 @@ class Team extends React.Component {
     }
 
     handleFieldChange = (event) => {
-        const selectedFields = Array.from(event.target.selectedOptions, (option) => option.value);
+        const { name, checked, value } = event.target;
 
+        let selectedFields = [...this.state.selectedFields];
+
+        if (checked) {
+            selectedFields.push(value);
+        } else {
+            // Remove the deselected field from the array
+            const index = selectedFields.indexOf(value);
+            if (index > -1) {
+                selectedFields.splice(index, 1);
+            }
+        }
+
+        // Update the state with the modified selectedFields array
         this.setState({ selectedFields });
     }
+
 
     showEditMemberForm(member) {
 
@@ -377,6 +392,7 @@ class Team extends React.Component {
 
         const { role } = this.state;
 
+
         return (
             <>
                 <section id="teamContainer" className={`${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
@@ -389,7 +405,11 @@ class Team extends React.Component {
                             <th>Role</th>
                             <th>Email</th>
                             <th>Field</th>
-                            <th><button id="addNewMember" onClick={this.showTeamForm}><i className="fa-solid fa-plus"></i></button></th>
+                            {this.props.user.role === 'owner' && (
+                                <>
+                                    <th><button id="addNewMember" onClick={this.showTeamForm}><i className="fa-solid fa-plus"></i></button></th>
+                                </>
+                            )}
                         </thead>
                         <tbody>
                             {this.state.team.map(member => (
@@ -401,8 +421,12 @@ class Team extends React.Component {
                                     {member.role !== 'owner' ? (
                                         <>
                                             <td>
-                                                <button className="edit-button" onClick={() => this.showEditMemberForm(member)}>Edit</button>
-                                                <button className="delete-button" onClick={() => this.deleteMember(member.email)}>Delete</button>
+                                                {this.props.user.role === 'owner' && (
+                                                    <>
+                                                        <button className="edit-button" onClick={() => this.showEditMemberForm(member)}>Edit</button>
+                                                        <button className="delete-button" onClick={() => this.deleteMember(member.email)}>Delete</button>
+                                                    </>
+                                                )}
                                             </td>
                                         </>
                                     ) : (
@@ -437,14 +461,17 @@ class Team extends React.Component {
                     {role === 'field manager' && this.state.fields.length > 0 && (
                         <>
                             <label htmlFor="fields">Fields</label>
-                            <select id="fields" name="fields" className="form-control" onChange={this.handleFieldChange} multiple required>
-                                <option value="" disabled>Select a field</option>
+                            <div className="checklist-container">
                                 {this.state.fields.map(field => (
-                                    <option key={field.id} value={field.id}>{field.name}</option>
+                                    <div key={field.id} className="checklist-item">
+                                        <input type="checkbox" id={`field-${field.id}`} name="fields" value={field.id} onChange={this.handleFieldChange} />
+                                        <label htmlFor={`field-${field.id}`}>{field.name}</label>
+                                    </div>
                                 ))}
-                            </select>
+                            </div>
                         </>
                     )}
+
                     {this.state.passwordMatchError && (
                         <p style={{ color: "red" }}>Passwords do not match</p>
                     )}
@@ -487,12 +514,14 @@ class Team extends React.Component {
                     {role === 'field manager' && this.state.fields.length > 0 && (
                         <>
                             <label htmlFor="fields">Fields</label>
-                            <select id="fields" name="fields" className="form-control" onChange={this.handleFieldChange} multiple>
-                                <option value="" disabled>Select a field</option>
+                            <div className="checklist-container">
                                 {this.state.fields.map(field => (
-                                    <option key={field.id} value={field.id}>{field.name}</option>
+                                    <div key={field.id} className="checklist-item">
+                                        <input type="checkbox" id={`field-${field.id}`} name="fields" value={field.id} onChange={this.handleFieldChange} />
+                                        <label htmlFor={`field-${field.id}`}>{field.name}</label>
+                                    </div>
                                 ))}
-                            </select>
+                            </div>
                         </>
                     )}
 
