@@ -20,7 +20,7 @@ class Tasks extends React.Component {
             text4: "Create new task",
             text5: "Task",
             text6: "Description",
-            text7: "Asignee",
+            text7: "Assignee",
             text8: "Create Task",
             text9: "Select a team member",
             text10: "Fields",
@@ -466,7 +466,7 @@ class Tasks extends React.Component {
                         className="form-control"
                         onChange={this.handleMemberChange}
                     >
-                        <option value="" disabled>{this.state.textContent.text8}</option>
+                        <option value="" disabled>{this.state.textContent.text9}</option>
                         {this.state.team.map((member) => {
                             if (member.id !== this.props.user.id && member.role !== "owner") {
                                 return (
@@ -482,7 +482,7 @@ class Tasks extends React.Component {
 
                     {this.state.selectedAssignee && (
                         <>
-                            <label htmlFor="taskField">{this.state.textContent.text9}</label>
+                            <label htmlFor="taskField">{this.state.textContent.text11}</label>
                             <select defaultValue="" id="fields" name="fields" className="form-control">
                                 {this.state.fields.length > 0 ? (
                                     <>

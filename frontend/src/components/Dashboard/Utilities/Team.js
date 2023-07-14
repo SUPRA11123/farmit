@@ -27,6 +27,9 @@ class Team extends React.Component {
             text14: "Delete",
             text15: "Passwords do not match",
             text16: "Password must contain at least one uppercase letter, one lowercase letter, one digit, and no special characters",
+            text17: "Select a role",
+            text18: "Edit existing team member",
+            text19: "Edit User",
         
         },
         pt: {
@@ -37,7 +40,7 @@ class Team extends React.Component {
             text4: "Campos",
             text5: "Adicionar novo membro",
             text6: "Nome",
-            text7: "Selecionar Função",
+            text7: "Função",
             text8: "E-mail",
             text9: "Palavra-passe",
             text10: "Confirmar Palavra-passe",
@@ -47,7 +50,9 @@ class Team extends React.Component {
             text14: "Apagar",
             text15: "As palavras-passe não coincidem.",
             text16: "A palavra-passe deve conter, pelo menos, uma letra maiúscula, uma letra minúscula, um dígito e não pode conter caracteres especiais.",
-            
+            text17: "Selecionar uma função",
+            text18: "Editar membro existente",
+            text19: "Editar Utilizador",
         },
         };
 
@@ -542,23 +547,23 @@ class Team extends React.Component {
 
                 <form id="editTeamMember" className={`hidden ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`} onSubmit={this.handleEditMember}>
 
-                    <h2><i className="fa-solid fa-people-group"></i>Edit existent team member <i className="fa-solid fa-xmark" id="editMemberCancel" onClick={this.cancelEditMember}></i></h2>
+                    <h2><i className="fa-solid fa-people-group"></i>{this.state.textContent.text18} <i className="fa-solid fa-xmark" id="editMemberCancel" onClick={this.cancelEditMember}></i></h2>
                     <hr></hr>
 
 
-                    <label htmlFor="name">Name</label>
+                    <label htmlFor="name">{this.state.textContent.text6}</label>
                     <input required type="text" id="editName" name="editName" className="form-control" placeholder="Name" disabled />
 
-                    <label htmlFor="role">Role</label>
+                    <label htmlFor="role">{this.state.textContent.text7}</label>
                     <select defaultValue={role} id="editRole" name="editRole" className="form-control" onChange={this.handleRoleChangeOnEdit}>
-                        <option value="" disabled>Select a role</option>
+                        <option value="" disabled>{this.state.textContent.text17} </option>
                         <option value="field manager">field manager</option>
                         <option value="farmer">farmer</option>
                     </select>
 
                     {role === 'field manager' && this.state.fields.length > 0 && (
                         <>
-                            <label htmlFor="fields">Fields</label>
+                            <label htmlFor="fields">{this.state.textContent.text4}</label>
                             <div className="checklist-container">
                                 {this.state.fields.map(field => (
                                     <div key={field.id} className="checklist-item">
@@ -575,7 +580,7 @@ class Team extends React.Component {
                     <input required type="text" id="editEmail" name="editEmail" className="form-control" placeholder="Email" disabled />
 
                     <button id="editMember" type="submit" disabled={!this.isEditFormValid()}>
-                        Edit User
+                    {this.state.textContent.text19}
                     </button>
                 </form>
 

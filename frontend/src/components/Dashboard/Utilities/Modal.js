@@ -210,6 +210,7 @@ class Modal extends React.Component {
     |> range(start: ${formattedStartDate}, stop: ${formattedEndDate})
     |> filter(fn: (r) => r["_measurement"] == "mqtt_consumer")
     |> filter(fn: (r) => r["_field"] == "decoded_payload_temperature" or r["_field"] == "decoded_payload_humidity")
+    |> filter(fn: (r) => r["topic"] == "v3/farmit@ttn/devices/${this.props.sensorData.sensorId}/up")
   `;
 
     let data = [];

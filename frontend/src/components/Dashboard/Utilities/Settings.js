@@ -22,6 +22,10 @@ class Settings extends React.Component {
             text9: "Dark Mode",
             text10: "Language",
             text11: "Terms & Conditions",
+            text12: "English",
+            text13: "Portuguese",
+            text14: "Logout of Agrosensor",
+            text15: "Logout",
         },
         pt: {
             text1: "Meu Perfil",
@@ -35,6 +39,10 @@ class Settings extends React.Component {
             text9: "Modo Escuro",
             text10: "Linguagem",
             text11: "Termos e Condições",
+            text12: "Inglês",
+            text13: "Português",
+            text14: "Sair do Agrosensor",
+            text15: "Sair",
         },
         };
 
@@ -222,6 +230,9 @@ class Settings extends React.Component {
                 text9: "Dark Mode",
                 text10: "Language",
                 text11: "Terms & Conditions",
+                text12: "English",
+                text13: "Portuguese",
+                text14: "Logout of Agrosensor"
             },
             pt: {
                 text1: "Meu Perfil",
@@ -235,6 +246,9 @@ class Settings extends React.Component {
                 text9: "Modo Escuro",
                 text10: "Linguagem",
                 text11: "Termos e Condições",
+                text12: "Inglês",
+                text13: "Português",
+                text14: "Sair do Agrosensor"
             },
             };
 
@@ -306,8 +320,8 @@ class Settings extends React.Component {
                     <label className="toggle">
                         <span className="toggle-label">{this.state.textContent.text10}: </span> 
                         <select id="languageSelector" onChange={this.changeLanguage} className={`${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
-                            <option value="en">English</option>
-                            <option value="pt" selected={tokenLanguage === "pt"}>Portuguese</option>
+                            <option value="en">{this.state.textContent.text12}</option>
+                            <option value="pt" selected={tokenLanguage === "pt"}>{this.state.textContent.text13}</option>
                         </select>
                     </label>
 
@@ -318,8 +332,8 @@ class Settings extends React.Component {
                 <div id="confirmLogout" className={`confirmLogout hidden ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
 
                     <i className="fa-solid fa-xmark cancelSettingsAction" id="deleteAccountCancel" onClick={this.cancelLogout}></i>
-                    <h2>Logout of Agrosensor</h2>
-                    <button onClick={this.props.logout} >Logout</button>
+                    <h2>{this.state.textContent.text14}</h2>
+                    <button onClick={this.props.logout} >{this.state.textContent.text15}</button>
 
                 </div>
 
