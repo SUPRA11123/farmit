@@ -122,7 +122,7 @@ class Maps extends React.Component {
                     cell3.innerHTML = "<span>" + field.crop_type + "</span>";
 
                     var cell4 = row.insertCell(3);
-                    cell4.innerHTML = '<div class="delete-container"><i class="fa-solid fa-ellipsis-vertical"></i><button class="delete-button">Delete</button></div>';
+                    cell4.innerHTML = '<div class="delete-container"></i><button class="deleteField-button">Delete</button></div>';
 
                     cell4.addEventListener('click', () => {
                         axios.delete(URL + "deletefield/" + field.id + "/")
@@ -280,7 +280,7 @@ class Maps extends React.Component {
                     cell3.innerHTML = "<span>" + field.crop_type + "</span>";
 
                     var cell4 = row.insertCell(3);
-                    cell4.innerHTML = '<div class="delete-container"><i class="fa-solid fa-ellipsis-vertical"></i><button class="delete-button">Delete</button></div>';
+                    cell4.innerHTML = '<div class="delete-container"></i><button class="deleteField-button">Delete</button></div>';
 
                     cell4.addEventListener('click', () => {
                         axios.delete(URL + "deletefield/" + field.id + "/")
@@ -654,6 +654,8 @@ class Maps extends React.Component {
                 });
 
                 document.getElementById("cancelNewField").addEventListener("click", () => {
+
+
                     cancelFormSubmitPromise = true;
                 });
 
@@ -710,7 +712,7 @@ class Maps extends React.Component {
                         cell1.innerHTML = "<span>" + fieldName + "</span>";
                         cell2.innerHTML = "<span>" + area + "</span> m<sup>2";
                         cell3.innerHTML = "<span>" + cropType + "</span>";
-                        cell4.innerHTML = '<div class="delete-container"><i class="fa-solid fa-ellipsis-vertical"></i><button class="delete-button">Delete</button></div>';
+                        cell4.innerHTML = '<div class="delete-container"></i><button class="deleteField-button">Delete</button></div>';
 
                         cell4.addEventListener('click', () => {
                             axios.delete(URL + "deletefield/" + res.data.id + "/")
@@ -859,6 +861,8 @@ class Maps extends React.Component {
 
                 document.getElementById("cancelNewField").addEventListener("click", () => {
                     cancelFormSubmitPromise = true;
+
+
                 });
 
                 formSubmitPromise.then(() => {
@@ -922,7 +926,7 @@ class Maps extends React.Component {
                         cell1.innerHTML = "<span>" + fieldName + "</span>";
                         cell2.innerHTML = "<span>" + area + "</span> m<sup>2";
                         cell3.innerHTML = "<span>" + cropType + "</span>";
-                        cell4.innerHTML = '<div class="delete-container"><i class="fa-solid fa-ellipsis-vertical"></i><button class="delete-button">Delete</button></div>';
+                        cell4.innerHTML = '<div class="delete-container"></i><button class="deleteField-button">Delete</button></div>';
 
                         cell4.addEventListener('click', () => {
                             axios.delete(URL + "deletefield/" + res.data.id + "/")
@@ -1259,7 +1263,7 @@ class Maps extends React.Component {
                         </thead>
                         <tbody>
                             <tr>
-                                <td colSpan={4}>
+                                <td>
 
 
                                 </td>

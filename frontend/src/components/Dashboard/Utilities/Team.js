@@ -14,7 +14,8 @@ class Team extends React.Component {
             confirmPassword: "",
             fields: [],
             team: [],
-            passwordMatchError: false
+            passwordMatchError: false,
+            showForm: false,
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleEditMember = this.handleEditMember.bind(this);
@@ -23,9 +24,14 @@ class Team extends React.Component {
     }
 
     componentDidMount() {
+
+        document.addEventListener('keydown', this.handleKeyDown);
+
         axios.get("http://localhost:8000/getteam/" + this.props.farmDetails.id + "/")
             .then(response => {
                 const team = response.data;
+
+                console.log(team);
 
                 // iterate through the team members and get their fields
                 const promises = team.map(member => {
@@ -62,6 +68,24 @@ class Team extends React.Component {
                 console.log(error);
             });
     }
+
+    componentWillUnmount() {
+        document.removeEventListener('keydown', this.handleKeyDown);
+    }
+
+    handleKeyDown = (event) => {
+        if (event.keyCode === 27) {
+
+    // if addMember form is open, close it
+            if (!document.getElementById("addTeamMember").classList.contains('hidden')) {
+                this.cancelMember();
+            } else {
+                this.cancelEditMember();
+            }
+           
+        }
+    };
+
 
 
     handleSubmit(event) {
@@ -202,10 +226,12 @@ class Team extends React.Component {
 
 
 
+
     showTeamForm() {
         document.getElementById("addTeamMember").reset();
         document.getElementById("teamOverlay").classList.remove('hidden');
         document.getElementById("addTeamMember").classList.remove('hidden');
+
     }
 
     cancelMember() {
@@ -253,6 +279,8 @@ class Team extends React.Component {
         }
 
     }
+
+
 
     cancelEditMember() {
         document.getElementById("editTeamMember").reset();
@@ -389,6 +417,7 @@ class Team extends React.Component {
                 </section>
 
                 <form id="addTeamMember" className={`hidden ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`} onSubmit={this.handleSubmit}>
+
 
                     <h2><i className="fa-solid fa-people-group"></i>Add new member <i className="fa-solid fa-xmark" id="teamCancel" onClick={this.cancelMember}></i></h2>
                     <hr></hr>

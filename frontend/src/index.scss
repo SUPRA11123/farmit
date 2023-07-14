@@ -59,7 +59,7 @@ body {
             bottom: -15%;
             z-index: -1;
         }
-        
+
 
         #mapContainer {
             position: absolute;
@@ -107,12 +107,13 @@ body {
         left: 50%;
         transform: translate(-50%, -50%);
 
-        p { 
+        p {
             margin-top: 10%;
             text-align: left;
             font-weight: bold;
             font-size: 1.5vh;
             color: #B0B0B0;
+
             span {
                 color: #0AA837;
                 cursor: pointer;
@@ -124,13 +125,16 @@ body {
             text-decoration: underline;
         }
 
-       label {
-        font-size: 2vh;
-        margin-top: 5%;
-        font-weight: 300;
-       }
+        label {
+            font-size: 2vh;
+            margin-top: 5%;
+            font-weight: 300;
+        }
 
-        input[type=email], input[type=password], input[type=text], select  {
+        input[type=email],
+        input[type=password],
+        input[type=text],
+        select {
             width: 100%;
             font-size: 2vh;
             padding: 12px 20px;
@@ -141,8 +145,8 @@ body {
             border: 1px solid #B0B0B0;
         }
 
-        input[type=text]:focus{
-           border: 1px solid $green;
+        input[type=text]:focus {
+            border: 1px solid $green;
         }
 
         .submitActive {
@@ -163,7 +167,7 @@ body {
 
         #errorMessage {
             color: $red;
-        }   
+        }
     }
 }
 
@@ -200,7 +204,7 @@ body {
     width: 15%;
     background-color: #f4f4f4;
     z-index: 5;
-   
+
     .navTop {
         position: relative;
         width: 100%;
@@ -208,13 +212,16 @@ body {
         display: flex;
         align-items: center;
         justify-content: center;
-        
+
         h1 {
             font-size: 2.5vh;
             font-family: $font1;
             margin-left: 10px;
             font-weight: bold;
-            span{font-weight: normal;}
+
+            span {
+                font-weight: normal;
+            }
         }
     }
 
@@ -243,13 +250,13 @@ body {
     }
 
     nav {
-        position:relative;
+        position: relative;
         height: 50%;
         width: 100%;
     }
 
     ul {
-        -webkit-user-select: none;    
+        -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
@@ -259,7 +266,7 @@ body {
         flex-direction: column;
         list-style-type: none;
         color: $darkGrey;
-        overflow-x: hidden;    
+        overflow-x: hidden;
 
         li {
             display: flex;
@@ -267,12 +274,12 @@ body {
             justify-content: left;
             flex-direction: row;
             padding: 5% 0 5% 0;
-            white-space:nowrap;
+            white-space: nowrap;
         }
 
         li p {
             font-size: 2vh;
-           
+
         }
 
         li:hover {
@@ -280,7 +287,10 @@ body {
             background-color: $green;
             color: white;
             transition: 0.25s;
-            i {color: white;}
+
+            i {
+                color: white;
+            }
         }
 
         li i {
@@ -304,12 +314,12 @@ body {
             -ms-transform: scale(-1, 1);
             transform: scale(-1, 1);
         }
-     }
- 
-     #logout:hover {
-         color: $red;
-         background-color: unset;
-     }
+    }
+
+    #logout:hover {
+        color: $red;
+        background-color: unset;
+    }
 
 }
 
@@ -327,7 +337,7 @@ body {
         h1 {
             display: none;
         }
-    
+
         img {
             width: 60%;
         }
@@ -336,17 +346,33 @@ body {
 
     }
 
-    img {transition-delay: 0.5;}
-    #toggleNavMenu {transform: rotate(180deg);border-radius: 0 5px 0 0;}
+    img {
+        transition-delay: 0.5;
+    }
 
-    ul {gap: 20px;}
+    #toggleNavMenu {
+        transform: rotate(180deg);
+        border-radius: 0 5px 0 0;
+    }
 
-    ul li { justify-content: center;}
+    ul {
+        gap: 20px;
+    }
 
-    ul li p{display: none; }
+    ul li {
+        justify-content: center;
+    }
 
-    ul li i {transition: none; padding: 15% 0 15% 0; margin: 0;}
-  
+    ul li p {
+        display: none;
+    }
+
+    ul li i {
+        transition: none;
+        padding: 15% 0 15% 0;
+        margin: 0;
+    }
+
 }
 
 
@@ -355,11 +381,15 @@ body {
     color: $green;
     box-shadow: inset 5px 0px 0px 0px $green;
 
-    i {color: $green;}
+    i {
+        color: $green;
+    }
 }
 
 
-.settingsActive {color: $green;}
+.settingsActive {
+    color: $green;
+}
 
 .utilityContainer {
     font-family: $font1;
@@ -371,7 +401,7 @@ body {
     overflow: scroll;
 }
 
-.utilityContainer::-webkit-scrollbar{
+.utilityContainer::-webkit-scrollbar {
     display: none;
 }
 
@@ -387,12 +417,13 @@ body {
 
 @keyframes slideInFromLeft {
     0% {
-      transform: translateX(-5%);
+        transform: translateX(-5%);
     }
+
     100% {
-      transform: translateX(0);
+        transform: translateX(0);
     }
-  }
+}
 
 
 #centreToMap {
@@ -417,9 +448,9 @@ body {
 .notification-container {
     position: relative;
     display: inline-block;
-  }
-  
-  .notification {
+}
+
+.notification {
     position: absolute;
     top: -10px;
     right: -10px;
@@ -434,7 +465,7 @@ body {
     align-items: center;
     justify-content: center;
     border: 1px solid white;
-  }
+}
 
 .alertContainer {
     position: absolute;
@@ -447,7 +478,7 @@ body {
 
     i {
         font-size: 4vh;
-        color: $darkGrey;       
+        color: $darkGrey;
         border-radius: 5px;
         padding: 5px;
         background-color: $grey;
@@ -480,7 +511,11 @@ body {
         height: 10%;
         font-size: 2.5vh;
         color: $darkGrey;
-        i { color: $green; margin-right: 2.5%;}
+
+        i {
+            color: $green;
+            margin-right: 2.5%;
+        }
     }
 
     .alertsContainer {
@@ -519,7 +554,7 @@ body {
                 color: $red;
             }
 
-        } 
+        }
     }
 
     #clearAllAlerts {
@@ -553,21 +588,22 @@ body {
     }
 
     .alertCardAnimation {
-        opacity: 0; 
+        opacity: 0;
         animation: fadeIn 0.5s ease-in-out forwards;
-        animation-delay: 0.5s; 
-      }
-      
+        animation-delay: 0.5s;
+    }
+
 }
 
 @keyframes fadeIn {
     0% {
-      opacity: 0;
+        opacity: 0;
     }
+
     100% {
-      opacity: 1;
+        opacity: 1;
     }
-  }
+}
 
 .alertMenuAnimation {
     animation: expandAlertMenu 0.5s ease forwards;
@@ -575,14 +611,15 @@ body {
 
 @keyframes expandAlertMenu {
     0% {
-      height: 0;
-      width: 0;
+        height: 0;
+        width: 0;
     }
+
     100% {
         height: 70%;
         width: 45%;
     }
-  }
+}
 
 .blurBox {
     position: fixed;
@@ -590,7 +627,7 @@ body {
     height: 100%;
     width: 100%;
     backdrop-filter: blur(4px);
-    
+
 }
 
 
@@ -666,14 +703,15 @@ body {
 
 @keyframes slide-up {
     0% {
-      top: 20%;
-      opacity: 0;
+        top: 20%;
+        opacity: 0;
     }
+
     100% {
-      top: 15%;
-      opacity: 1;
+        top: 15%;
+        opacity: 1;
     }
-  }
+}
 
 #taskWidget {
     background-color: $grey;
@@ -684,15 +722,18 @@ body {
 }
 
 #weatherWidget {
-    background: rgb(190,217,255);
-    background: linear-gradient(0deg, rgba(190,217,255,1) 0%, rgba(66,143,255,1) 100%);
+    background: rgb(190, 217, 255);
+    background: linear-gradient(0deg, rgba(190, 217, 255, 1) 0%, rgba(66, 143, 255, 1) 100%);
     animation: slide-up 1s forwards;
 }
 
 .Col2Card:hover {
     outline: 2px solid $darkGrey;
     cursor: pointer;
-    h1 {color: black !important;}
+
+    h1 {
+        color: black !important;
+    }
 }
 
 .Col2Card {
@@ -707,9 +748,9 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    
-    
-    
+
+
+
 
     #widgetPin {
         color: $red;
@@ -729,6 +770,7 @@ body {
         font-size: 8vh;
         margin: 0;
         font-weight: bold;
+
         span {
             position: absolute;
             font-weight: normal;
@@ -736,7 +778,8 @@ body {
         }
     }
 
-    .weatherWigetTop, .weatherWigetBottom {
+    .weatherWigetTop,
+    .weatherWigetBottom {
         position: absolute;
         width: 100%;
         height: 10%;
@@ -745,14 +788,19 @@ body {
         justify-content: space-around;
 
         #widgetWeatherIcon {
-           height: 50px;
+            height: 50px;
         }
-      
+
     }
 
-    .weatherWigetBottom {bottom: 10%;}
-    .weatherWigetTop {top: 0}
-    
+    .weatherWigetBottom {
+        bottom: 10%;
+    }
+
+    .weatherWigetTop {
+        top: 0
+    }
+
 }
 
 .col4Card {
@@ -798,7 +846,7 @@ body {
         width: 100%;
         font-size: 2.5vh;
         color: black;
-        
+
     }
 
     .taskCount {
@@ -819,13 +867,18 @@ body {
 }
 
 #taskWidget:hover {
-    h2 {color: $green !important;}
+    h2 {
+        color: $green !important;
+    }
 }
 
 .col4Card:hover {
     outline: 2px solid $darkGrey;
     cursor: pointer;
-    h2{color: $green !important;}
+
+    h2 {
+        color: $green !important;
+    }
 }
 
 
@@ -845,7 +898,7 @@ body {
 #homeMap:hover {
     outline: 2px solid $darkGrey;
     cursor: pointer;
-  }
+}
 
 
 .lineChartContainer {
@@ -890,8 +943,8 @@ body {
     width: 100%;
     left: 0%;
     margin-bottom: 2%;
-    background: rgb(190,217,255);
-    background: linear-gradient(0deg, rgba(190,217,255,1) 0%, rgba(66,143,255,1) 100%);
+    background: rgb(190, 217, 255);
+    background: linear-gradient(0deg, rgba(190, 217, 255, 1) 0%, rgba(66, 143, 255, 1) 100%);
     border-radius: 5px;
     color: white;
     font-size: 2vh;
@@ -911,7 +964,7 @@ body {
     }
 }
 
-.weatheDataContainer  {
+.weatheDataContainer {
     position: absolute;
     top: 22.5%;
     width: 100%;
@@ -923,13 +976,14 @@ body {
         margin: 0 5px 0 5px;
         border-radius: 5px;
         background-color: $grey;
+
         h2 {
             color: $darkGrey;
             font-weight: normal;
             font-size: 1vw;
             margin-left: 5%;
         }
-        
+
         p {
             color: $darkGrey;
             text-align: center;
@@ -938,11 +992,15 @@ body {
             margin: 2.5% 0 2.5% 0;
         }
 
-       
+
     }
+
     #sunsetSunrise {
         width: 25%;
-        i {color: $darkGrey;}
+
+        i {
+            color: $darkGrey;
+        }
     }
 }
 
@@ -964,7 +1022,7 @@ body {
         top: 0;
         text-align: center;
         width: 100%;
-    }  
+    }
 
     li {
         width: 25%;
@@ -979,6 +1037,7 @@ body {
         color: $darkGrey;
         border: 2px solid $darkGrey;
         width: 100%;
+
         span {
             color: $green;
             font-weight: bold;
@@ -989,15 +1048,18 @@ body {
         cursor: pointer;
         background-color: $green;
         color: white;
-        span {color: white;}
-        
+
+        span {
+            color: white;
+        }
+
     }
 
     .daySelectorActive {
         border: 2px solid $green;
         color: $green;
     }
-    
+
 }
 
 .fieldsSensorsContainer {
@@ -1011,15 +1073,15 @@ body {
     justify-content: flex-start;
 
     .fieldsSensorsBtn {
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    font-size: 2vh;
-    margin-right: 10px;
-    color: $darkGrey;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 2vh;
+        margin-right: 10px;
+        color: $darkGrey;
     }
 
-    .fieldsSensorsBtn:hover{
+    .fieldsSensorsBtn:hover {
         cursor: pointer;
     }
 
@@ -1032,11 +1094,13 @@ body {
         }
     }
 
-    #addNewField, #addNewSensor {
+    #addNewField,
+    #addNewSensor {
         position: absolute;
         right: 0;
         background-color: $green;
         color: white;
+
         i {
             color: white;
         }
@@ -1044,7 +1108,7 @@ body {
 
 }
 
-.fieldsTableConatiner::-webkit-scrollbar{
+.fieldsTableConatiner::-webkit-scrollbar {
     display: none;
 }
 
@@ -1059,11 +1123,13 @@ body {
     border: 2px solid #D9D9D9;
     overflow-y: scroll;
     overflow-x: visible;
-    -ms-overflow-style: none;  /* IE and Edge */
+    -ms-overflow-style: none;
+    /* IE and Edge */
     scrollbar-width: none;
     z-index: 5;
 
-    #createField, #createSensor {
+    #createField,
+    #createSensor {
         top: 0;
         width: 100%;
         height: 100%;
@@ -1074,13 +1140,13 @@ body {
         align-items: center;
         flex-direction: column;
         font-family: $font1;
-       
+
 
 
         label {
             font-size: 2.5vh;
             text-align: left;
-            
+
         }
 
         input {
@@ -1103,7 +1169,7 @@ body {
         width: 20%;
         position: relative;
         margin-bottom: 2.5%;
-  
+
     }
 
     .fieldsTableBtn {
@@ -1114,7 +1180,7 @@ body {
         bottom: 2.5%;
         width: 100%;
         padding: 2.5% 0 2.5% 0;
-        
+
     }
 
     .fieldsTableBtn:hover {
@@ -1124,7 +1190,8 @@ body {
     }
 
     .fieldsTable tbody tr:hover {
-        background-color: $green /* Change this to the desired hover color */
+        background-color: $green
+            /* Change this to the desired hover color */
     }
 
     #cancelNewField {
@@ -1171,62 +1238,64 @@ body {
     position: absolute;
     top: 0;
     border-radius: 15px 15px 0 0;
-  
+
     th h2 {
-      position: relative;
-      text-align: left;
-      border-radius: 25px;
-      margin: 15%;
-      font-size: 2.5vh;
-      font-weight: bold;
+        position: relative;
+        text-align: left;
+        border-radius: 25px;
+        margin: 15%;
+        font-size: 2.5vh;
+        font-weight: bold;
     }
-  
+
     thead tr {
-   
+
         border-radius: 25px;
         border-bottom: 2px solid #D9D9D9;
     }
-  
+
     tbody tr:nth-child(odd) {
-      background-color: white;
+        background-color: white;
     }
-  
-  
-    tbody tr { 
-        line-height: 50px; 
+
+
+    tbody tr {
+        line-height: 50px;
+
         td:last-child {
             width: 50px;
-          }
+        }
     }
 
     tbody tr td {
         width: 30%;
     }
+
     tbody tr td span {
-        
-      margin-left: 15%;
-      font-size: 2vh;
+
+        margin-left: 15%;
+        font-size: 2vh;
     }
 
     tbody tr:hover {
         background-color: $green;
         color: white;
-       
-      }
 
-    i {
-       font-size: 2.5vh;
-       padding-right: 10px;
-  
-      }
-  
-    tbody tr:hover {
-      cursor: pointer;
-      background-color: $lightBlue;
     }
 
-  }
-  
+    i {
+        font-size: 2.5vh;
+        padding-right: 10px;
+
+    }
+
+    tbody tr:hover {
+        cursor: pointer;
+        background-color: $lightBlue;
+    }
+
+}
+
 
 #createField {
     position: absolute;
@@ -1235,21 +1304,21 @@ body {
     top: 25%;
     left: 0;
     z-index: 1;
-   
+
 }
 
-#map{
+#map {
     position: relative;
     top: 10%;
     height: 87.5%;
     width: 52.5%;
     border-radius: 15px;
     transition: 0.5s;
- }
+}
 
- #add{
- 
-    
+#add {
+
+
     top: 0;
     height: 100%;
     width: 100%;
@@ -1263,17 +1332,17 @@ body {
         margin: 5px;
     }
 
- }
+}
 
- #div{
-   
+#div {
+
     position: absolute;
     top: 5%;
     left: 50%;
     transform: translate(-50%, -50%);
- }
+}
 
- #googleSignIn {
+#googleSignIn {
     position: relative;
     left: 50%;
     transform: translateX(-50%);
@@ -1322,12 +1391,12 @@ body {
     display: flex;
     flex-direction: row;
 
-    .taskContainer::-webkit-scrollbar{
+    .taskContainer::-webkit-scrollbar {
         display: none;
-      }
+    }
 
     .taskColumn {
-        
+
         position: relative;
         width: 33%;
         height: 97.5%;
@@ -1396,9 +1465,9 @@ body {
             background-color: red;
         }
 
-        .taskCard::-webkit-scrollbar{
+        .taskCard::-webkit-scrollbar {
             display: none;
-          }
+        }
 
         .taskCard {
             position: relative;
@@ -1410,7 +1479,7 @@ body {
             padding-bottom: 5px;
             margin-bottom: 2.5%;
             margin-top: 2.5%;
-            
+
 
             h3 {
                 padding-top: 5%;
@@ -1429,14 +1498,14 @@ body {
                 i {
                     color: $green;
                 }
-                
+
             }
 
             p {
                 margin: 10px;
                 margin-top: 2px;
                 font-size: 1.75vh;
-           
+
                 margin-bottom: 10%;
             }
 
@@ -1469,7 +1538,9 @@ body {
     }
 }
 
-#taskOverlay{z-index: 199;}
+#taskOverlay {
+    z-index: 199;
+}
 
 .overlayDarken {
     position: fixed;
@@ -1478,9 +1549,9 @@ body {
     height: 110%;
     width: 110%;
     z-index: 6;
-    background: rgba(0,0,0,0.2);
+    background: rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(0);
-    
+
 }
 
 .overlayDarkenAnimation {
@@ -1489,14 +1560,15 @@ body {
 
 @keyframes blurAnimation {
     0% {
-      backdrop-filter: blur(0);
-      background: rgba(0,0,0,0);
+        backdrop-filter: blur(0);
+        background: rgba(0, 0, 0, 0);
     }
+
     100% {
-      backdrop-filter: blur(2px);
-      background: rgba(0,0,0,0.2);
+        backdrop-filter: blur(2px);
+        background: rgba(0, 0, 0, 0.2);
     }
-  }
+}
 
 #addTask {
     position: absolute;
@@ -1525,11 +1597,16 @@ body {
     }
 
     h2 {
-        i{color: $green; margin-right: 10px;}
+        i {
+            color: $green;
+            margin-right: 10px;
+        }
+
         color: black;
         font-size: 2.5vh;
         width: 100%;
         text-align: center;
+
         #taskCancel {
             position: absolute;
             right: 2.5%;
@@ -1538,13 +1615,15 @@ body {
         }
     }
 
-    input, select, button {
+    input,
+    select,
+    button {
         width: 60%;
         font-family: $font1;
         border-radius: 5px;
         padding: 5px;
         border: 1px solid black;
-     
+
     }
 
     button {
@@ -1591,7 +1670,11 @@ body {
     h2 {
         color: black;
         font-size: 2.5vh;
-        i{color: $green; margin-right: 10px;}
+
+        i {
+            color: $green;
+            margin-right: 10px;
+        }
     }
 
     hr {
@@ -1601,7 +1684,9 @@ body {
         width: 100%;
     }
 
-    input, select, button {
+    input,
+    select,
+    button {
         width: 60%;
         font-size: 2.5vh;
         border-radius: 5px;
@@ -1618,7 +1703,7 @@ body {
         margin-top: 20px;
         width: 60%;
         text-align: left;
-        
+
     }
 
     #teamCancel {
@@ -1661,7 +1746,11 @@ body {
     h2 {
         color: black;
         font-size: 2.5vh;
-        i{color: $green; margin-right: 10px;}
+
+        i {
+            color: $green;
+            margin-right: 10px;
+        }
     }
 
     hr {
@@ -1671,7 +1760,9 @@ body {
         width: 100%;
     }
 
-    input, select, button {
+    input,
+    select,
+    button {
         width: 60%;
         font-size: 2.5vh;
     }
@@ -1684,7 +1775,7 @@ body {
         margin: 5px;
         width: 60%;
         text-align: left;
-        
+
     }
 
     #editMemberCancel {
@@ -1716,24 +1807,30 @@ body {
 }
 
 .highlighted {
-    background-color: yellow; /* Customize the highlighting style as desired */
-  }
+    background-color: yellow;
+    /* Customize the highlighting style as desired */
+}
 
 
-  .delete-container .delete-button {
+.delete-container .delete-button {
     display: none;
-  }
-  
-  .delete-container:hover .delete-button {
-    display:inline-flex;
-    
-  }
+}
 
-  .delete-container:hover :not(.delete-button) {
+.delete-container:hover .delete-button {
+    display: inline-flex;
+
+}
+
+.delete-container:hover :not(.delete-button) {
     display: none;
-  }
+}
 
-  .delete-button {
+.delete-container:hover .deleteField-button {
+    display: inline-flex;
+
+}
+
+.delete-button {
     display: none;
     align-items: center;
     justify-content: center;
@@ -1745,10 +1842,29 @@ body {
     margin: 0 5px 0 5px;
     padding: 5px;
     border-radius: 5px;
-    
-  }
 
-  .edit-button{
+}
+
+.deleteField-button {
+    align-items: center;
+    justify-content: center;
+    border: none;
+    z-index: 300;
+    background: $red;
+    color: white;
+    cursor: pointer;
+    margin: 0 5px 0 5px;
+    padding: 5px;
+    border-radius: 5px;
+
+}
+
+.deleteField-button:hover {
+    background-color: white;
+    color: red;
+}
+
+.edit-button {
     display: none;
     align-items: center;
     justify-content: center;
@@ -1760,7 +1876,7 @@ body {
     margin: 0;
     padding: 5px;
     border-radius: 5px;
-  }
+}
 
 #teamContainer {
     position: absolute;
@@ -1785,7 +1901,7 @@ body {
 
     #addNewMember {
 
-   
+
         right: 2.5%;
         color: $green;
         cursor: pointer;
@@ -1815,15 +1931,22 @@ body {
             border-bottom: 2px solid #D9D9D9;
             font-size: 2.5vh;
             background-color: $grey;
-            th {padding-left: 5%; padding-bottom: 2.5%;}
+
+            th {
+                padding-left: 5%;
+                padding-bottom: 2.5%;
+            }
         }
 
         tbody tr:hover {
             background-color: $lightBlue !important;
         }
+
         tbody tr td:last-child {
-            width: 50px; /* Adjust the width as needed */
-          }
+            width: 50px;
+            /* Adjust the width as needed */
+        }
+
         tbody tr td {
             font-size: 2vh;
             padding-left: 5%;
@@ -1832,19 +1955,22 @@ body {
 
         tbody tr:nth-child(odd) {
             background-color: white;
-          }
-        
-        
-        tbody tr { line-height: 50px; margin-left: 5%; }
+        }
 
-     tbody tr:hover .edit-button,
-    tbody tr:hover .delete-button {
-        display: inline-block;
-    }
+
+        tbody tr {
+            line-height: 50px;
+            margin-left: 5%;
+        }
+
+        tbody tr:hover .edit-button,
+        tbody tr:hover .delete-button {
+            display: inline-block;
+        }
     }
 }
 
-  .modalContainer {
+.modalContainer {
     position: absolute;
     top: 42.5%;
     width: 52.5%;
@@ -1854,9 +1980,9 @@ body {
     border: 2px solid #D9D9D9;
     display: flex;
     flex-direction: column;
-    opacity: 0; 
+    opacity: 0;
     animation: fadeIn 0.5s ease-in-out forwards;
-    animation-delay: 0.5s; 
+    animation-delay: 0.5s;
 
     .body {
         width: 90%;
@@ -1876,27 +2002,27 @@ body {
             justify-content: flex-start;
         }
     }
-   
-  }
 
- 
-  .titleCloseBtn {
+}
+
+
+.titleCloseBtn {
     position: absolute;
     right: 2.5%;
     top: 2.5%;
     font-size: 2vh;
-  }
+}
 
-  .titleCloseBtn button {
+.titleCloseBtn button {
     background-color: transparent;
     border: none;
     font-size: 2vh;
     cursor: pointer;
-  }
+}
 
- 
 
-.title2{
+
+.title2 {
     font-size: 1vh;
     font-family: "Inter", sans-serif;
     color: #3d3d3d;
@@ -1905,7 +2031,8 @@ body {
 }
 
 .highlighted {
-    background-color: $blue; /* Customize the highlighting style as desired */
+    background-color: $blue;
+    /* Customize the highlighting style as desired */
 }
 
 #exportSensorDataForm {
@@ -1935,7 +2062,7 @@ body {
     align-items: center;
     justify-content: center;
 
-   
+
 
     h2 {
         font-size: 2.5vh;
@@ -1971,7 +2098,7 @@ body {
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    
+
 }
 
 .imageClearBtn {
@@ -1986,7 +2113,7 @@ body {
     color: $darkGrey;
     border-radius: 5px;
     padding: 5px 10px;
-    
+
     .clearAllText {
         transition: 0.2s;
         display: none;
@@ -1997,13 +2124,14 @@ body {
 
 .imageClearBtn:hover {
     color: $red;
+
     .clearAllText {
         display: inline;
     }
 }
 
 .imageOutput {
-    
+
     position: absolute;
     top: 10%;
     right: 0;
@@ -2033,7 +2161,7 @@ body {
     align-items: center;
     justify-content: center;
 
-   
+
 
     #downloadImgs:hover {
         color: $green;
@@ -2064,7 +2192,7 @@ body {
         border-radius: 5px;
         padding: 10px 20px;
     }
-    
+
 }
 
 .largePreviewContainer {
@@ -2082,27 +2210,25 @@ body {
     position: absolute;
     top: 10%;
     width: 45%;
-    object-fit:cover;
+    object-fit: cover;
     border-radius: 15px;
-  }
+}
 
-  .imageDate {
+.imageDate {
     width: 100%;
     text-align: center;
     font-family: $font1;
     font-size: 2vh;
-  }
+}
 
-  .thumbnailContainer::-webkit-scrollbar {
+.thumbnailContainer::-webkit-scrollbar {
     display: none;
-  }
-  
-  .thumbnailContainer::-webkit-scrollbar-thumb:horizontal {
-    
-  }
-  
-  
-  .thumbnailContainer {
+}
+
+.thumbnailContainer::-webkit-scrollbar-thumb:horizontal {}
+
+
+.thumbnailContainer {
     position: absolute;
     top: 10%;
     height: 85%;
@@ -2111,36 +2237,36 @@ body {
     padding: 0 0 5% 0;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-gap: 10px; 
+    grid-gap: 10px;
     overflow-y: scroll;
     overflow-x: hidden;
     transition: 1s;
-  }
+}
 
-  #scanFields {
+#scanFields {
     margin-top: 2.5%;
     border-radius: 5px;
     padding: 5px 2px;
-  }
-  
-  .thumbnail {
+}
+
+.thumbnail {
     width: 100%;
     height: 100%;
     object-fit: cover;
     cursor: pointer;
-    filter:grayscale(1);
+    filter: grayscale(1);
     border-radius: 5px;
-  }
+}
 
-  .thumbnail:hover {
+.thumbnail:hover {
     filter: none;
-  }
-  
-  .thumbnail.selected {
-    filter: none;
-  }
+}
 
-  .predictionDataContainer {
+.thumbnail.selected {
+    filter: none;
+}
+
+.predictionDataContainer {
     position: absolute;
     width: 100%;
     height: 30%;
@@ -2250,7 +2376,7 @@ body {
             }
         }
     }
-  }
+}
 
 //SETTINGS STYLES
 
@@ -2268,12 +2394,20 @@ body {
         width: 50%;
         height: 30%;
     }
-    
-    hr {width: 90%;}
 
-    h2 { margin-top: 5%; margin-left: 5%;  font-size: 2.5vh;}
+    hr {
+        width: 90%;
+    }
 
-    p { margin-left: 5%; }
+    h2 {
+        margin-top: 5%;
+        margin-left: 5%;
+        font-size: 2.5vh;
+    }
+
+    p {
+        margin-left: 5%;
+    }
 
     .settingsBtn {
         color: black;
@@ -2303,11 +2437,20 @@ body {
     border-radius: 15px;
     background-color: $grey;
     overflow-y: scroll;
-    h2 {width:100%;text-align:center;margin-top: 0;}
-    h3,p {font-size: 2vh;}
+
+    h2 {
+        width: 100%;
+        text-align: center;
+        margin-top: 0;
+    }
+
+    h3,
+    p {
+        font-size: 2vh;
+    }
 }
 
-.tAndC::-webkit-scrollbar{
+.tAndC::-webkit-scrollbar {
     display: none;
 }
 
@@ -2326,7 +2469,7 @@ body {
 
     h2 {
         margin-top: 0;
-     
+
     }
 
     button {
@@ -2399,7 +2542,7 @@ body {
     cursor: pointer;
 }
 
-.changePassword{
+.changePassword {
     position: absolute;
     z-index: 302;
     width: 40%;
@@ -2415,7 +2558,7 @@ body {
 
     input {
         margin: 5% 0 5% 0;
-      // make input boxes, round boxes and clean/beautiful
+        // make input boxes, round boxes and clean/beautiful
         width: 90%;
         // center the input
         position: relative;
@@ -2433,7 +2576,7 @@ body {
 
     }
 
-    #changePassword{
+    #changePassword {
         background-color: $green;
         color: #fff;
         border: none;
@@ -2449,7 +2592,7 @@ body {
 
     .underline {
         text-decoration: underline;
-      }
+    }
 
 }
 
@@ -2457,85 +2600,102 @@ body {
     font-size: 2vh;
 }
 
-  #settingsOverlay {
+#settingsOverlay {
     z-index: 301;
-  }
+}
 
 .toggle {
-	cursor: pointer;
-	display: inline-block;
+    cursor: pointer;
+    display: inline-block;
     margin-left: 5%;
     margin-bottom: 10px;
     margin-top: 10px;
 }
 
 .toggle-switch {
-	display: inline-block;
-	background: #ccc;
-	border-radius: 16px;
-	width: 58px;
-	height: 32px;
-	position: relative;
-	vertical-align: middle;
-	transition: background 0.25s;
-	&:before,
-	&:after {
-		content: "";
-	}
-	&:before {
-		display: block;
-		background: linear-gradient(to bottom, #fff 0%,#eee 100%);
-		border-radius: 50%;
-		box-shadow: 0 0 0 1px rgba(0,0,0,0.25);
-		width: 24px;
-		height: 24px;
-		position: absolute;
-		top: 4px;
-		left: 4px;
-		transition: left 0.25s;
-	}
-	.toggle:hover &:before {
-		background: linear-gradient(to bottom, #fff 0%,#fff 100%);
-		box-shadow: 0 0 0 1px rgba(0,0,0,0.5);
-	}
-	.toggle-checkbox:checked + & {
-		background: $green;
-		&:before {
-			left: 30px;
-		}
-	}
+    display: inline-block;
+    background: #ccc;
+    border-radius: 16px;
+    width: 58px;
+    height: 32px;
+    position: relative;
+    vertical-align: middle;
+    transition: background 0.25s;
+
+    &:before,
+    &:after {
+        content: "";
+    }
+
+    &:before {
+        display: block;
+        background: linear-gradient(to bottom, #fff 0%, #eee 100%);
+        border-radius: 50%;
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25);
+        width: 24px;
+        height: 24px;
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        transition: left 0.25s;
+    }
+
+    .toggle:hover &:before {
+        background: linear-gradient(to bottom, #fff 0%, #fff 100%);
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+    }
+
+    .toggle-checkbox:checked+& {
+        background: $green;
+
+        &:before {
+            left: 30px;
+        }
+    }
 }
+
 .toggle-checkbox {
-	position: absolute;
-	visibility: hidden;
+    position: absolute;
+    visibility: hidden;
 }
+
 .toggle-label {
-	margin-left: 5px;
-	position: relative;
-	top: 2px;
+    margin-left: 5px;
+    position: relative;
+    top: 2px;
 }
 
 .darkModeBG {
     background-color: #3d3d3d !important;
-    h2, p {color: white !important;}
+
+    h2,
+    p {
+        color: white !important;
+    }
+
     #homeMap::before {
         background-color: #636363 !important;
     }
+
     #navContainerMobile {
         background-color: #3d3d3d !important;
+
         #navTop {
             background-color: #2a2a2a !important;
         }
-        #navListMobile ul li{
+
+        #navListMobile ul li {
             background-color: #3d3d3d !important;
         }
     }
-    
+
 }
 
 .darkMode {
 
-    .taskColumnHeader, .settingsBtn, .modalContainer {
+    .taskColumnHeader,
+    .settingsBtn,
+    .modalContainer {
         background-color: #2a2a2a !important;
     }
 
@@ -2545,13 +2705,22 @@ body {
 
     .taskCard {
         background-color: #3d3d3d !important;
-        p {color: $green !important;}
+
+        p {
+            color: $green !important;
+        }
     }
-    
+
     background-color: #636363 !important;
     color: white !important;
 
-    nav ul li, h2, h1, p, ul, button, input {
+    nav ul li,
+    h2,
+    h1,
+    p,
+    ul,
+    button,
+    input {
         color: white !important;
     }
 
@@ -2588,7 +2757,11 @@ body {
         color: $green !important;
     }
 
-    #sensorId, #createSensorBtn, #fieldName, #cropType, #createFieldBtn {
+    #sensorId,
+    #createSensorBtn,
+    #fieldName,
+    #cropType,
+    #createFieldBtn {
         color: black !important;
     }
 
@@ -2599,58 +2772,59 @@ body {
     display: flex;
     align-items: center;
     margin-top: 10px;
-  }
-  
-  .datePicker {
+}
+
+.datePicker {
     margin-right: 10px;
-  }
-  
+}
+
 
 .exportButton {
     display: inline;
     position: absolute;
     right: 0;
-  }
-  
-  .exportButton button {
+}
+
+.exportButton button {
     background-color: $green;
     color: white;
     border: none;
     border-radius: 4px;
     padding: 5px 10px;
     cursor: pointer;
-  }
+}
 
-  .timerange-dropdown{
+.timerange-dropdown {
     position: relative;
     background-color: rgba(255, 255, 255, 0.8);
     border-radius: 5px;
     // make it more beautiful
     z-index: 20;
     margin-right: 2px;
-  }
-    .resetZoomButton {
-       // put on the bottom right corner
-        position: relative;
-        background-color: $grey;
-        border-radius: 5px;
-        border: none;
-        padding: 5px 10px;
-        margin-left: 2px;
-        color: $darkGrey;
+}
 
-      }
-      
-      .resetZoomButton:hover {
-        color: black;
-        cursor: pointer;
-      }
-   
+.resetZoomButton {
+    // put on the bottom right corner
+    position: relative;
+    background-color: $grey;
+    border-radius: 5px;
+    border: none;
+    padding: 5px 10px;
+    margin-left: 2px;
+    color: $darkGrey;
+
+}
+
+.resetZoomButton:hover {
+    color: black;
+    cursor: pointer;
+}
 
 
 
-  
-  
+
+
+
 
 // MOBILE STYLES
 
@@ -2691,28 +2865,29 @@ body {
 
     // MAIN STYLES
 
-   
+
 
     @keyframes slideInFromTop {
         0% {
-          transform: translateY(-100%);
+            transform: translateY(-100%);
         }
+
         100% {
-          transform: translateY(0);
+            transform: translateY(0);
         }
-      }
+    }
 
     #navContainer {
         display: none;
     }
-   
+
     #navContainerMobile {
         display: inline;
         position: absolute;
         top: 0;
         width: 100%;
         height: 100%;
-      
+
 
         #navTop {
             position: absolute;
@@ -2743,22 +2918,31 @@ body {
             margin-left: 25px;
             z-index: 200;
         }
-       
+
         #navTop {
             height: 10%;
-            img {display: none;}
+
+            img {
+                display: none;
+            }
+
             background-color: $green;
+
             h1 {
                 position: absolute;
                 font-size: 2.5vh;
                 color: white;
                 width: 100%;
                 text-align: center;
-                span{font-weight: normal;}
+
+                span {
+                    font-weight: normal;
+                }
             }
         }
+
         ul {
-            -webkit-user-select: none;    
+            -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
@@ -2770,7 +2954,7 @@ body {
             color: $darkGrey;
             text-align: center;
             justify-content: space-evenly;
-    
+
             li p {
                 font-size: 2.5vh;
                 margin: 2.5%;
@@ -2778,17 +2962,18 @@ body {
                 padding: 2.5% 0 2.5% 0;
             }
         }
+
         nav ul {
             margin-top: 0;
         }
 
-        nav ul li{
+        nav ul li {
             z-index: 20;
             background-color: white;
         }
 
         nav ul li p {
-           margin-left: 5%;
+            margin-left: 5%;
         }
 
         #logout {
@@ -2806,7 +2991,7 @@ body {
         top: 10%;
         width: 100%;
         overflow-y: scroll;
-      
+
     }
 
     .fixedUtility {
@@ -2814,7 +2999,7 @@ body {
         width: 95%;
         left: 2.5%;
         margin-bottom: 20%;
-        
+
 
         h2 {
             font-size: 3vh;
@@ -2870,7 +3055,7 @@ body {
 
         p {
             font-size: 2.5vh;
-            
+
             span {
                 position: relative;
                 font-size: 2vh;
@@ -2901,6 +3086,7 @@ body {
         width: 90%;
         left: 5%;
         height: 20%;
+
         h2 {
             margin-bottom: 0;
         }
@@ -2915,8 +3101,8 @@ body {
         background-color: $grey;
     }
 
-    .weatheDataContainer { 
-        
+    .weatheDataContainer {
+
         position: relative;
         top: 5%;
         width: 95%;
@@ -2925,11 +3111,13 @@ body {
         justify-content: center;
         gap: 5px;
 
-        div, #sunsetSunrise {
+        div,
+        #sunsetSunrise {
             width: 49%;
         }
 
-        div h2, div p {
+        div h2,
+        div p {
             font-size: 3vw;
         }
 
@@ -2966,7 +3154,7 @@ body {
             font-size: 1vh;
         }
 
-    
+
     }
 
     //FIELDS STYLES
@@ -3001,13 +3189,9 @@ body {
             }
         }
 
-        .timerange-dropdown {
-           
-        }
+        .timerange-dropdown {}
 
-        .resetZoomButton {
-         
-        }
+        .resetZoomButton {}
 
         .exportButton {
             display: none;
@@ -3039,6 +3223,7 @@ body {
         .delete-container {
             display: none;
         }
+
         .fieldsTable tbody tr td {
             width: fit-content;
         }
@@ -3070,7 +3255,7 @@ body {
             }
         }
 
-      
+
 
         .taskContainer {
             display: flex;
@@ -3147,6 +3332,7 @@ body {
 
     .imageInputHeader {
         height: 15%;
+
         button {
             margin-top: 0;
         }
@@ -3163,4 +3349,4 @@ body {
         top: 5%;
     }
 
-  }
+}

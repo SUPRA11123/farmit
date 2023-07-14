@@ -162,11 +162,9 @@ class Dashboard extends React.Component {
 
         axios.get(URL + "gettasksbyassignee/" + this.state.user.id + "/")
             .then((response) => {
-                // get the count of tasks
                 const tasks = response.data;
 
 
-                // only count the tasks that are not completed
                 const tasksCount = tasks.filter((task) => task.status !== "Completed").length;
 
 
@@ -177,7 +175,6 @@ class Dashboard extends React.Component {
                         message: `You have ${tasksCount} tasks assigned to you!`,
                     };
 
-                    // Add tasks alert to the alerts array
                     this.setState((prevState) => ({
                         alerts: [...prevState.alerts, tasksAlert],
                     }));
@@ -186,13 +183,6 @@ class Dashboard extends React.Component {
             .catch((error) => {
                 console.log(error);
             });
-
-
-
-
-
-
-
 
 
         // get sensors from farm
@@ -345,7 +335,7 @@ class Dashboard extends React.Component {
                         // if for the past 24 hours, the humidity has been above 80%, then send an alert. 
                         // if there's already an alert for this sensor, then don't send another alert
 
-                        if (_value > 78 && !this.state.alerts.find((alert) => alert.sensorId === sensorId && alert.humidity === "high") && match) {
+                        if (_value < 60 && !this.state.alerts.find((alert) => alert.sensorId === sensorId && alert.humidity === "high") && match) {
                             const alertMessage = `High soil moisture was detected in sensor ${sensorId} in the past 24 hours! Make sure to maintain optimal soil moisture levels.`;
 
                             // Create an object with the alert details
@@ -370,7 +360,7 @@ class Dashboard extends React.Component {
                             // Wait for the state to be updated before continuing
                             await setStatePromise;
                         }
-                        else if (_value < 40 && !this.state.alerts.find((alert) => alert.sensorId === sensorId && alert.humidity === "low") && match) {
+                        else if (_value > 60 && !this.state.alerts.find((alert) => alert.sensorId === sensorId && alert.humidity === "low") && match) {
                             const alertMessage = `Low soil moisture was detected in sensor ${sensorId} in the past 24 hours! Make sure to water the plants appropriately.`;
 
                             // Create an object with the alert details
@@ -455,7 +445,7 @@ class Dashboard extends React.Component {
                 .then(response => {
                     console.log(response.data);
                     this.setState({ sensorsOwned: response.data }, () => {
-                        resolve(); // Resolve the promise after setState is finished
+                        resolve(); 
 
                     });
 
@@ -463,7 +453,7 @@ class Dashboard extends React.Component {
                 })
                 .catch(error => {
                     console.log(error);
-                    reject(error); // Reject the promise if there is an error
+                    reject(error); 
                 });
         });
     }
@@ -613,16 +603,16 @@ class Dashboard extends React.Component {
                                 <i className="fa-regular fa-map"></i>
                                 <p>Fields</p>
                             </li>
-                            <li onClick={() => this.setState({ currentDashboardScreen: "tasks" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "tasks" ? "navActive" : ""}>
-                                <i className="fa-solid fa-bullseye"></i>
-                                <p>Tasks</p>
-                            </li>
                             {this.state.user.role != 'farmer' && (
                                 <li onClick={() => this.setState({ currentDashboardScreen: "team" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "team" ? "navActive" : ""}>
                                     <i className="fa-solid fa-people-group"></i>
                                     <p>Team</p>
                                 </li>
                             )}
+                            <li onClick={() => this.setState({ currentDashboardScreen: "tasks" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "tasks" ? "navActive" : ""}>
+                                <i className="fa-solid fa-bullseye"></i>
+                                <p>Tasks</p>
+                            </li>
                             <li onClick={() => this.setState({ currentDashboardScreen: "weather" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "weather" ? "navActive" : ""}>
                                 <i className="fa-solid fa-cloud-sun"></i>
                                 <p>Weather</p>
