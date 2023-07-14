@@ -5,13 +5,46 @@ class Weather extends React.Component {
 
     constructor(props) {
         super(props);
+
+        var language = localStorage.getItem("language") || "en";
+
+        var languageText = {
+        en: {
+
+            text1: "Pressure",
+            text2: "Humidity",
+            text3: "Wind",
+            text4: "Sunrise & Sunset",
+            text5: "Air Temperature",
+            text6: "Air Humidity",
+            text7: "Today",
+            text8: "",
+            text9: "",
+            text10: "",
+            text11: "",
+        
+        },
+        pt: {
+
+            text1: "Pressão",
+            text2: "Humidade",
+            text3: "Vento",
+            text4: "Nascer do sol & pôr do sol",
+            text5: "Temperatura do ar",
+            text6: "Humidade do ar",
+            text7: "Hoje",
+            
+        },
+        };
+
         this.setForecast = this.setForecast.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.state = {
             day: 0,
             forecastData: [],
             forecastLabels: [],
-            statSelector: 'temperature'
+            statSelector: 'temperature',
+            textContent: languageText[language],
           };
         this.myChart = null;
     }
@@ -163,7 +196,19 @@ class Weather extends React.Component {
 
     getDay(x) {
 
-        let weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+      var language = localStorage.getItem("language") || "en";
+
+      var weekday;
+
+      if(language == "en") {
+        weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+      } else if (language == "pt") {
+        weekday = ["Domingo","Segunda","Terça","Quarta","Quinta","Sexta","Sábado"];
+      } else {
+        weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+      }
+
+       
         var today = new Date();
         var result = today.setDate(today.getDate() + x);
         let date = new Date(result);
@@ -173,7 +218,18 @@ class Weather extends React.Component {
 
     getLabels(day) {
 
-        let weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+      var language = localStorage.getItem("language") || "en";
+
+      var weekday;
+
+      if(language == "en") {
+        weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+      } else if (language == "pt") {
+        weekday = ["Domingo","Segunda","Terça","Quarta","Quinta","Sexta","Sábado"];
+      } else {
+        weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+      }
+
         return weekday[day.getDay()];
     }
 
@@ -211,7 +267,18 @@ class Weather extends React.Component {
 
     render() {
 
-        let weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+      var language = localStorage.getItem("language") || "en";
+
+      var weekday;
+
+      if(language == "en") {
+        weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+      } else if (language == "pt") {
+        weekday = ["Domingo","Segunda","Terça","Quarta","Quinta","Sexta","Sábado"];
+      } else {
+        weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+      }
+
         var today = new Date();
 
         return (
@@ -226,22 +293,22 @@ class Weather extends React.Component {
 
             <div className="weatheDataContainer">
                 <div style={{marginLeft: 0}} className={`${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
-                    <h2>Pressure</h2>
+                    <h2>{this.state.textContent.text1}</h2>
                     <p>{this.props.weatherData.main.pressure} hpa</p>
                 </div>
             
                 <div className={`${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
-                    <h2>Humidity</h2>
+                    <h2>{this.state.textContent.text2}</h2>
                     <p>{this.props.weatherData.main.humidity}%</p>
                 </div>
      
                 <div className={`${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
-                    <h2>Wind</h2>
+                    <h2>{this.state.textContent.text3}</h2>
                     <p>{this.convertToKM(this.props.weatherData.wind.speed)} km/h</p>
                 </div>
 
                 <div id="sunsetSunrise" className={`${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
-                    <h2>Sunrise and Sunset</h2>
+                    <h2>{this.state.textContent.text4}</h2>
                     {this.getSunriseSunset()}
                 </div>
  
@@ -252,14 +319,14 @@ class Weather extends React.Component {
             <div className={`lineChartContainer ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
         
               <select name="statSelector" id="statSelector" className={`${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`} onChange={this.handleChange}>
-                <option value="temperature">Air Temperature <i className="fa-solid fa-sun"></i></option>
-                <option value="humidity">Air Humidity</option>
+                <option value="temperature">{this.state.textContent.text5} <i className="fa-solid fa-sun"></i></option>
+                <option value="humidity">{this.state.textContent.text6}</option>
               </select>   
 
               <canvas id="myChart" height='20%' width='100px'></canvas>
 
               <ul id="daySelector" className={`daySelector ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
-                  <li><button onClick={() => this.setForecast(0)} className="daySelectorActive" id="dayBtn0">Today</button></li>
+                  <li><button onClick={() => this.setForecast(0)} className="daySelectorActive" id="dayBtn0">{this.state.textContent.text7}</button></li>
                   <li><button onClick={() => this.setForecast(1)} id="dayBtn1">{this.getDay(1)}</button></li>
                   <li><button onClick={() => this.setForecast(2)} id="dayBtn2">{this.getDay(2)}</button></li>
                   <li><button onClick={() => this.setForecast(3)} id="dayBtn3">{this.getDay(3)}</button></li>

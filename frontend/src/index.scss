@@ -832,8 +832,8 @@ body {
 }
 
 #taskWidget {
-    top: 70%;
-    height: 27.5%;
+    top: 52.5%;
+    height: 45%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -860,7 +860,7 @@ body {
 
             span {
                 font-weight: bold;
-                color: $green;
+                color: black;
             }
         }
     }
@@ -1694,6 +1694,10 @@ body {
         border: 1px solid black;
     }
 
+    #notStrongPassword {
+        width: 60%;
+    }
+
     button {
         margin: 25px;
     }
@@ -2050,6 +2054,7 @@ body {
 #exportSensorDataForm {
     position: absolute;
     left: 0;
+    top: 25%;
     width: 100%;
     height: 40%;
     text-align: center;

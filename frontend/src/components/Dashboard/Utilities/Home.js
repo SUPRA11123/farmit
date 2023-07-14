@@ -11,6 +11,40 @@ class Home extends React.Component {
     super(props)
     this.myChart = null;
 
+    var language = localStorage.getItem("language") || "en";
+
+    var languageText = {
+    en: {
+
+        text1: "Dashboard for",
+        text2: "5 Day Weather Forecast",
+        text3: "Current Tasks",
+        text4: "Not Started",
+        text5: "In Progress",
+        text6: "Completed",
+        text7: "",
+        text8: "",
+        text9: "",
+        text10: "",
+
+    
+    },
+    pt: {
+
+        text1: "Painel para",
+        text2: "Previsão do tempo para os próximos 5 dias",
+        text3: "Tarefas atuais",
+        text4: "Por fazer",
+        text5: "Em progesso",
+        text6: "Concluídas",
+        text7: "",
+        text8: "",
+        text9: "",
+        text10: "",
+        
+    },
+    };
+
     this.state = {
       day: 0,
       forecastData: [],
@@ -20,6 +54,7 @@ class Home extends React.Component {
       sensor_longitude: null,
       markers: [],
       tasks: [],
+      textContent: languageText[language],
     };
   }
 
@@ -242,8 +277,19 @@ class Home extends React.Component {
                 },
               });
 
+              var language = localStorage.getItem("language") || "en";
+              var content;
+
+              if(language == "en") {
+                content = "Sensor ID: <b>" + sensor.sensorId + "</b><br>Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b><br><br> Click to view graph';
+              } else if (language == "pt") {
+                  content = "ID do Sensor: <b>" + sensor.sensorId + "</b><br>Temperatura: <b>" + sensor.temperature + '°C</b><br>Humidade: <b>' + sensor.humidity + '%</b><br><br> Clique para ver o gráfico';
+              } else {
+                  content = "Sensor ID: <b>" + sensor.sensorId + "</b><br>Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b><br><br> Click to view graph';
+              }
+
               const infoWindow = new window.google.maps.InfoWindow({
-                content: "Sensor ID: <b>" + sensor.sensorId + "</b><br>Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b>',
+                content: content,
               });
 
 
@@ -484,7 +530,18 @@ class Home extends React.Component {
   //Create short weekday labels for graph
 
   getLabels(day) {
-    let weekday = ["Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat"];
+
+    var language = localStorage.getItem("language") || "en";
+    var weekday;
+
+    if(language == "en") {
+      weekday = ["Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat"];
+    } else if (language == "pt") {
+      weekday = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+    } else {
+      weekday = ["Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat"];
+    }
+
     return weekday[day.getDay()];
   }
 
@@ -578,20 +635,58 @@ class Home extends React.Component {
     var today = new Date();
     var curHr = today.getHours();
 
+    var language = localStorage.getItem("language") || "en";
+
     if (curHr < 12) {
-      return "Good morning ";
+
+      if(language == "en") {
+        return "Good morning ";
+      } else if (language == "pt") {
+        return "Bom dia ";
+      } else {
+        return "Good morning ";
+      }
+   
     } else if (curHr < 18) {
-      return "Good afternoon ";
+
+      if(language == "en") {
+        return "Good afternoon ";
+      } else if (language == "pt") {
+        return "Boa tarde ";
+      } else {
+        return "Good afternoon ";
+      }
+
     } else {
-      return "Good evening ";
+      if(language == "en") {
+        return "Good evening ";
+      } else if (language == "pt") {
+        return "Boa noite ";
+      } else {
+        return "Good evening ";
+      }
     }
   }
 
   //Compute the current date, adding the suffix 
 
   getCurrentDayAndDate() {
-    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+    var language = localStorage.getItem("language") || "en";
+    var daysOfWeek;
+    var months;
+
+    if(language == "en") {
+      daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    } else if (language == "pt") {
+      daysOfWeek = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+      months = ['de janeiro', 'de fevereiro', 'de março', 'de abril', 'de maio', 'de junho', 'de julho', 'de agosto', 'de setembro', 'de outubro', 'de novembro', 'de dezembro'];
+    } else {
+      daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    }
+
     const currentDate = new Date();
     const dayOfWeek = daysOfWeek[currentDate.getDay()];
     const date = currentDate.getDate();
@@ -600,7 +695,18 @@ class Home extends React.Component {
     function getOrdinalSuffix(date) {
       const suffixes = ['th', 'st', 'nd', 'rd'];
       const suffixIndex = date % 10 < 4 ? date % 10 : 0;
-      return suffixes[suffixIndex];
+      
+
+      var language = localStorage.getItem("language") || "en";
+
+      if(language == "en") {
+        return suffixes[suffixIndex];
+      } else if (language == "pt") {
+        return "";
+      } else {
+        return suffixes[suffixIndex];
+      }
+
     }
 
     const ordinalSuffix = getOrdinalSuffix(date);
@@ -615,13 +721,16 @@ class Home extends React.Component {
       <>
         <div className="homeBackground">
           <p className={`${localStorage.getItem("darkMode") === "true" ? "darkModeBG" : ''}`}>{this.getWelcomeMessage()}{this.props.user.name}!</p>
-          <p className={`${localStorage.getItem("darkMode") === "true" ? "darkModeBG" : ''}`}><span>Dashboard for {this.getCurrentDayAndDate()}</span></p>
+          <p className={`${localStorage.getItem("darkMode") === "true" ? "darkModeBG" : ''}`}><span>{this.state.textContent.text1} {this.getCurrentDayAndDate()}</span></p>
         </div>
 
+
+        {/* 
         <div className={`locationWidget ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
           <h2>{this.props.farmDetails.name}</h2>
           <p><i className="fa-solid fa-clock"></i>{this.displayTime()}</p>
         </div>
+        */}
 
         <div onClick={() => this.props.displayScreen("weather")} id="weatherWidget" className={`Col2Card ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
           <div className="weatherWigetTop">
@@ -640,7 +749,7 @@ class Home extends React.Component {
         </div>
 
         <div id='alertWidget' onClick={() => this.props.displayScreen("weather")} className={`animate__slideInUp col4Card ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
-          <h2>5 Day Weather Forecast</h2>
+          <h2>{this.state.textContent.text2}</h2>
           <canvas id="homeChart" height='25%' width='100px'></canvas>
         </div>
 
@@ -649,15 +758,15 @@ class Home extends React.Component {
         </div>
 
         <div id='taskWidget' onClick={() => this.props.displayScreen("tasks")} className={`Col2Card ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
-          <h2 id="taskWidgetHeader">Current Tasks</h2>
+          <h2 id="taskWidgetHeader">{this.state.textContent.text3}</h2>
           <div className="taskCount">
-            <p>Not Started: <span>{this.state.todoCount}</span></p>
+            <p style={{ color: '#4079c4', fontWeight: 'bold' }}>{this.state.textContent.text4}: <span>{this.state.todoCount}</span></p>
           </div>
           <div className="taskCount">
-            <p>In Progress: <span>{this.state.inProgressCount}</span></p>
+            <p style={{ color: '#C44940', fontWeight: 'bold' }}>{this.state.textContent.text5}: <span>{this.state.inProgressCount}</span></p>
           </div>
           <div className="taskCount">
-            <p>Completed: <span>{this.state.completedCount}</span></p>
+            <p style={{ color: '#0ba837', fontWeight: 'bold' }}>{this.state.textContent.text6}: <span>{this.state.completedCount}</span></p>
           </div>
         </div>
 

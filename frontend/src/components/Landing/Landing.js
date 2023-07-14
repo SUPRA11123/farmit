@@ -51,14 +51,17 @@ class Landing extends React.Component {
         text16: "Farm name",
         text17: "Country",
         text18: "Please click on the map to set a marker for your farm",
-        text19: "Submit"
+        text19: "Submit",
+        text20: "Passwords do not match",
+        text21: "Password must contain at least one uppercase letter, one lowercase letter, one digit, and no special characters",
+        text22: "User already exists",
       },
       pt: {
         //LOGIN SCREEN
         text1: "Login no painel de controlo",
         text2: "E-mail",
         text3: "Palavra-passe",
-        text4: "Inicio de sessão",
+        text4: "Iniciar Sessão",
         text5: "Não tem uma conta?",
         text6: "Registo",
 
@@ -67,7 +70,7 @@ class Landing extends React.Component {
         text8: "Nome",
         text9: "E-Mail",
         text10: "Palavra-passe",
-        text11: "Confirme palavra-passe",
+        text11: "Confirmar palavra-passe",
         text12: "Próximo",
         text13: "já tem uma conta?",
         text14: "Conecte-se",
@@ -75,7 +78,10 @@ class Landing extends React.Component {
         text16: "Nome da quinta",
         text17: "País",
         text18: "Por favor, clique no mapa para definir um marcador para a sua quinta",
-        text19: "Enviar"
+        text19: "Registar",
+        text20: "As palavras-passe não coincidem.",
+        text21: "A palavra-passe deve conter, pelo menos, uma letra maiúscula, uma letra minúscula, um dígito e não pode conter caracteres especiais.",
+        text22: "O utilizador já existe",
       },
     };
 
@@ -140,7 +146,8 @@ class Landing extends React.Component {
     var confirmPassword = document.getElementById("confirmPwd").value;
 
     if (password !== confirmPassword) {
-      alert("Passwords do not match");
+      document.getElementById("errorMessageRegister").innerText = this.state.textContent.text20;
+      document.getElementById("errorMessageRegister").classList.remove('hidden');
       return;
     }
 
@@ -151,17 +158,25 @@ class Landing extends React.Component {
       password: password,
       role: "owner"
     }).then(response => {
-      if (response.data.message === "User already exists") {
-        console.log(response);
-        alert("User already exists");
-      } else {
+     
         console.log(response);
         document.getElementById("userInfo").classList.add("hidden");
         document.getElementById("farmInfo").classList.remove("hidden");
-      }
+      
     }).catch(error => {
 
+      console.log(error);
+
+      if (error.response.data.errors.email === "user with this email already exists.") {
+    
+        document.getElementById("errorMessageRegister").innerText = this.state.textContent.text22;
+        document.getElementById("errorMessageRegister").classList.remove('hidden');
+      } else {
+        document.getElementById("errorMessageRegister").innerText = this.state.textContent.text21;
+        document.getElementById("errorMessageRegister").classList.remove('hidden');
+      }
       // print the error but dont show the password
+
       console.log(error);
 
     });
@@ -313,7 +328,7 @@ class Landing extends React.Component {
           alert(error.response.data.message);
         });
     } else {
-      alert("Please select a location on the map");
+      return;
     }
   }
 
@@ -413,8 +428,9 @@ class Landing extends React.Component {
             <label htmlFor="confirmPwd">{this.state.textContent.text11}</label><br />
             <input onChange={this.checkAccountComplete} required type="password" id="confirmPwd" name="confirmPwd" /><br />
             
-            
             <input id="accountNext" type="submit" value={this.state.textContent.text12} />
+
+            <p id='errorMessageRegister' style={{ color: '#C44940', fontWeight: 'bold' }} className='hidden'></p>
 
             <p>{this.state.textContent.text13} <span onClick={this.toLogin}>{this.state.textContent.text14}</span></p>
 

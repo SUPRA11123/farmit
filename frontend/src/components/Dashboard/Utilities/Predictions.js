@@ -8,6 +8,37 @@ const URL = process.env.REACT_APP_URL;
 
 class Predictions extends React.Component {
   constructor(props) {
+
+    var language = localStorage.getItem("language") || "en";
+
+    var languageText = {
+    en: {
+
+        text1: "Select a field",
+        text2: "Upload Images",
+        text3: "Scan",
+        text4: "Maturity Levels",
+        text5: "Count",
+        text6: "Total Mature",
+        text7: "Weight",
+        text8: "Clear All",
+    
+    },
+    pt: {
+
+        text1: "Selecionar um campo",
+        text2: "Carregar imagens",
+        text3: "Scan",
+        text4: "Níveis de maturidade",
+        text5: "Contagem",
+        text6: "Percentagem de maturidade",
+        text7: "Peso",
+        text8: "Apagar tudo",
+        
+    },
+    };
+
+
     super(props);
     this.state = {
       selectedImages: [],
@@ -20,6 +51,7 @@ class Predictions extends React.Component {
       totalGreen: 0,
       percentage: 0,
       fields: [],
+      textContent: languageText[language],
     };
 
     this.processImages = this.processImages.bind(this);
@@ -158,10 +190,29 @@ class Predictions extends React.Component {
         const totalAll = parseFloat(totalBerries.innerHTML);
         const bluePercentage = (blueNumber / totalAll) * 100;
 
+        var language = localStorage.getItem("language") || "en";
+
+        var labels;
+    
+       
+
         if(bluePercentage > 80) {
-          document.getElementById('predictionResult').innerHTML = "Field is ready to harvest <i id='thumbsUp' class='fa-solid fa-thumbs-up'></i>";
+          if(language == "en") {
+            document.getElementById('predictionResult').innerHTML = "Field is ready to harvest <i id='thumbsUp' class='fa-solid fa-thumbs-up'></i>";
+          } else if (language == "pt") {
+            document.getElementById('predictionResult').innerHTML = "O campo está pronto para colheita <i id='thumbsUp' class='fa-solid fa-thumbs-up'></i>";
+          } else {
+            document.getElementById('predictionResult').innerHTML = "Field is ready to harvest <i id='thumbsUp' class='fa-solid fa-thumbs-up'></i>";
+          }
         } else {
-          document.getElementById('predictionResult').innerHTML = "Field is not ready to harvest <i id='thumbsDown' class='fa-solid fa-thumbs-down'></i>";
+          if(language == "en") {
+            document.getElementById('predictionResult').innerHTML = "Field is not ready to harvest <i id='thumbsDown' class='fa-solid fa-thumbs-down'></i>";
+          } else if (language == "pt") {
+            document.getElementById('predictionResult').innerHTML = "O campo ainda não está pronto para colheita <i id='thumbsDown' class='fa-solid fa-thumbs-down'></i>";
+          } else {
+            document.getElementById('predictionResult').innerHTML = "Field is not ready to harvest <i id='thumbsDown' class='fa-solid fa-thumbs-down'></i>";
+          }
+          
         }
 
         this.setState({totalAll: totalBerries.innerHTML, totalRed: redNumber, totalGreen: greenNumber, totalBlue: blueNumber, percentage: bluePercentage.toFixed(0) });
@@ -244,11 +295,24 @@ class Predictions extends React.Component {
     selectElement.selectedIndex = 0;
   }
   createBarChart() {
+
+    var language = localStorage.getItem("language") || "en";
+
+    var labels;
+
+    if(language == "en") {
+      labels = ['Green', 'Red', 'Blue'];
+    } else if (language == "pt") {
+      labels = ['Verde', 'Vermelho', 'Azul'];
+    } else {
+      labels = ['Green', 'Red', 'Blue'];
+    }
+
     const ctx = this.chartRef.current.getContext('2d');
     const chart = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ['Green', 'Red', 'Blue'],
+        labels: labels,
         datasets: [
           {
             label: 'Bars',
@@ -308,14 +372,14 @@ class Predictions extends React.Component {
             {showClearButton && (
               <button className={`imageClearBtn ${localStorage.getItem('darkMode') === 'true' ? 'darkMode' : ''}`} onClick={this.clearAllImages}>
                 <i className="fa-solid fa-delete-left"></i>
-                <span className="clearAllText">Clear All</span>
+                <span className="clearAllText">{this.state.textContent.text8}</span>
               </button>
             )}
 
             <select defaultValue="" id="scanFields">
               {this.state.fields.length > 0 ? (
                   <>
-                      <option value="" disabled>Select a field</option>
+                      <option value="" disabled>{this.state.textContent.text1}</option>
                       {this.state.fields.map((field) => {
                           // Check if the selected member is a field manager and the field is assigned to them
                           if (true) {
@@ -375,7 +439,7 @@ class Predictions extends React.Component {
                 multiple
                 onChange={this.handleFileUpload}
               />
-              <i className='fa-solid fa-cloud-arrow-up'></i> Upload Images
+              <i className='fa-solid fa-cloud-arrow-up'></i> {this.state.textContent.text2}
             </label>
           )}
         </section>
@@ -406,7 +470,7 @@ class Predictions extends React.Component {
 
             <div className='barChartContainer'>
 
-              <h2>Maturity Levels</h2>
+              <h2>{this.state.textContent.text4}</h2>
 
               <div className='maturityContainer'>
                 <span id='GreenCount'>0</span>
@@ -420,11 +484,11 @@ class Predictions extends React.Component {
 
             <div className='countContainer'>
 
-              <h2>Count</h2>
+              <h2>{this.state.textContent.text5}</h2>
 
               <div className='countBox'>
 
-                <p>Total Mature</p>
+                <p>{this.state.textContent.text6}</p>
 
                 <h3>{this.state.percentage}%</h3>
 
@@ -432,7 +496,7 @@ class Predictions extends React.Component {
 
               <div className='countBox'>
 
-                <p>Weight</p>
+                <p>{this.state.textContent.text7}</p>
 
                 <h3>{((this.state.totalBlue)*0.3).toFixed(0)}g</h3>
 
@@ -454,7 +518,7 @@ class Predictions extends React.Component {
               onClick={this.scanImages}
               disabled={!hasUploadedImages}
             >
-              Scan
+              {this.state.textContent.text3}
             </button>
           )}
   

@@ -22,6 +22,11 @@ class Team extends React.Component {
             text9: "Password",
             text10: "Confirm Password",
             text11: "Create Member",
+            text12: "Select a field",
+            text13: "Edit",
+            text14: "Delete",
+            text15: "Passwords do not match",
+            text16: "Password must contain at least one uppercase letter, one lowercase letter, one digit, and no special characters",
         
         },
         pt: {
@@ -32,11 +37,16 @@ class Team extends React.Component {
             text4: "Campos",
             text5: "Adicionar novo membro",
             text6: "Nome",
-            text7: "Função",
+            text7: "Selecionar Função",
             text8: "E-mail",
             text9: "Palavra-passe",
-            text10: "Confirme Palavra-passe",
+            text10: "Confirmar Palavra-passe",
             text11: "Criar Membro",
+            text12: "Selecionar campo",
+            text13: "Editar",
+            text14: "Apagar",
+            text15: "As palavras-passe não coincidem.",
+            text16: "A palavra-passe deve conter, pelo menos, uma letra maiúscula, uma letra minúscula, um dígito e não pode conter caracteres especiais.",
             
         },
         };
@@ -126,8 +136,6 @@ class Team extends React.Component {
     handleSubmit(event) {
         event.preventDefault();
 
-        document.getElementById("teamOverlay").classList.add('hidden');
-
         // set state of the field selected on the fields dropdown
 
         // get password and confirm password from form
@@ -160,6 +168,7 @@ class Team extends React.Component {
                         console.log(response);
 
                         // show the team table
+                        document.getElementById("teamOverlay").classList.add('hidden');
                         document.getElementById("teamContainer").classList.remove('hidden');
                         document.getElementById("addTeamMember").classList.add('hidden');
 
@@ -174,6 +183,7 @@ class Team extends React.Component {
                     }
                     ).catch(error => {
                         console.log(error);
+                        document.getElementById("notStrongPassword").classList.remove('hidden');
                     }
                     );
                 } else {
@@ -200,6 +210,7 @@ class Team extends React.Component {
                         }
                         ).catch(error => {
                             console.log(error);
+                            document.getElementById("notStrongPassword").classList.remove('hidden');
                         }
                         );
                     } else {
@@ -218,6 +229,7 @@ class Team extends React.Component {
 
             }).catch(error => {
                 console.log(error);
+                document.getElementById("notStrongPassword").classList.remove('hidden');
             });
         } else {
             this.setState({ passwordMatchError: true });
@@ -264,6 +276,7 @@ class Team extends React.Component {
 
     showTeamForm() {
         document.getElementById("addTeamMember").reset();
+        document.getElementById("notStrongPassword").classList.add('hidden');
         document.getElementById("teamOverlay").classList.remove('hidden');
         document.getElementById("addTeamMember").classList.remove('hidden');
 
@@ -448,15 +461,15 @@ class Team extends React.Component {
                                     <td>{member.role}</td>
                                     <td>{member.email}</td>
                                     <td>{member.field}</td>
-                                    {member.role !== 'owner' ? (
+                                    {this.props.user.role === 'owner' ? (
                                         <>
                                             <td>
-                                                {this.props.user.role === 'owner' && (
+
                                                     <>
-                                                        <button className="edit-button" onClick={() => this.showEditMemberForm(member)}>Edit</button>
-                                                        <button className="delete-button" onClick={() => this.deleteMember(member.email)}>Delete</button>
+                                                        <button className="edit-button" onClick={() => this.showEditMemberForm(member)}>{this.state.textContent.text13}</button>
+                                                        <button className="delete-button" onClick={() => this.deleteMember(member.email)}>{this.state.textContent.text14}</button>
                                                     </>
-                                                )}
+
                                             </td>
                                         </>
                                     ) : (
@@ -477,34 +490,31 @@ class Team extends React.Component {
 
 
                     <label htmlFor="name">{this.state.textContent.text6}</label>
-                    <input required type="text" id="name" name="name" className="form-control" placeholder="Name" />
+                    <input required type="text" id="name" name="name" className="form-control" placeholder={this.state.textContent.text6} />
 
 
                     <label htmlFor="role">{this.state.textContent.text7}</label>
                     <select defaultValue="" id="role" name="role" className="form-control" onChange={this.handleRoleChange} required>
-                        <option value="" selected disabled>Select a role</option>
+                        <option value="" selected disabled>{this.state.textContent.text7}</option>
                         <option value="field manager">field manager</option>
                         <option value="farmer">farmer</option>
                     </select>
 
                     {role === 'field manager' && this.state.fields.length > 0 && (
                         <>
-                            <label htmlFor="fields">{this.state.textContent.text8}</label>
-                            <select id="fields" name="fields" className="form-control" onChange={this.handleFieldChange} multiple required>
-                                <option value="" disabled>Select a field</option>
+                            <label htmlFor="fields">Fields</label>
+                            <div className="checklist-container">
                                 {this.state.fields.map(field => (
                                     <div key={field.id} className="checklist-item">
                                         <input type="checkbox" id={`field-${field.id}`} name="fields" value={field.id} onChange={this.handleFieldChange} />
                                         <label htmlFor={`field-${field.id}`}>{field.name}</label>
                                     </div>
                                 ))}
-                            </select>
+                            </div>
                         </>
                     )}
 
-                    {this.state.passwordMatchError && (
-                        <p style={{ color: "red" }}>Passwords do not match</p>
-                    )}
+                   
 
 
                     <label htmlFor="email">{this.state.textContent.text8}</label>
@@ -512,12 +522,17 @@ class Team extends React.Component {
 
 
                     <label htmlFor="password">{this.state.textContent.text9}</label>
-                    <input required type="password" id="password" name="password" className="form-control" placeholder="Password" />
+                    <input required type="password" id="password" name="password" className="form-control" placeholder={this.state.textContent.text9} />
 
 
                     <label htmlFor="confirmPassword">{this.state.textContent.text10}</label>
-                    <input required type="password" id="confirmPassword" name="confirmPassword" className="form-control" placeholder="Confirm Password" />
+                    <input required type="password" id="confirmPassword" name="confirmPassword" className="form-control" placeholder={this.state.textContent.text10} />
+                    
+                    {this.state.passwordMatchError && (
+                        <p style={{ color: "red" }}>{this.state.textContent.text15}</p>
+                    )}
 
+                    <p style={{ color: "red" }} className="hidden" id="notStrongPassword">{this.state.textContent.text16}</p>
 
                     <button id="addMember" type="submit" disabled={!this.isFormValid()}>
                     {this.state.textContent.text11}

@@ -15,11 +15,74 @@ class Maps extends React.Component {
 
     constructor(props) {
         super(props);
+
+        var language = localStorage.getItem("language") || "en";
+
+        var languageText = {
+        en: {
+
+            text1: "My Fields",
+            text2: "My Sensors",
+            text3: "Name",
+            text4: "Land Area",
+            text5: "Crop",
+            text6: "ID",
+            text7: "Field",
+            text8: "Use the rectangle/polygon tool to draw the field onto map",
+            text9: "Cancel",
+            text10: "Field Name",
+            text11: "Crop",
+            text12: "Sensor ID",
+            text13: "Coordinates",
+            text14: "(Click on field to retrieve)",
+            text15: "Field",
+            text16: "Temperature",
+            text17: "Humidity",
+            text18: "Click to view graph",
+            text19: "Create Field",
+            text20: "Enter Name",
+            text21: "Enter Type",
+            text22: "Create Sensor",
+            text23: "Select a field",
+            text24: "Enter ID",
+        
+        },
+        pt: {
+
+            text1: "Os meus campos",
+            text2: "Os meus sensores",
+            text3: "Nome",
+            text4: "Área",
+            text5: "Plantação",
+            text6: "ID",
+            text7: "Campo",
+            text8: "Use a ferramenta rectângulo/polígono para desenhar um campo na quinta",
+            text9: "Cancelar",
+            text10: "Nome do campo",
+            text11: "Plantação",
+            text12: "Id do Sensor",
+            text13: "Coordenadas",
+            text14: "Clique num campo para obter as coordenadas",
+            text15: "Campos",
+            text16: "Temperatura",
+            text17: "Humidade",
+            text18: "Clique para ver o gráfico",
+            text19: "Criar Campo",
+            text20: "Introduzir Nome",
+            text21: "Introduzir Plantação",
+            text22: "Criar Sensor",
+            text23: "Clique num campo",
+            text24: "Introduzir ID",
+            
+        },
+        };
+
         this.state = {
             modalOpen: false,
             sensor_latitude: null,
             sensor_longitude: null,
             markers: [],
+            textContent: languageText[language],
         };
 
         this.showSensorTable = this.showSensorTable.bind(this);
@@ -121,9 +184,20 @@ class Maps extends React.Component {
                     var cell3 = row.insertCell(2);
                     cell3.innerHTML = "<span>" + field.crop_type + "</span>";
 
+                    var language = localStorage.getItem("language") || "en";
+                    var deleteBTN;
+
+                    if(language == "en") {
+                        deleteBTN = '<div class="delete-container"></i><button class="deleteField-button">Delete</button></div>';
+                    } else if (language == "pt") {
+                        deleteBTN = '<div class="delete-container"></i><button class="deleteField-button">Apagar</button></div>';
+                    } else {
+                        deleteBTN = '<div class="delete-container"></i><button class="deleteField-button">Delete</button></div>';
+                    }
+
                     if (this.props.user.role === "owner") {
                         var cell4 = row.insertCell(3);
-                        cell4.innerHTML = '<div class="delete-container"></i><button class="deleteField-button">Delete</button></div>';
+                        cell4.innerHTML = deleteBTN;
 
 
                         cell4.addEventListener('click', () => {
@@ -282,10 +356,21 @@ class Maps extends React.Component {
                     var cell3 = row.insertCell(2);
                     cell3.innerHTML = "<span>" + field.crop_type + "</span>";
 
+                    var language = localStorage.getItem("language") || "en";
+                    var deleteBTN;
+
+                    if(language == "en") {
+                        deleteBTN = '<div class="delete-container"></i><button class="deleteField-button">Delete</button></div>';
+                    } else if (language == "pt") {
+                        deleteBTN = '<div class="delete-container"></i><button class="deleteField-button">Apagar</button></div>';
+                    } else {
+                        deleteBTN = '<div class="delete-container"></i><button class="deleteField-button">Delete</button></div>';
+                    }
+
                    
                     if (this.props.user.role === "owner") {
                         var cell4 = row.insertCell(3);
-                        cell4.innerHTML = '<div class="delete-container"></i><button class="deleteField-button">Delete</button></div>';
+                        cell4.innerHTML = deleteBTN;
 
                         cell4.addEventListener('click', () => {
                             axios.delete(URL + "deletefield/" + field.id + "/")
@@ -334,8 +419,21 @@ class Maps extends React.Component {
                                 },
                             });
 
+                            var language = localStorage.getItem("language") || "en";
+                            var content;
+                      
+                            if(language == "en") {
+                              content = "Sensor ID: <b>" + sensor.sensorId + "</b><br>Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b><br><br> Click to view graph';
+                            } else if (language == "pt") {
+                                content = "ID do Sensor: <b>" + sensor.sensorId + "</b><br>Temperatura: <b>" + sensor.temperature + '°C</b><br>Humidade: <b>' + sensor.humidity + '%</b><br><br> Clique para ver o gráfico';
+                            } else {
+                                content = "Sensor ID: <b>" + sensor.sensorId + "</b><br>Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b><br><br> Click to view graph';
+                            }
+
                             const infoWindow = new window.google.maps.InfoWindow({
-                                content: "Sensor ID: <b>" + sensor.sensorId + "</b><br>Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b>',
+
+                                content: content,
+                                
                             });
 
 
@@ -412,7 +510,18 @@ class Maps extends React.Component {
 
                         const infoWindow = marker.infoWindow;
 
-                        infoWindow.setContent("Sensor ID: <b>" + sensor.sensorId + "</b><br>Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b><br><br> Click to view graph');
+                        var language = localStorage.getItem("language") || "en";
+                        var content;
+                  
+                        if(language == "en") {
+                          content = "Sensor ID: <b>" + sensor.sensorId + "</b><br>Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b><br><br> Click to view graph';
+                        } else if (language == "pt") {
+                            content = "Sensor ID: <b>" + sensor.sensorId + "</b><br>Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b><br><br> Clique para ver o gráfico';
+                        } else {
+                            content = "Sensor ID: <b>" + sensor.sensorId + "</b><br>Temperature: <b>" + sensor.temperature + '°C</b><br>Humidity: <b>' + sensor.humidity + '%</b><br><br> Click to view graph';
+                        }
+
+                        infoWindow.setContent(content);
 
                         /* 
                         // update the text of the marker
@@ -531,6 +640,24 @@ class Maps extends React.Component {
                 console.log(err);
             }
             );
+
+
+            return new Promise((resolve, reject) => {
+                axios.get(URL + "getfieldsbyid/" + id + "/")
+                    .then(res => {
+                       
+                         
+                        return res.data;
+                        resolve();
+                       
+    
+    
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        reject(error); 
+                    });
+            });
     }
 
     initDrawing(map) {
@@ -620,14 +747,25 @@ class Maps extends React.Component {
             const popup = document.createElement('div');
             popup.classList.add('popup');
 
+            var language = localStorage.getItem("language") || "en";
+
             const message = document.createElement('p');
-            message.textContent = 'Do you want to add this polygon?';
-
             const acceptButton = document.createElement('button');
-            acceptButton.textContent = 'Add';
-
             const cancelButton = document.createElement('button');
-            cancelButton.textContent = 'Cancel';
+       
+            if(language == "en") {
+                message.textContent = 'Do you want to add this polygon?';
+                acceptButton.textContent = 'Add';
+                cancelButton.textContent = 'Cancel';
+            } else if (language == "pt") {
+                message.textContent = 'Quer adicionar este polígono?';
+                acceptButton.textContent = 'Adicionar';
+                cancelButton.textContent = 'Cancelar';
+            } else {
+                message.textContent = 'Do you want to add this polygon?';
+                acceptButton.textContent = 'Add';
+                cancelButton.textContent = 'Cancel';
+            }
 
 
             acceptButton.addEventListener('click', () => {
@@ -715,11 +853,22 @@ class Maps extends React.Component {
                         var cell3 = row.insertCell(2);
                         var cell4 = row.insertCell(3);
 
+                        var language = localStorage.getItem("language") || "en";
+                        var deleteBTN;
+
+                        if(language == "en") {
+                            deleteBTN = '<div class="delete-container"></i><button class="deleteField-button">Delete</button></div>';
+                        } else if (language == "pt") {
+                            deleteBTN = '<div class="delete-container"></i><button class="deleteField-button">Apagar</button></div>';
+                        } else {
+                            deleteBTN = '<div class="delete-container"></i><button class="deleteField-button">Delete</button></div>';
+                        }
+
                         cell1.innerHTML = "<span>" + fieldName + "</span>";
                         cell2.innerHTML = "<span>" + area + "</span> m<sup>2";
                         cell3.innerHTML = "<span>" + cropType + "</span>";
                         if (this.props.user.role === "owner") {
-                            cell4.innerHTML = '<div class="delete-container"></i><button class="deleteField-button">Delete</button></div>';
+                            cell4.innerHTML = deleteBTN;
 
                             cell4.addEventListener('click', () => {
                                 axios.delete(URL + "deletefield/" + res.data.id + "/")
@@ -826,14 +975,25 @@ class Maps extends React.Component {
             const popup = document.createElement('div');
             popup.classList.add('popup');
 
+            var language = localStorage.getItem("language") || "en";
+
             const message = document.createElement('p');
-            message.textContent = 'Do you want to add this rectangle?';
-
             const acceptButton = document.createElement('button');
-            acceptButton.textContent = 'Add';
-
             const cancelButton = document.createElement('button');
-            cancelButton.textContent = 'Cancel';
+       
+            if(language == "en") {
+                message.textContent = 'Do you want to add this rectangle?';
+                acceptButton.textContent = 'Add';
+                cancelButton.textContent = 'Cancel';
+            } else if (language == "pt") {
+                message.textContent = 'Quer adicionar este rectângulo?';
+                acceptButton.textContent = 'Adicionar';
+                cancelButton.textContent = 'Cancelar';
+            } else {
+                message.textContent = 'Do you want to add this rectangle?';
+                acceptButton.textContent = 'Add';
+                cancelButton.textContent = 'Cancel';
+            }
 
 
             acceptButton.addEventListener('click', () => {
@@ -934,8 +1094,20 @@ class Maps extends React.Component {
                         cell1.innerHTML = "<span>" + fieldName + "</span>";
                         cell2.innerHTML = "<span>" + area + "</span> m<sup>2";
                         cell3.innerHTML = "<span>" + cropType + "</span>";
+
+                        var language = localStorage.getItem("language") || "en";
+                        var deleteBTN;
+
+                        if(language == "en") {
+                            deleteBTN = '<div class="delete-container"></i><button class="deleteField-button">Delete</button></div>';
+                        } else if (language == "pt") {
+                            deleteBTN = '<div class="delete-container"></i><button class="deleteField-button">Apagar</button></div>';
+                        } else {
+                            deleteBTN = '<div class="delete-container"></i><button class="deleteField-button">Delete</button></div>';
+                        }
+
                         if (this.props.user.role === "owner") {
-                            cell4.innerHTML = '<div class="delete-container"></i><button class="deleteField-button">Delete</button></div>';
+                            cell4.innerHTML = deleteBTN;
 
                             cell4.addEventListener('click', () => {
                                 axios.delete(URL + "deletefield/" + res.data.id + "/")
@@ -1023,6 +1195,7 @@ class Maps extends React.Component {
     showFieldForm() {
 
         document.getElementById("fieldTable").classList.toggle("hidden");
+        document.getElementById("sensorSwitch").disabled = true;
 
         // check if table is hidden
         if (document.getElementById("fieldTable").classList.contains("hidden")) {
@@ -1033,6 +1206,7 @@ class Maps extends React.Component {
             document.getElementById('cancelNewField').classList.add('hidden');
             document.getElementById("addFieldsHeader").classList.add("hidden");
             document.getElementById("createField").classList.add("hidden");
+            document.getElementById("sensorSwitch").disabled = false;
         }
 
     }
@@ -1082,7 +1256,7 @@ class Maps extends React.Component {
     }
 
     showFieldTable() {
-
+        document.getElementById("sensorSwitch").disabled = false;
         document.getElementById("createSensor").classList.add("hidden");
         document.getElementById('fieldTable').classList.remove('hidden');
         document.getElementById('addNewField').classList.remove('hidden');
@@ -1093,12 +1267,21 @@ class Maps extends React.Component {
     }
 
     showSensorTable() {
+        document.getElementById("sensorSwitch").disabled = false;
         document.getElementById('fieldTable').classList.add('hidden');
         document.getElementById('addNewField').classList.add('hidden');
-        document.getElementById('addNewSensor').classList.remove('hidden');
         document.getElementById('sensorTable').classList.remove("hidden");
         document.getElementById('fieldSwitch').classList.remove("fieldsSensorsBtnActive");
         document.getElementById('sensorSwitch').classList.add("fieldsSensorsBtnActive");
+
+
+        console.log(document.getElementById('fieldTable').rows.length);
+
+        if(document.getElementById('fieldTable').rows.length > 2 ) {
+            document.getElementById('addNewSensor').classList.remove('hidden');
+        }
+
+        console.log();
 
         axios.get(URL + "getsensors/" + this.props.farmDetails.id + "/")
             .then((response) => {
@@ -1224,10 +1407,13 @@ class Maps extends React.Component {
                     <>
 
                         <div className="fieldsSensorsContainer">
-                            <button onClick={this.showFieldTable} id="fieldSwitch" className={`fieldsSensorsBtn fieldsSensorsBtnActive ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}><i className="fa-regular fa-map"></i> My Fields</button>
-                            <button onClick={this.showSensorTable} id="sensorSwitch" className={`fieldsSensorsBtn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}><i className="fa-solid fa-wifi"></i> My Sensors</button>
-                            <button onClick={this.showFieldForm} id="addNewField" className='fieldsSensorsBtn'> <i className="fa-solid fa-plus"></i> Field</button>
+                            <button onClick={this.showFieldTable} id="fieldSwitch" className={`fieldsSensorsBtn fieldsSensorsBtnActive ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}><i className="fa-regular fa-map"></i> {this.state.textContent.text1}</button>
+                            <button onClick={this.showSensorTable} id="sensorSwitch" className={`fieldsSensorsBtn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}><i className="fa-solid fa-wifi"></i> {this.state.textContent.text2}</button>
+                            <button onClick={this.showFieldForm} id="addNewField" className='fieldsSensorsBtn'> <i className="fa-solid fa-plus"></i> {this.state.textContent.text7}</button>
                             <button onClick={this.showSensorForm} id="addNewSensor" className='hidden fieldsSensorsBtn'> <i className="fa-solid fa-plus"></i> Sensor</button>
+                           
+                            
+                            
                         </div>
 
                     </>
@@ -1236,29 +1422,29 @@ class Maps extends React.Component {
 
                 <div className="fieldsTableConatiner">
 
-                    <h2 className="hidden" id="addFieldsHeader">Use the rectangle/polygon tool to draw the field onto map</h2>
-                    <button onClick={this.showFieldForm} id="cancelNewField" className={`fieldsTableBtn hidden ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}><i className='fa-solid fa-xmark'></i> Cancel</button>
+                    <h2 className="hidden" id="addFieldsHeader">{this.state.textContent.text8}</h2>
+                    <button onClick={this.showFieldForm} id="cancelNewField" className={`fieldsTableBtn hidden ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}><i className='fa-solid fa-xmark'></i> {this.state.textContent.text9}</button>
 
                     <form id="createField" className={`hidden ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`} onSubmit={this.createField}>
-                        <label htmlFor="name">Field Name</label>
-                        <input autocomplete="off" required type="text" name="name" id="fieldName" placeholder="enter name" />
-                        <label htmlFor="name">Crop</label>
-                        <input autocomplete="off" required type="text" name="crop_type" id="cropType" placeholder="select type" />
-                        <input id="createFieldBtn" type="submit" value="Create Field" />
+                        <label htmlFor="name">{this.state.textContent.text10}</label>
+                        <input autocomplete="off" required type="text" name="name" id="fieldName" placeholder={this.state.textContent.text20} />
+                        <label htmlFor="name">{this.state.textContent.text11}</label>
+                        <input autocomplete="off" required type="text" name="crop_type" id="cropType" placeholder={this.state.textContent.text21} />
+                        <input id="createFieldBtn" type="submit" value={this.state.textContent.text19} />
                     </form>
 
                     <form id="createSensor" className={`hidden ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`} onSubmit={this.createSensor}>
-                        <label htmlFor="sensorID">Sensor ID</label>
-                        <input autocomplete="off" required type="text" name="sensorID" id="sensorId" placeholder="enter ID" />
-                        <label htmlFor="sensorLat">Coordinates</label>
-                        <label htmlFor="sensorLat">(Click on map to retrieve)</label>
-                        <input autocomplete="off" required type="text" name="sensorLat" id="sensorLat" placeholder="enter latitude" disabled />
-                        <input autocomplete="off" required type="text" name="sensorLong" id="sensorLong" placeholder="enter longitude" disabled />
-                        <label htmlFor="sensorField">Field</label>
-                        <input autoComplete="off" required type="text" name="sensorField" id="sensorField" placeholder="select field" disabled />
+                        <label htmlFor="sensorID">{this.state.textContent.text12}</label>
+                        <input autocomplete="off" required type="text" name="sensorID" id="sensorId" placeholder={this.state.textContent.text24} />
+                        <label htmlFor="sensorLat">{this.state.textContent.text13}</label>
+                        <label htmlFor="sensorLat">{this.state.textContent.text14}</label>
+                        <input autocomplete="off" required type="text" name="sensorLat" id="sensorLat" placeholder="latitude" disabled />
+                        <input autocomplete="off" required type="text" name="sensorLong" id="sensorLong" placeholder="longitude" disabled />
+                        <label htmlFor="sensorField">{this.state.textContent.text7}</label>
+                        <input autoComplete="off" required type="text" name="sensorField" id="sensorField" placeholder={this.state.textContent.text23} disabled />
                         <input type="hidden" name="sensorFieldId" id="sensorFieldId" />
-                        <input id="createSensorBtn" type="submit" value="Create sensor" />
-                        <button onClick={this.hideSensorForm} id="cancelSensorBtn">Cancel</button>
+                        <input id="createSensorBtn" type="submit" value={this.state.textContent.text22} />
+                        <button onClick={this.hideSensorForm} id="cancelSensorBtn">{this.state.textContent.text9}</button>
                     </form>
 
                     <div id="add"></div>
@@ -1266,9 +1452,9 @@ class Maps extends React.Component {
                     <table id='fieldTable' className={`fieldsTable ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
                         <thead>
                             <tr>
-                                <th><h2>Name</h2></th>
-                                <th><h2>Land Area</h2></th>
-                                <th><h2>Crop</h2></th>
+                                <th><h2>{this.state.textContent.text3}</h2></th>
+                                <th><h2>{this.state.textContent.text4}</h2></th>
+                                <th><h2>{this.state.textContent.text5}</h2></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1284,8 +1470,8 @@ class Maps extends React.Component {
                     <table id='sensorTable' className={`fieldsTable hidden ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
                         <thead>
                             <tr>
-                                <th><h2>ID</h2></th>
-                                <th><h2>Field</h2></th>
+                                <th><h2>{this.state.textContent.text6}</h2></th>
+                                <th><h2>{this.state.textContent.text7}</h2></th>
                             </tr>
                         </thead>
                         <tbody>

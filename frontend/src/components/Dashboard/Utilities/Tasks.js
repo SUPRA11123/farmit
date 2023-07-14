@@ -19,21 +19,29 @@ class Tasks extends React.Component {
             text3: "Completed",
             text4: "Create new task",
             text5: "Task",
-            text6: "Description (Optional)",
+            text6: "Description",
             text7: "Asignee",
             text8: "Create Task",
+            text9: "Select a team member",
+            text10: "Fields",
+            text11: "Select a field",
+
         
         },
         pt: {
 
-            text1: "A Fazer",
+            text1: "Por Fazer",
             text2: "Em Curso",
             text3: "Concluídas",
             text4: "Adicionar nova tarefa",
             text5: "Tarefa",
-            text6: "Descrição (Opcional)",
-            text7: "Cessionário",
+            text6: "Descrição",
+            text7: "Membro",
             text8: "Criar Tarefa",
+            text9: "Selecionar membro da equipa",
+            text10: "Campos",
+            text11: "Selecionar campo",
+
             
         },
         };
@@ -458,7 +466,7 @@ class Tasks extends React.Component {
                         className="form-control"
                         onChange={this.handleMemberChange}
                     >
-                        <option value="" disabled>Select a team member</option>
+                        <option value="" disabled>{this.state.textContent.text8}</option>
                         {this.state.team.map((member) => {
                             if (member.id !== this.props.user.id && member.role !== "owner") {
                                 return (
@@ -474,11 +482,11 @@ class Tasks extends React.Component {
 
                     {this.state.selectedAssignee && (
                         <>
-                            <label htmlFor="taskField">Field</label>
+                            <label htmlFor="taskField">{this.state.textContent.text9}</label>
                             <select defaultValue="" id="fields" name="fields" className="form-control">
                                 {this.state.fields.length > 0 ? (
                                     <>
-                                        <option value="" disabled>Select a field</option>
+                                        <option value="" disabled>{this.state.textContent.text10}</option>
                                         {this.state.fields.map((field) => {
                                             // Check if the selected member is a field manager and the field is assigned to them
                                             if (this.state.selectedAssignee.role === "field manager" && field.manager === this.state.selectedAssignee.id) {

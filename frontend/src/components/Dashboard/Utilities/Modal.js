@@ -11,6 +11,43 @@ Chart.register(zoomPlugin);
 class Modal extends React.Component {
   constructor(props) {
     super(props);
+
+    var language = localStorage.getItem("language") || "en";
+
+    var languageText = {
+    en: {
+
+        text1: "Temperature and Humidity Values From Sensor ",
+        text2: "Temperature",
+        text3: "Humidity",
+        text4: "Reset Zoom",
+        text5: "Download",
+        text6: "Start Date",
+        text7: "End Date",
+        text8: "Export CSV",
+        text9: "Value",
+        text10: "Time",
+        text11: "Start date (day and hours) cannot match with end date",
+
+    
+    },
+    pt: {
+
+        text1: "Valores de temperatura e humidade do sensor ",
+        text2: "Temperatura",
+        text3: "Humidade",
+        text4: "Redefinir zoom",
+        text5: "Transferir",
+        text6: "Data de início",
+        text7: "Data de fim",
+        text8: "Exportar CSV",
+        text9: "Valor",
+        text10: "Horas",
+        text11: "Data de início (dia e horas) não pode ser igual à Data de fim",
+        
+    },
+    };
+
     this.state = {
       temperatureData: [],
       humidityData: [],
@@ -18,6 +55,7 @@ class Modal extends React.Component {
       endDate: "",
       showDateInputs: false,
       selectedTimeOption: "20m",
+      textContent: languageText[language],
     };
     this.chartRef = React.createRef();
 
@@ -291,13 +329,13 @@ class Modal extends React.Component {
           labels: time,
           datasets: [
             {
-              label: "Temperature (ºC)",
+              label: this.state.textContent.text2 + " (ºC)",
               data: temperatureData.map((row) => row.decoded_payload_temperature),
               borderColor: "#C44940",
               fill: false,
             },
             {
-              label: "Humidity (%)",
+              label: this.state.textContent.text3 + " (%)",
               data: humidityData.map((row) => row.decoded_payload_humidity),
               borderColor: "#4079c4",
               fill: false,
@@ -340,7 +378,7 @@ class Modal extends React.Component {
               max: 100,
               title: {
                 display: true,
-                text: "Value",
+                text: this.state.textContent.text9,
               },
               ticks: {
                 color: labelColor,
@@ -349,7 +387,7 @@ class Modal extends React.Component {
             x: {
               title: {
                 display: true,
-                text: "Time",
+                text: this.state.textContent.text10,
               },
               ticks: {
                 color: labelColor,
@@ -393,14 +431,39 @@ class Modal extends React.Component {
 
     const { showDateInputs, startDate, endDate } = this.state;
 
-    const timeOptions = [
-      { value: '20m', label: 'Past 20m' },
-      { value: '1h', label: 'Past 1h' },
-      { value: '3h', label: 'Past 3h' },
-      { value: '6h', label: 'Past 6h' },
-      { value: '12h', label: 'Past 12h' },
-      { value: '24h', label: 'Past 24h' },
-    ];
+    var language = localStorage.getItem("language") || "en";
+    var timeOptions;
+
+    if(language == "en") {
+      timeOptions = [
+        { value: '20m', label: 'Past 20m' },
+        { value: '1h', label: 'Past 1h' },
+        { value: '3h', label: 'Past 3h' },
+        { value: '6h', label: 'Past 6h' },
+        { value: '12h', label: 'Past 12h' },
+        { value: '24h', label: 'Past 24h' },
+      ];
+    } else if (language == "pt") {
+      timeOptions = [
+        { value: '20m', label: 'Últimos 20 minutos' },
+        { value: '1h', label: 'Última hora' },
+        { value: '3h', label: 'Última 3 horas' },
+        { value: '6h', label: 'Última 6 horas' },
+        { value: '12h', label: 'Última 12 horas' },
+        { value: '24h', label: 'Última 24 horas' },
+      ];
+    } else {
+      timeOptions = [
+        { value: '20m', label: 'Past 20m' },
+        { value: '1h', label: 'Past 1h' },
+        { value: '3h', label: 'Past 3h' },
+        { value: '6h', label: 'Past 6h' },
+        { value: '12h', label: 'Past 12h' },
+        { value: '24h', label: 'Past 24h' },
+      ];
+    }
+
+  
 
     return (
       <div className={`modalContainer ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
@@ -408,7 +471,7 @@ class Modal extends React.Component {
           <button onClick={() => { setOpenModal(false); this.props.largeMap(); }}>X</button>
         </div>
         <div className="title2">
-          <h1>Temperature and Humidity Values From Sensor {this.props.sensorData.sensorId}</h1>
+          <h1>{this.state.textContent.text1} {this.props.sensorData.sensorId}</h1>
 
         </div>
         <div className="body">
@@ -420,13 +483,14 @@ class Modal extends React.Component {
           <br />
           {showDateInputs && (
             <form id="exportSensorDataForm" onSubmit={this.handleExportCSV}>
-              <label htmlFor="startDate">Start Date:</label>
+              <p>{this.state.textContent.text11}</p>
+              <label htmlFor="startDate">{this.state.textContent.text6}:</label>
               <input type="datetime-local" id="startDate" value={startDate} onChange={this.handleStartDateChange} required />
               <br /><br />
-              <label htmlFor="endDate">End Date:</label>
+              <label htmlFor="endDate">{this.state.textContent.text7}:</label>
               <input type="datetime-local" id="endDate" value={endDate} onChange={this.handleEndDateChange} required />
               <br /><br />
-              <input type="submit" value="Export data" />
+              <input type="submit" value={this.state.textContent.text8} />
             </form>
           )}
 
@@ -437,10 +501,10 @@ class Modal extends React.Component {
               ))}
             </select>
 
-            <button className="resetZoomButton" onClick={this.resetZoom}>Reset Zoom</button>
+            <button className="resetZoomButton" onClick={this.resetZoom}>{this.state.textContent.text4}</button>
             {!showDateInputs && (
               <div className="exportButton">
-                <button onClick={this.exportDataToCSV}><i class="fa-sharp fa-solid fa-download"></i> Download</button>
+                <button onClick={this.exportDataToCSV}><i class="fa-sharp fa-solid fa-download"></i> {this.state.textContent.text5}</button>
               </div>
             )}
           </div>

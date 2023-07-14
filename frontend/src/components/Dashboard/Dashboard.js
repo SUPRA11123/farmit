@@ -50,6 +50,9 @@ class Dashboard extends React.Component {
             text5: "Weather",
             text6: "Fruit-Scan",
             text7: "Settings",
+
+            //ALERTS
+            text8: "Alerts",
         
         },
         pt: {
@@ -59,9 +62,12 @@ class Dashboard extends React.Component {
             text2: "Campos",
             text3: "Tarefas",
             text4: "Equipa",
-            text5: "Meterologia",
-            text6: "Fuit-Scan",
+            text5: "Meteorologia",
+            text6: "Scan de frutas",
             text7: "Definições",
+
+            //ALERTS
+            text8: "Alertas",
             
         },
         };
@@ -108,7 +114,7 @@ class Dashboard extends React.Component {
             text3: "Tarefas",
             text4: "Equipa",
             text5: "Meteorologia",
-            text6: "Fruit-Scan",
+            text6: "Scan de frutas",
             text7: "Definições",
           },
         };
@@ -142,9 +148,20 @@ class Dashboard extends React.Component {
 
         this.setState({ farmDetails: farmDetails });
 
+        var language = localStorage.getItem("language") || "en";
+        var lang;
+
+        if(language == "en") {
+          lang = 'en'
+        } else if (language == "pt") {
+            lang = 'pt'
+        } else {
+            lang = 'en'
+        }
+
 
         // get the weather data
-        const url = `https://api.openweathermap.org/data/2.5/weather?lat=${farmDetails.latitude}&lon=${farmDetails.longitude}&units=${this.UNIT}&appid=${this.WEATHER_API_KEY}`;
+        const url = `https://api.openweathermap.org/data/2.5/weather?lat=${farmDetails.latitude}&lon=${farmDetails.longitude}&units=${this.UNIT}&appid=${this.WEATHER_API_KEY}&lang=${lang}`;
         const response = await fetch(url);
         const data = await response.json();
 
@@ -165,7 +182,7 @@ class Dashboard extends React.Component {
 
         // get the weather forecast
 
-        const url2 = `https://api.openweathermap.org/data/2.5/forecast?lat=${farmDetails.latitude}&lon=${farmDetails.longitude}&units=${this.UNIT}&appid=${this.WEATHER_API_KEY}`;
+        const url2 = `https://api.openweathermap.org/data/2.5/forecast?lat=${farmDetails.latitude}&lon=${farmDetails.longitude}&units=${this.UNIT}&appid=${this.WEATHER_API_KEY}&lang=${lang}`;
         const response2 = await fetch(url2);
         const data2 = await response2.json();
 
@@ -183,11 +200,20 @@ class Dashboard extends React.Component {
 
         let biggestTemperatureRegisteredDayName = "";
 
+        var language = localStorage.getItem("language") || "en";
 
         for (let i = 1; i < iterationLimit; i++) {
             const temperature = data2.list[i].main.temp;
             const date = new Date(data2.list[i].dt_txt);
-            const dayName = date.toLocaleString('en-us', { weekday: 'long' });
+            var dayName;
+
+            if(language == "en") {
+                dayName = date.toLocaleString('en-us', { weekday: 'long' });
+              } else if (language == "pt") {
+                dayName = date.toLocaleString('pt-pt', { weekday: 'long' });
+              } else {
+                dayName = date.toLocaleString('en-us', { weekday: 'long' });
+              }
 
             if (temperature > biggestTemperatureRegistered) {
                 biggestTemperatureRegistered = temperature;
@@ -200,9 +226,21 @@ class Dashboard extends React.Component {
 
         }
 
+
+
+    var alertMessage;
+
+    if(language == "en") {
+      alertMessage = `The temperature could reach over ${(biggestTemperatureRegistered).toFixed(0)}°C on ${biggestTemperatureRegisteredDayName}!`;
+    } else if (language == "pt") {
+        alertMessage = `A temperatura pode atingir os ${(biggestTemperatureRegistered).toFixed(0)}°C  ${biggestTemperatureRegisteredDayName}!`;
+    } else {
+        alertMessage = `The temperature could reach over ${(biggestTemperatureRegistered).toFixed(0)}°C on ${biggestTemperatureRegisteredDayName}!`;
+    }
+
         alert = {
             type: "weather",
-            message: `The temperature could reach over ${(biggestTemperatureRegistered).toFixed(0)}°C on ${biggestTemperatureRegisteredDayName}!`,
+            message: alertMessage,
         }
 
         // get current date and day of the week
@@ -219,10 +257,19 @@ class Dashboard extends React.Component {
         tomorrow.setDate(tomorrow.getDate() + 1);
 
         const tomorrowDayName = tomorrow.toLocaleString('en-us', { weekday: 'long' });
+        var alertMessage2;
+
+        if(language == "en") {
+            alertMessage2 = `The temperature could reach over ${(biggestTemperatureRegistered).toFixed(0)}°C tomorrow!`;
+          } else if (language == "pt") {
+              alertMessage2 = `A temperatura pode atingir os ${(biggestTemperatureRegistered).toFixed(0)}°C amanhã!`;
+          } else {
+              alertMessage2 = `The temperature could reach over ${(biggestTemperatureRegistered).toFixed(0)}°C tomorrow!`;
+          }
 
 
         if (biggestTemperatureRegisteredDayName === tomorrowDayName) {
-            alert.message = `The temperature could reach over ${(biggestTemperatureRegistered).toFixed(0)}°C tomorrow!`;
+            alert.message = alertMessage2;
         }
 
         this.setState({ alerts: [alert] });
@@ -235,12 +282,20 @@ class Dashboard extends React.Component {
 
                 const tasksCount = tasks.filter((task) => task.status !== "Completed").length;
 
-
+                var alertMessage3;
+        
+                if(language == "en") {
+                    alertMessage3 = `You have ${tasksCount} task(s) assigned to you!`;
+                  } else if (language == "pt") {
+                      alertMessage3 = `Tem ${tasksCount} tarefa(s) por fazer`;
+                  } else {
+                      alertMessage3 = `You have ${tasksCount} tasks assigned to you!`;
+                  }
 
                 if (tasksCount > 0) {
                     const tasksAlert = {
                         type: "tasks",
-                        message: `You have ${tasksCount} tasks assigned to you!`,
+                        message: alertMessage3,
                     };
 
                     this.setState((prevState) => ({
@@ -305,7 +360,7 @@ class Dashboard extends React.Component {
 
         const sensors = {};
 
-
+        var language = localStorage.getItem("language") || "en";
 
         const fetchSensorLocationData = new Promise((resolve, reject) => {
             queryApi.queryRows(sensorLocationQuery, {
@@ -345,7 +400,16 @@ class Dashboard extends React.Component {
                         // if there's already an alert for this sensor, then don't send another alert
 
                         if (_value > 30 && !this.state.alerts.find((alert) => alert.sensorId === sensorId && alert.temperature === "high") && match) {
-                            const alertMessage = `High temperature was detected in sensor ${sensorId} in the past 24 hours! Take necessary measures to cool the environment.`;
+
+                            var alertMessage;
+                    
+                            if(language == "en") {
+                                alertMessage = `High temperature was detected in sensor ${sensorId} in the past 24 hours! Take necessary measures to cool the environment.`;
+                            } else if (language == "pt") {
+                                alertMessage = `Temperaturas altas foram detetadas pelo sensor ${sensorId} nas últimas 24 horas! Tome as medidas necessárias para arrefecer o solo. `;
+                            } else {
+                                alertMessage = `High temperature was detected in sensor ${sensorId} in the past 24 hours! Take necessary measures to cool the environment.`;
+                            }
 
                             // Create an object with the alert details
                             const alert = {
@@ -369,7 +433,16 @@ class Dashboard extends React.Component {
                             // Wait for the state to be updated before continuing
                             await setStatePromise;
                         } else if (_value < 10 && !this.state.alerts.find((alert) => alert.sensorId === sensorId && alert.temperature === "low") && match) {
-                            const alertMessage = `Low temperature was detected in sensor ${sensorId} in the past 24 hours! Take necessary measures to warm the environment.`;
+
+                            var alertMessage;
+                    
+                            if(language == "en") {
+                                alertMessage = `Low temperature was detected in sensor ${sensorId} in the past 24 hours! Take necessary measures to warm the environment.`;
+                            } else if (language == "pt") {
+                                alertMessage = `Temperaturas altas foram detetadas pelo sensor ${sensorId} nas últimas 24 horas! Tome as medidas necessárias.`;
+                            } else {
+                                alertMessage = `Low temperature was detected in sensor ${sensorId} in the past 24 hours! Take necessary measures to warm the environment.`;
+                            }
 
                             // Create an object with the alert details
                             const alert = {
@@ -404,7 +477,16 @@ class Dashboard extends React.Component {
                         // if there's already an alert for this sensor, then don't send another alert
 
                         if (_value < 60 && !this.state.alerts.find((alert) => alert.sensorId === sensorId && alert.humidity === "high") && match) {
-                            const alertMessage = `High soil moisture was detected in sensor ${sensorId} in the past 24 hours! Make sure to maintain optimal soil moisture levels.`;
+
+                            var alertMessage;
+                    
+                            if(language == "en") {
+                                alertMessage = `High soil moisture was detected in sensor ${sensorId} in the past 24 hours! Make sure to maintain optimal soil moisture levels.`;
+                            } else if (language == "pt") {
+                                alertMessage = `Valores elevados de humidade foram detetados pelo sensor ${sensorId} nas últimas 24 horas! Certifique-se que os níveis ideais de humidade do solo são mantidos.`;
+                            } else {
+                                alertMessage = `High soil moisture was detected in sensor ${sensorId} in the past 24 hours! Make sure to maintain optimal soil moisture levels.`;
+                            }
 
                             // Create an object with the alert details
                             const alert = {
@@ -429,7 +511,16 @@ class Dashboard extends React.Component {
                             await setStatePromise;
                         }
                         else if (_value > 60 && !this.state.alerts.find((alert) => alert.sensorId === sensorId && alert.humidity === "low") && match) {
-                            const alertMessage = `Low soil moisture was detected in sensor ${sensorId} in the past 24 hours! Make sure to water the plants appropriately.`;
+                            
+                            var alertMessage;
+                    
+                            if(language == "en") {
+                                alertMessage = `Low soil moisture was detected in sensor ${sensorId} in the past 24 hours! Make sure to water the plants appropriately.`;
+                            } else if (language == "pt") {
+                                alertMessage = `Valores baixos de humidade foram detetados pelo sensor ${sensorId} nas últimas 24 horas! Certifique-se que rega as plantas adequadamente.`;
+                            } else {
+                                alertMessage = `Low soil moisture was detected in sensor ${sensorId} in the past 24 hours! Make sure to water the plants appropriately.`;
+                            }
 
                             // Create an object with the alert details
                             const alert = {
@@ -638,7 +729,7 @@ class Dashboard extends React.Component {
                 if(language == "en"){
                     return "My Fields";
                 } else if(language == "pt"){
-                    return  "Meus Campos";
+                    return  "Os Meus Campos";
                 }
                 break;
             case "tasks":
@@ -652,7 +743,7 @@ class Dashboard extends React.Component {
                 if(language == "en"){
                     return "My Team";
                 } else if(language == "pt"){
-                    return  "Meu Time";
+                    return  "A Minha Equipa";
                 }
                 break;
             case "weather":
@@ -795,7 +886,7 @@ class Dashboard extends React.Component {
 
                 <section id="alertMenu" className={`alertMenu hidden ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
 
-                    <h2>Alerts</h2>
+                    <h2>{this.state.textContent.text8}</h2>
                     <div id="alertsContainer" className='alertsContainer'>
                         {this.state.alerts.map((alert, index) => {
 
