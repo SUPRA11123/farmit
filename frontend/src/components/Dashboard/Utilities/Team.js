@@ -6,6 +6,41 @@ class Team extends React.Component {
     constructor(props) {
         super(props);
 
+        var language = localStorage.getItem("language") || "en";
+
+        var languageText = {
+        en: {
+
+            text1: "Name",
+            text2: "Role",
+            text3: "Email",
+            text4: "Field",
+            text5: "Add new member",
+            text6: "Name",
+            text7: "Role",
+            text8: "Email",
+            text9: "Password",
+            text10: "Confirm Password",
+            text11: "Create Member",
+        
+        },
+        pt: {
+
+            text1: "Nome",
+            text2: "Função",
+            text3: "E-mail",
+            text4: "Campos",
+            text5: "Adicionar novo membro",
+            text6: "Nome",
+            text7: "Função",
+            text8: "E-mail",
+            text9: "Palavra-passe",
+            text10: "Confirme Palavra-passe",
+            text11: "Criar Membro",
+            
+        },
+        };
+
         this.state = {
             name: "",
             email: "",
@@ -14,7 +49,8 @@ class Team extends React.Component {
             confirmPassword: "",
             fields: [],
             team: [],
-            passwordMatchError: false
+            passwordMatchError: false,
+            textContent: languageText[language],
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleEditMember = this.handleEditMember.bind(this);
@@ -357,10 +393,10 @@ class Team extends React.Component {
 
                     <table id="teamTable">
                         <thead>
-                            <th>Name</th>
-                            <th>Role</th>
-                            <th>Email</th>
-                            <th>Field</th>
+                            <th>{this.state.textContent.text1}</th>
+                            <th>{this.state.textContent.text2}</th>
+                            <th>{this.state.textContent.text3}</th>
+                            <th>{this.state.textContent.text4}</th>
                             <th><button id="addNewMember" onClick={this.showTeamForm}><i className="fa-solid fa-plus"></i></button></th>
                         </thead>
                         <tbody>
@@ -390,15 +426,15 @@ class Team extends React.Component {
 
                 <form id="addTeamMember" className={`hidden ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`} onSubmit={this.handleSubmit}>
 
-                    <h2><i className="fa-solid fa-people-group"></i>Add new member <i className="fa-solid fa-xmark" id="teamCancel" onClick={this.cancelMember}></i></h2>
+                    <h2><i className="fa-solid fa-people-group"></i>{this.state.textContent.text5} <i className="fa-solid fa-xmark" id="teamCancel" onClick={this.cancelMember}></i></h2>
                     <hr></hr>
 
 
-                    <label htmlFor="name">Name</label>
+                    <label htmlFor="name">{this.state.textContent.text6}</label>
                     <input required type="text" id="name" name="name" className="form-control" placeholder="Name" />
 
 
-                    <label htmlFor="role">Role</label>
+                    <label htmlFor="role">{this.state.textContent.text7}</label>
                     <select defaultValue="" id="role" name="role" className="form-control" onChange={this.handleRoleChange} required>
                         <option value="" selected disabled>Select a role</option>
                         <option value="field manager">field manager</option>
@@ -407,7 +443,7 @@ class Team extends React.Component {
 
                     {role === 'field manager' && this.state.fields.length > 0 && (
                         <>
-                            <label htmlFor="fields">Fields</label>
+                            <label htmlFor="fields">{this.state.textContent.text8}</label>
                             <select id="fields" name="fields" className="form-control" onChange={this.handleFieldChange} multiple required>
                                 <option value="" disabled>Select a field</option>
                                 {this.state.fields.map(field => (
@@ -421,20 +457,20 @@ class Team extends React.Component {
                     )}
 
 
-                    <label htmlFor="email">Email</label>
+                    <label htmlFor="email">{this.state.textContent.text8}</label>
                     <input required type="text" id="email" name="email" className="form-control" placeholder="Email" />
 
 
-                    <label htmlFor="password">Password</label>
+                    <label htmlFor="password">{this.state.textContent.text9}</label>
                     <input required type="password" id="password" name="password" className="form-control" placeholder="Password" />
 
 
-                    <label htmlFor="confirmPassword">Confirm Password</label>
+                    <label htmlFor="confirmPassword">{this.state.textContent.text10}</label>
                     <input required type="password" id="confirmPassword" name="confirmPassword" className="form-control" placeholder="Confirm Password" />
 
 
                     <button id="addMember" type="submit" disabled={!this.isFormValid()}>
-                        Create User
+                    {this.state.textContent.text11}
                     </button>
 
                 </form>

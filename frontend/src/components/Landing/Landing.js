@@ -25,6 +25,59 @@ class Landing extends React.Component {
     this.handleFarmInfo = this.handleFarmInfo.bind(this);
     this.getUser = this.getUser.bind(this);
 
+    var language = localStorage.getItem("language") || "en";
+
+    var languageText = {
+      en: {
+
+        //LOGIN SCREEN
+        text1: "Dashboard Login",
+        text2: "Email",
+        text3: "Password",
+        text4: "Login",
+        text5: "Dont have an account?",
+        text6: "Register",
+
+        //REGISTER SCREEN
+        text7: "Create your account",
+        text8: "Name",
+        text9: "Email",
+        text10: "Password",
+        text11: "Confirm Password",
+        text12: "Next",
+        text13: "Already have an account?",
+        text14: "Login",
+        text15: "Details about your farm",
+        text16: "Farm name",
+        text17: "Country",
+        text18: "Please click on the map to set a marker for your farm",
+        text19: "Submit"
+      },
+      pt: {
+        //LOGIN SCREEN
+        text1: "Login no painel de controlo",
+        text2: "E-mail",
+        text3: "Palavra-passe",
+        text4: "Inicio de sessão",
+        text5: "Não tem uma conta?",
+        text6: "Registo",
+
+        //REGISTER SCREEN
+        text7: "Criar conta",
+        text8: "Nome",
+        text9: "E-Mail",
+        text10: "Palavra-passe",
+        text11: "Confirme palavra-passe",
+        text12: "Próximo",
+        text13: "já tem uma conta?",
+        text14: "Conecte-se",
+        text15: "Detalhes sobre a sua quinta",
+        text16: "Nome da quinta",
+        text17: "País",
+        text18: "Por favor, clique no mapa para definir um marcador para a sua quinta",
+        text19: "Enviar"
+      },
+    };
 
     this.state = {
       country: {
@@ -35,9 +88,11 @@ class Landing extends React.Component {
         markerLat: 0,
         markerLong: 0
       },
-      zoom: 5 
+      zoom: 5,
+      textContent: languageText[language],
       
     };
+
   }
   
   componentDidMount() {
@@ -295,27 +350,7 @@ class Landing extends React.Component {
     } else {
       alert("User does not exist");
     }
-  }
-
-  languageText = {
-    en: {
-      title: "Delete Account",
-      label: "To delete your Agrosensor account, you are required to enter your password:",
-      password: "Password",
-      changetext: "Dont have an account?",
-      changeBtn: "Register",
-      deleteButton: "Delete Account"
-    },
-    pt: {
-      title: "Excluir Conta",
-      label: "Para excluir sua conta do Agrosensor, você precisa digitar sua senha:",
-      passwordPlaceholder: "Senha",
-      deleteButton: "Excluir Conta"
-    },
-    // Add more languages and their respective text content here
-  };
-  
-
+  }  
 
   render() {
 
@@ -327,48 +362,10 @@ class Landing extends React.Component {
 
           <img src={require('../../resources/img/logo.png')} alt="agrosense logo" />
 
-          <form id="userInfo" className="hidden" onSubmit={this.handleNext}>
-
-            <h2>Create your account</h2>
-
-            <label htmlFor="Name">Name</label><br />
-            <input onChange={this.checkAccountComplete} required type="text" id="createName" name="Name" /><br />
-
-            <label htmlFor="email">Email</label><br />
-            <input onChange={this.checkAccountComplete} required type="email" id="createEmail" name="email" /><br />
-
-            <label htmlFor="pwd">Password</label><br />
-            <input onChange={this.checkAccountComplete} required type="password" id="createPwd" name="pwd" /><br />
-
-            <label htmlFor="confirmPwd">Confirm Password</label><br />
-            <input onChange={this.checkAccountComplete} required type="password" id="confirmPwd" name="confirmPwd" /><br />
-            
-            
-            <input id="accountNext" type="submit" value="Next" />
-
-            <p>Already have an account? <span onClick={this.toLogin}>Login</span></p>
-
-          </form>
-
-          <form id="farmInfo" className="hidden" onSubmit={this.handleFarmInfo}>
-
-            <h2>Details about your farm</h2>
-
-            <label htmlFor="farmName">Farm Name</label><br />
-            <input required type="text" id="farmName" name="farmName" /><br />
-
-            <label htmlFor="country">Country</label><br />
-            <CountrySelect id='farmCountry' changeMap={this.changeMap}></CountrySelect>
-
-            <span id="mapPrompt" className='hidden'>Please click on the map to set a marker for your farm</span>
-
-            <input id="farmNext" type="submit" value="Next" />
-
-          </form>
 
           <form id="userLogin" onSubmit={this.handleLogin}>
 
-            <h2>Dashboard Login</h2>
+            <h2>{this.state.textContent.text1}</h2>
 
             <div id="googleSignIn">
               <GoogleLogin
@@ -388,15 +385,54 @@ class Landing extends React.Component {
 
             <p id='errorMessage'></p>
 
-            <label htmlFor="loginEmail">Email</label><br />
+            <label htmlFor="loginEmail">{this.state.textContent.text2}</label><br />
             <input onChange={this.checkAccountComplete} required type="email" id="loginEmail" name="loginEmail" /><br />
 
-            <label htmlFor="loginPwd">Password</label><br />
+            <label htmlFor="loginPwd">{this.state.textContent.text3}</label><br />
             <input onChange={this.checkAccountComplete} required type="password" id="loginPwd" name="loginPwd" /><br />
 
-            <input id="loginInBtn" type="submit" value="Login" />
+            <input id="loginInBtn" type="submit" value={this.state.textContent.text4} />
 
-            <p>Dont have an account? <span onClick={this.toRegister}>Register</span></p>
+            <p>{this.state.textContent.text5} <span onClick={this.toRegister}>{this.state.textContent.text6}</span></p>
+
+          </form>
+
+          <form id="userInfo" className="hidden" onSubmit={this.handleNext}>
+
+            <h2>{this.state.textContent.text7}</h2>
+
+            <label htmlFor="Name">{this.state.textContent.text8}</label><br />
+            <input onChange={this.checkAccountComplete} required type="text" id="createName" name="Name" /><br />
+
+            <label htmlFor="email">{this.state.textContent.text9}</label><br />
+            <input onChange={this.checkAccountComplete} required type="email" id="createEmail" name="email" /><br />
+
+            <label htmlFor="pwd">{this.state.textContent.text10}</label><br />
+            <input onChange={this.checkAccountComplete} required type="password" id="createPwd" name="pwd" /><br />
+
+            <label htmlFor="confirmPwd">{this.state.textContent.text11}</label><br />
+            <input onChange={this.checkAccountComplete} required type="password" id="confirmPwd" name="confirmPwd" /><br />
+            
+            
+            <input id="accountNext" type="submit" value={this.state.textContent.text12} />
+
+            <p>{this.state.textContent.text13} <span onClick={this.toLogin}>{this.state.textContent.text14}</span></p>
+
+          </form>
+
+          <form id="farmInfo" className="hidden" onSubmit={this.handleFarmInfo}>
+
+            <h2>{this.state.textContent.text15}</h2>
+
+            <label htmlFor="farmName">{this.state.textContent.text16}</label><br />
+            <input required type="text" id="farmName" name="farmName" /><br />
+
+            <label htmlFor="country">{this.state.textContent.text17}</label><br />
+            <CountrySelect id='farmCountry' changeMap={this.changeMap}></CountrySelect>
+
+            <span id="mapPrompt" className='hidden'>{this.state.textContent.text18}</span>
+
+            <input id="farmNext" type="submit" value={this.state.textContent.text19} />
 
           </form>
 

@@ -9,6 +9,35 @@ class Tasks extends React.Component {
 
         super(props);
 
+        var language = localStorage.getItem("language") || "en";
+
+        var languageText = {
+        en: {
+
+            text1: "To do",
+            text2: "In Progress",
+            text3: "Completed",
+            text4: "Create new task",
+            text5: "Task",
+            text6: "Description (Optional)",
+            text7: "Asignee",
+            text8: "Create Task",
+        
+        },
+        pt: {
+
+            text1: "A Fazer",
+            text2: "Em Curso",
+            text3: "Concluídas",
+            text4: "Adicionar nova tarefa",
+            text5: "Tarefa",
+            text6: "Descrição (Opcional)",
+            text7: "Cessionário",
+            text8: "Criar Tarefa",
+            
+        },
+        };
+
         this.state = {
             name: "",
             email: "",
@@ -21,7 +50,8 @@ class Tasks extends React.Component {
             team: [],
             tasks: [],
             myTasks: [],
-            passwordMatchError: false
+            passwordMatchError: false,
+            textContent: languageText[language],
         };
 
         this.createTask = this.createTask.bind(this);
@@ -358,7 +388,7 @@ class Tasks extends React.Component {
                     <div className={`taskColumn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
                         <h2 className="taskColumnHeader blue">
                             {this.props.user.role === "owner" || this.props.user.role === "field manager"
-                            ? "To Do"
+                            ? this.state.textContent.text1
                             : "My Tasks"}
                             {this.props.user.role === "owner" || this.props.user.role === "field manager" ? (
                             <button id="addNewTask" onClick={this.showAddTaskForm}>
@@ -375,7 +405,7 @@ class Tasks extends React.Component {
 
 
                     <div className={`taskColumn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
-                        <h2 className="taskColumnHeader red">In Progress</h2>
+                        <h2 className="taskColumnHeader red">{this.state.textContent.text2}</h2>
 
                         <div id='inProgressTasksContainer' className='taskContainer'>
 
@@ -383,7 +413,7 @@ class Tasks extends React.Component {
                     </div>
 
                     <div className={`taskColumn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
-                        <h2 className="taskColumnHeader green">Completed</h2>
+                        <h2 className="taskColumnHeader green">{this.state.textContent.text3}</h2>
 
                         <div id='completedTasksContainer' className='taskContainer'>
 
@@ -394,15 +424,15 @@ class Tasks extends React.Component {
 
 
                 <form id="addTask" className={`hidden ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`} onSubmit={this.createTask}>
-                    <h2><i className="fa-solid fa-bullseye"></i>Create new task <i className="fa-solid fa-xmark" id="taskCancel" onClick={this.cancelTask}></i></h2>
+                    <h2><i className="fa-solid fa-bullseye"></i>{this.state.textContent.text4} <i className="fa-solid fa-xmark" id="taskCancel" onClick={this.cancelTask}></i></h2>
                     <hr></hr>
-                    <label htmlFor="task">Task</label>
+                    <label htmlFor="task">{this.state.textContent.text5}</label>
                     <input required type="text" id="task" name="task" />
 
-                    <label htmlFor="taskDescription">Description (Optional)</label>
+                    <label htmlFor="taskDescription">{this.state.textContent.text6}</label>
                     <input type="text" id="taskDescription" name="taskDescription" />
 
-                    <label htmlFor="taskAssignee">Assignee</label>
+                    <label htmlFor="taskAssignee">{this.state.textContent.text7}</label>
                     <select
                         defaultValue=""
                         id="taskAssignee"
@@ -455,7 +485,7 @@ class Tasks extends React.Component {
                     )}
 
 
-                    <input id="taskSubmit" type="submit" value="Create" />
+                    <input id="taskSubmit" type="submit" value={this.state.textContent.text8} />
 
                 </form>
 

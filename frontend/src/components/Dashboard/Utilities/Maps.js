@@ -1236,9 +1236,9 @@ class Maps extends React.Component {
                     <form id="createSensor" className={`hidden ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`} onSubmit={this.createSensor}>
                         <label htmlFor="sensorID">Sensor ID</label>
                         <input autocomplete="off" required type="text" name="sensorID" id="sensorId" placeholder="enter ID" />
-                        <label htmlFor="sensorLat">Latitude</label>
+                        <label htmlFor="sensorLat">Coordinates</label>
+                        <label htmlFor="sensorLat">(Click on map to retrieve)</label>
                         <input autocomplete="off" required type="text" name="sensorLat" id="sensorLat" placeholder="enter latitude" disabled />
-                        <label htmlFor="sensorLong">Longitude</label>
                         <input autocomplete="off" required type="text" name="sensorLong" id="sensorLong" placeholder="enter longitude" disabled />
                         <label htmlFor="sensorField">Field</label>
                         <input autoComplete="off" required type="text" name="sensorField" id="sensorField" placeholder="select field" disabled />

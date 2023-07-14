@@ -149,6 +149,8 @@ class Predictions extends React.Component {
         const greenNumber = greenMatch ? parseFloat(greenMatch[1]) : null;
         const redNumber = redMatch ? parseFloat(redMatch[1]) : null;
 
+        console.log(blueNumber);
+
         document.getElementById("BlueCount").innerHTML = blueNumber;
         document.getElementById("GreenCount").innerHTML = greenNumber;
         document.getElementById("RedCount").innerHTML = redNumber;
@@ -231,6 +233,11 @@ class Predictions extends React.Component {
       previewImages: [],
       selectedImage: null,
       selectedImageDate: null,
+      totalAll: null,
+      totalBerries: null,
+      totalBlue: null,
+      totalGreen: null,
+      totalRed: null
     });
     document.getElementById('predictionDataContainer').classList.add('hidden');
     const selectElement = document.getElementById('scanFields');

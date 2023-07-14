@@ -4,11 +4,55 @@ import React from "react";
 class Settings extends React.Component {
 
     constructor(props) {
+
         super(props);
+
+        var language = localStorage.getItem("language") || "en";
+
+        var languageText = {
+        en: {
+            text1: "My Profile",
+            text2: "Name",
+            text3: "Farm",
+            text4: "Email",
+            text5: "Logout",
+            text6: "Change Password",
+            text7: "Delete Account",
+            text8: "General",
+            text9: "Dark Mode",
+            text10: "Language",
+            text11: "Terms & Conditions",
+        },
+        pt: {
+            text1: "Meu Perfil",
+            text2: "Nome",
+            text3: "Quinta",
+            text4: "E-mail",
+            text5: "Sair",
+            text6: "Alterar a Palavra-passe",
+            text7: "Apagar Conta",
+            text8: "Geral",
+            text9: "Modo Escuro",
+            text10: "Linguagem",
+            text11: "Termos e Condições",
+        },
+        };
+
+        this.state = {
+            language: localStorage.getItem("language") || "en",
+            textContent: languageText[language],
+        };
+
         this.changeTheme = this.changeTheme.bind(this);
         this.deleteAccount = this.deleteAccount.bind(this);
         this.changePassword = this.changePassword.bind(this);
+        this.changeLanguage = this.changeLanguage.bind(this);
+
+        this.props.openMenuSettings();
+        
     }
+
+
 
     componentDidMount() {
         if (localStorage.getItem("darkMode") === "true") {
@@ -134,6 +178,50 @@ class Settings extends React.Component {
             alert("New passwords do not match");
         }
     }
+
+    changeLanguage(event) {
+
+
+
+        var languageText = {
+            en: {
+                text1: "My Profile",
+                text2: "Name",
+                text3: "Farm",
+                text4: "Email",
+                text5: "Logout",
+                text6: "Change Password",
+                text7: "Delete Account",
+                text8: "General",
+                text9: "Dark Mode",
+                text10: "Language",
+                text11: "Terms & Conditions",
+            },
+            pt: {
+                text1: "Meu Perfil",
+                text2: "Nome",
+                text3: "Quinta",
+                text4: "E-mail",
+                text5: "Sair",
+                text6: "Alterar a Palavra-passe",
+                text7: "Apagar Conta",
+                text8: "Geral",
+                text9: "Modo Escuro",
+                text10: "Linguagem",
+                text11: "Termos e Condições",
+            },
+            };
+
+        const selectedLanguage = event.target.value;
+        localStorage.setItem("language", selectedLanguage);
+        this.props.updateLanguage(selectedLanguage);
+
+        this.setState({
+            language: selectedLanguage,
+            textContent: languageText[selectedLanguage],
+          });
+
+    }
     
 
     cancelChangePassword() {
@@ -164,38 +252,40 @@ class Settings extends React.Component {
 
     render() {
 
+        const tokenLanguage = localStorage.getItem("language");
+
         return (
-            <>
+            <> 
                 <section id="settingsContainer" className={`settingsContainer ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
 
-                    <h2>My Profile</h2>
+                    <h2>{this.state.textContent.text1}</h2>
                     <hr></hr>
-                    <p>Name: {this.props.user.name}</p>
-                    <p>Farm: {this.props.farmDetails.name}</p>
-                    <p>Email: {this.props.user.email}</p>
+                    <p>{this.state.textContent.text2}: {this.props.user.name}</p>
+                    <p>{this.state.textContent.text3}: {this.props.farmDetails.name}</p>
+                    <p>{this.state.textContent.text4}: {this.props.user.email}</p>
 
-                    <button className={`settingsBtn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`} onClick={this.showLogoutForm}><i className="fa-solid fa-arrow-right-from-bracket"></i> Logout</button><br/>
-                    <button className="settingsBtn" onClick={this.showChangePasswordForm}><i className="fa-solid fa-unlock"></i> Change Password</button><br/>
-                    <button className="settingsBtn" onClick={this.showDeleteForm}><i className="fa-solid fa-trash"></i> Delete Account</button><br/>
+                    <button className={`settingsBtn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`} onClick={this.showLogoutForm}><i className="fa-solid fa-arrow-right-from-bracket"></i> {this.state.textContent.text5}</button><br/>
+                    <button className="settingsBtn" onClick={this.showChangePasswordForm}><i className="fa-solid fa-unlock"></i> {this.state.textContent.text6}</button><br/>
+                    <button className="settingsBtn" onClick={this.showDeleteForm}><i className="fa-solid fa-trash"></i> {this.state.textContent.text7}</button><br/>
 
-                    <h2>General</h2>
+                    <h2>{this.state.textContent.text8}</h2>
                     <hr></hr>
 
                     <label className="toggle">
-                        <span className="toggle-label">Dark Mode: </span>
+                        <span className="toggle-label">{this.state.textContent.text9}: </span>
                         <input id="themeSelector" onChange={this.changeTheme} className="toggle-checkbox" type="checkbox" />
                         <div className="toggle-switch"></div>
                     </label>
                     
                     <label className="toggle">
-                        <span className="toggle-label">Language: </span> 
-                        <select id="languageSelector" className={`${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
-                            <option value="English">English</option>
-                            <option value="Portuguese">Portuguese</option>
+                        <span className="toggle-label">{this.state.textContent.text10}: </span> 
+                        <select id="languageSelector" onChange={this.changeLanguage} className={`${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
+                            <option value="en">English</option>
+                            <option value="pt" selected={tokenLanguage === "pt"}>Portuguese</option>
                         </select>
                     </label>
 
-                    <button className="settingsBtn" onClick={this.showTandC}><i className="fa-solid fa-file-contract"></i> Terms & Conditions</button>
+                    <button className="settingsBtn" onClick={this.showTandC}><i className="fa-solid fa-file-contract"></i> {this.state.textContent.text11}</button>
                     
                 </section>
 

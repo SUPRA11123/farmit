@@ -34,12 +34,46 @@ class Dashboard extends React.Component {
     }
 
     constructor(props) {
+
         super(props);
+
+        var language = localStorage.getItem("language") || "en";
+
+        var languageText = {
+        en: {
+
+            //NAV MENU
+            text1: "Dashboard",
+            text2: "Fields",
+            text3: "Tasks",
+            text4: "Team",
+            text5: "Weather",
+            text6: "Fruit-Scan",
+            text7: "Settings",
+        
+        },
+        pt: {
+
+            //NAV MENU
+            text1: "Painel",
+            text2: "Campos",
+            text3: "Tarefas",
+            text4: "Equipa",
+            text5: "Meterologia",
+            text6: "Fuit-Scan",
+            text7: "Definições",
+            
+        },
+        };
+
         this.state = {
             currentDashboardScreen: "dashboard",
             sensorsOwned: [],
             alerts: [],
+            language: localStorage.getItem("language") || "en",
+            textContent: languageText[language],
         };
+
         this.changeUtility = this.changeUtility.bind(this);
         this.displaySettings = this.displaySettings.bind(this);
         this.displayDashboardScreen = this.displayDashboardScreen.bind(this);
@@ -49,8 +83,42 @@ class Dashboard extends React.Component {
         this.getTheme = this.getTheme.bind(this);
         this.myDivRef = React.createRef();
         this.sensorCreated = this.sensorCreated.bind(this);
+        this.updateLanguage = this.updateLanguage.bind(this);
+        this.openMenuSettings = this.openMenuSettings.bind(this);
+
 
     }
+
+    updateLanguage(language) {
+        const languageText = {
+          en: {
+            // English text
+            text1: "Dashboard",
+            text2: "Fields",
+            text3: "Tasks",
+            text4: "Team",
+            text5: "Weather",
+            text6: "Fruit-scan",
+            text7: "Settings",
+          },
+          pt: {
+            // Portuguese text
+            text1: "Painel",
+            text2: "Campos",
+            text3: "Tarefas",
+            text4: "Equipa",
+            text5: "Meteorologia",
+            text6: "Fruit-Scan",
+            text7: "Definições",
+          },
+        };
+      
+        this.setState({
+          language: language,
+          textContent: languageText[language],
+        });
+      }
+      
 
     async componentDidMount() {
 
@@ -469,7 +537,9 @@ class Dashboard extends React.Component {
     }
 
     changeUtility(util) {
+
         this.setState({ currentDashboardScreen: util });
+        
     }
 
     displaySettings() { document.getElementById('fixedUtility').classList.add("expandFixed"); }
@@ -507,11 +577,25 @@ class Dashboard extends React.Component {
     }
 
     handleMobileClick() {
+
+        if(this.state.currentDashboardScreen != 'settings') {
+            document.getElementById('toggleNavMenu').classList.remove('hidden');
+        }
+
         if (window.innerWidth < 600) {
             document.getElementById("navListMobile").classList.add('hidden');
             document.getElementById("mobileNavBtn").classList.toggle("fa-bars");
             document.getElementById("mobileNavBtn").classList.toggle("fa-xmark");
         }
+    }
+
+    openMenuSettings(){
+
+        if(document.getElementById('navContainer').classList.contains('smallNav')){
+            this.toggleMenu();
+        }
+
+        document.getElementById('toggleNavMenu').classList.add('hidden');
     }
 
     toggleMenu() {
@@ -553,27 +637,54 @@ class Dashboard extends React.Component {
     }
 
     getHeader() {
+
+        var language = localStorage.getItem("language") || "en";
+
         switch (this.state.currentDashboardScreen) {
             case "dashboard":
                 return null;
                 break;
             case "maps":
-                return "My Fields"
+                if(language == "en"){
+                    return "My Fields";
+                } else if(language == "pt"){
+                    return  "Meus Campos";
+                }
                 break;
             case "tasks":
-                return "Current Tasks"
+                if(language == "en"){
+                    return "Current Tasks";
+                } else if(language == "pt"){
+                    return  "Tarefas Atuais";
+                }
                 break;
             case "team":
-                return "My Team"
+                if(language == "en"){
+                    return "My Team";
+                } else if(language == "pt"){
+                    return  "Meu Time";
+                }
                 break;
             case "weather":
-                return "Weather Forecast"
+                if(language == "en"){
+                    return "Weather Forecast";
+                } else if(language == "pt"){
+                    return  "Previsão Do Tempo";
+                }
                 break;
             case "predictions":
-                return "Fruit-Scan"
+                if(language == "en"){
+                    return "Fruit-Scan";
+                } else if(language == "pt"){
+                    return "Fruit-Scan";
+                }
                 break;
             case "settings":
-                return "Settings"
+                if(language == "en"){
+                    return "Settings"
+                } else if(language == "pt"){
+                    return "Definições";
+                }
                 break;
             default:
                 return "error";
@@ -607,33 +718,33 @@ class Dashboard extends React.Component {
                         <ul>
                             <li onClick={() => this.setState({ currentDashboardScreen: "dashboard" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "dashboard" ? "navActive" : ""}>
                                 <i className="fa-solid fa-table-cells-large"></i>
-                                <p>Dashboard</p>
+                                <p>{this.state.textContent.text1}</p>
                             </li>
                             <li onClick={() => this.setState({ currentDashboardScreen: "maps" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "maps" ? "navActive" : ""}>
                                 <i className="fa-regular fa-map"></i>
-                                <p>Fields</p>
+                                <p>{this.state.textContent.text2}</p>
                             </li>
                             <li onClick={() => this.setState({ currentDashboardScreen: "tasks" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "tasks" ? "navActive" : ""}>
                                 <i className="fa-solid fa-bullseye"></i>
-                                <p>Tasks</p>
+                                <p>{this.state.textContent.text3}</p>
                             </li>
                             {this.state.user.role != 'farmer' && (
                                 <li onClick={() => this.setState({ currentDashboardScreen: "team" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "team" ? "navActive" : ""}>
                                     <i className="fa-solid fa-people-group"></i>
-                                    <p>Team</p>
+                                    <p>{this.state.textContent.text4}</p>
                                 </li>
                             )}
                             <li onClick={() => this.setState({ currentDashboardScreen: "weather" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "weather" ? "navActive" : ""}>
                                 <i className="fa-solid fa-cloud-sun"></i>
-                                <p>Weather</p>
+                                <p>{this.state.textContent.text5}</p>
                             </li>
                             <li onClick={() => this.setState({ currentDashboardScreen: "predictions" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "predictions" ? "navActive" : ""}>
                                 <i className="fa-solid fa-leaf"></i>
-                                <p>Fruit-scan</p>
+                                <p>{this.state.textContent.text6}</p>
                             </li>
                             <li onClick={() => this.setState({ currentDashboardScreen: "settings" }, this.handleMobileClick)} className={this.state.currentDashboardScreen === "settings" ? "navActive" : ""}>
                                 <i className="fa-solid fa-gear"></i>
-                                <p>Settings</p>
+                                <p>{this.state.textContent.text7}</p>
                             </li>
                         </ul>
                     </nav>
@@ -679,9 +790,9 @@ class Dashboard extends React.Component {
                             weatherData={this.state.weatherData} weatherForecast={this.state.weatherForecast}
                             farmDetails={this.state.farmDetails} user={this.state.user}
                             changeTheme={this.changeTheme} getTheme={this.getTheme}
-                            sensors={this.state.sensors}
-                            logout={this.handleLogout}
-                            sensorCreated={this.sensorCreated}
+                            sensors={this.state.sensors} logout={this.handleLogout}
+                            sensorCreated={this.sensorCreated} updateLanguage={this.updateLanguage}
+                            openMenuSettings={this.openMenuSettings}
 
                         />
 
