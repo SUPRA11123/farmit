@@ -60,10 +60,14 @@ class Tasks extends React.Component {
         this.cancelTask = this.cancelTask.bind(this);
         this.getField = this.getField.bind(this);
         this.deleteTask = this.deleteTask.bind(this);
+        this.showAddTaskForm = this.showAddTaskForm.bind(this);
 
     }
 
     componentDidMount() {
+
+        document.addEventListener('keydown', this.handleKeyDown);
+
 
         axios.get("http://localhost:8000/getteam/" + this.props.farmDetails.id + "/")
             .then(response => {
@@ -87,6 +91,20 @@ class Tasks extends React.Component {
                 console.log(error);
             });
     }
+
+    componentWillUnmount() {
+        document.removeEventListener('keydown', this.handleKeyDown);
+      }
+      
+
+    handleKeyDown = (event) => {
+        if (event.keyCode === 27) {
+
+          this.cancelTask();
+
+        }
+      };
+      
 
     getTasks() {
 

@@ -26,7 +26,7 @@ from backend import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('signup/', views.signup),
-    path('signin/', views.signin),
+    path('signin/', views.signin), 
     path('getuserbyemail/<str:email>/', views.get_user),
     path('getuserbyid/<int:id>/', views.getUserById),
     path('createfarm/', farm_views.create_farm),
@@ -49,6 +49,7 @@ urlpatterns = [
     path('edituser/<int:id>/', views.editUser),  
     path('getsensors/<int:id>/', sensor_views.getSensors),
     path('createsensor/', sensor_views.create_sensor),
+    path('deletesensor/<int:id>/', sensor_views.delete_sensor),
     path('scan/', include(('parseImage.urls', 'parseImage'), namespace="parseImage")),
     path('deletetask/<int:id>/', task_views.delete_task),
     path('updatetaskstatus/<int:id>/', task_views.update_task_status),

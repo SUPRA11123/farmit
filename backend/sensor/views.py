@@ -23,5 +23,13 @@ def create_sensor(request):
         return JsonResponse(serializer.data, safe=False)
     return JsonResponse(serializer.errors, safe=False)
 
+@api_view(['DELETE'])
+def delete_sensor(request, id):
+    sensor = Sensor.objects.get(id=id)
+    sensor.delete()
+    return JsonResponse({'message': "Sensor deleted successfully"}, safe=False)
+
+
+
 
 # Create your views here.
