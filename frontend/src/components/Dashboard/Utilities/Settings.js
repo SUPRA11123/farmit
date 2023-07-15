@@ -298,17 +298,7 @@ class Settings extends React.Component {
             <> 
                 <section id="settingsContainer" className={`settingsContainer ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
 
-                    <h2>{this.state.textContent.text1}</h2>
-                    <hr></hr>
-                    <p>{this.state.textContent.text2}: {this.props.user.name}</p>
-                    <p>{this.state.textContent.text3}: {this.props.farmDetails.name}</p>
-                    <p>{this.state.textContent.text4}: {this.props.user.email}</p>
-
-                    <button className={`settingsBtn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`} onClick={this.showLogoutForm}><i className="fa-solid fa-arrow-right-from-bracket"></i> {this.state.textContent.text5}</button><br/>
-                    <button className="settingsBtn" onClick={this.showChangePasswordForm}><i className="fa-solid fa-unlock"></i> {this.state.textContent.text6}</button><br/>
-                    <button className="settingsBtn" onClick={this.showDeleteForm}><i className="fa-solid fa-trash"></i> {this.state.textContent.text7}</button><br/>
-
-                    <h2>{this.state.textContent.text8}</h2>
+                <h2>{this.state.textContent.text8}</h2>
                     <hr></hr>
 
                     <label className="toggle">
@@ -320,13 +310,24 @@ class Settings extends React.Component {
                     <label className="toggle">
                         <span className="toggle-label">{this.state.textContent.text10}: </span> 
                         <select id="languageSelector" onChange={this.changeLanguage} className={`${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>
-                            <option value="en">{this.state.textContent.text12}</option>
-                            <option value="pt" selected={tokenLanguage === "pt"}>{this.state.textContent.text13}</option>
+                            <option value="en">🇬🇧 {this.state.textContent.text12}</option>
+                            <option value="pt" selected={tokenLanguage === "pt"}>🇵🇹 {this.state.textContent.text13}</option>
                         </select>
                     </label>
 
                     <button className="settingsBtn" onClick={this.showTandC}><i className="fa-solid fa-file-contract"></i> {this.state.textContent.text11}</button>
                     
+                    <h2>{this.state.textContent.text1}</h2>
+                    <hr></hr>
+                    <p>{this.state.textContent.text2}: {this.props.user.name}</p>
+                    <p>{this.state.textContent.text3}: {this.props.farmDetails.name}</p>
+                    <p>{this.state.textContent.text4}: {this.props.user.email}</p>
+
+                    <button className={`settingsBtn ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`} onClick={this.showLogoutForm}><i className="fa-solid fa-arrow-right-from-bracket"></i> {this.state.textContent.text5}</button><br/>
+                    <button className="settingsBtn" onClick={this.showChangePasswordForm}><i className="fa-solid fa-unlock"></i> {this.state.textContent.text6}</button><br/>
+                    <button className="settingsBtn" onClick={this.showDeleteForm}><i className="fa-solid fa-trash"></i> {this.state.textContent.text7}</button><br/>
+
+                   
                 </section>
 
                 <div id="confirmLogout" className={`confirmLogout hidden ${localStorage.getItem("darkMode") === "true" ? "darkMode" : ''}`}>

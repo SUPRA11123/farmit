@@ -90,12 +90,11 @@ body {
         position: absolute;
         width: 50%;
         left: 25%;
-        top: 15%;
+        top: 5%;
     }
 
     h2 {
         font-size: 2.5vh;
-        margin-top: 25%;
         margin-bottom: 10%;
         text-align: center;
     }
@@ -824,7 +823,7 @@ body {
 
     #homeChart {
         position: absolute;
-        bottom: 10%;
+        bottom: 5%;
         width: 90% !important;
         margin-left: 5%;
         margin-top: 2.5%;
@@ -1188,6 +1187,13 @@ body {
         background-color: $green;
         color: white;
     }
+
+    .fieldsTable tbody tr:hover{
+        .delete-container {
+            opacity: 1 !important;
+        }
+        
+      }
 
     .fieldsTable tbody tr:hover {
         background-color: $green
@@ -1827,6 +1833,9 @@ body {
     /* Customize the highlighting style as desired */
 }
 
+.delete-container {
+    opacity: 0;
+}
 
 .delete-container .delete-button {
     display: none;
@@ -2611,6 +2620,13 @@ body {
         text-decoration: underline;
     }
 
+}
+#languageSelectorLanding {
+    font-size: 2.5vh;
+    position: absolute;
+    top: 95%;
+    left: 50%;
+    transform: translate(-50%, -95%);
 }
 
 #languageSelector {

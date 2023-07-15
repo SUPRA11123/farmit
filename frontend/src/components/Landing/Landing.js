@@ -24,6 +24,7 @@ class Landing extends React.Component {
     this.handleLogin = this.handleLogin.bind(this);
     this.handleFarmInfo = this.handleFarmInfo.bind(this);
     this.getUser = this.getUser.bind(this);
+    this.changeLanguage = this.changeLanguage.bind(this);
 
     var language = localStorage.getItem("language") || "en";
 
@@ -55,6 +56,11 @@ class Landing extends React.Component {
         text20: "Passwords do not match",
         text21: "Password must contain at least one uppercase letter, one lowercase letter, one digit, and no special characters",
         text22: "User already exists",
+
+        //SELECTOR
+
+        text23: "English",
+        text24: "Portuguese",
       },
       pt: {
         //LOGIN SCREEN
@@ -82,6 +88,11 @@ class Landing extends React.Component {
         text20: "As palavras-passe não coincidem.",
         text21: "A palavra-passe deve conter, pelo menos, uma letra maiúscula, uma letra minúscula, um dígito e não pode conter caracteres especiais.",
         text22: "O utilizador já existe",
+
+         //SELECTOR
+
+         text23: "Inglês",
+         text24: "Português",
       },
     };
 
@@ -367,7 +378,93 @@ class Landing extends React.Component {
     }
   }  
 
+
+  changeLanguage(event) {
+
+
+
+    var languageText = {
+      en: {
+
+        //LOGIN SCREEN
+        text1: "Dashboard Login",
+        text2: "Email",
+        text3: "Password",
+        text4: "Login",
+        text5: "Dont have an account?",
+        text6: "Register",
+
+        //REGISTER SCREEN
+        text7: "Create your account",
+        text8: "Name",
+        text9: "Email",
+        text10: "Password",
+        text11: "Confirm Password",
+        text12: "Next",
+        text13: "Already have an account?",
+        text14: "Login",
+        text15: "Details about your farm",
+        text16: "Farm name",
+        text17: "Country",
+        text18: "Please click on the map to set a marker for your farm",
+        text19: "Submit",
+        text20: "Passwords do not match",
+        text21: "Password must contain at least one uppercase letter, one lowercase letter, one digit, and no special characters",
+        text22: "User already exists",
+
+        //SELECTOR
+
+        text23: "English",
+        text24: "Portuguese",
+      },
+      pt: {
+        //LOGIN SCREEN
+        text1: "Login no painel de controlo",
+        text2: "E-mail",
+        text3: "Palavra-passe",
+        text4: "Iniciar Sessão",
+        text5: "Não tem uma conta?",
+        text6: "Registo",
+
+        //REGISTER SCREEN
+        text7: "Criar conta",
+        text8: "Nome",
+        text9: "E-Mail",
+        text10: "Palavra-passe",
+        text11: "Confirmar palavra-passe",
+        text12: "Próximo",
+        text13: "já tem uma conta?",
+        text14: "Conecte-se",
+        text15: "Detalhes sobre a sua quinta",
+        text16: "Nome da quinta",
+        text17: "País",
+        text18: "Por favor, clique no mapa para definir um marcador para a sua quinta",
+        text19: "Registar",
+        text20: "As palavras-passe não coincidem.",
+        text21: "A palavra-passe deve conter, pelo menos, uma letra maiúscula, uma letra minúscula, um dígito e não pode conter caracteres especiais.",
+        text22: "O utilizador já existe",
+
+         //SELECTOR
+
+         text23: "Inglês",
+         text24: "Português",
+      },
+        };
+
+    const selectedLanguage = event.target.value;
+    localStorage.setItem("language", selectedLanguage);
+   
+
+    this.setState({
+        language: selectedLanguage,
+        textContent: languageText[selectedLanguage],
+      });
+
+}
+
   render() {
+
+    const tokenLanguage = localStorage.getItem("language");
 
     return (
 
@@ -377,7 +474,7 @@ class Landing extends React.Component {
 
           <img src={require('../../resources/img/logo.png')} alt="agrosense logo" />
 
-
+          
           <form id="userLogin" onSubmit={this.handleLogin}>
 
             <h2>{this.state.textContent.text1}</h2>
@@ -398,7 +495,7 @@ class Landing extends React.Component {
               />
             </div>
 
-            <p id='errorMessage'></p>
+            
 
             <label htmlFor="loginEmail">{this.state.textContent.text2}</label><br />
             <input onChange={this.checkAccountComplete} required type="email" id="loginEmail" name="loginEmail" /><br />
@@ -407,6 +504,8 @@ class Landing extends React.Component {
             <input onChange={this.checkAccountComplete} required type="password" id="loginPwd" name="loginPwd" /><br />
 
             <input id="loginInBtn" type="submit" value={this.state.textContent.text4} />
+
+            <p id='errorMessage'></p>
 
             <p>{this.state.textContent.text5} <span onClick={this.toRegister}>{this.state.textContent.text6}</span></p>
 
@@ -451,6 +550,12 @@ class Landing extends React.Component {
             <input id="farmNext" type="submit" value={this.state.textContent.text19} />
 
           </form>
+
+
+          <select id="languageSelectorLanding" onChange={this.changeLanguage}>
+            <option value="en">🇬🇧 {this.state.textContent.text23}</option>
+            <option value="pt" selected={tokenLanguage === "pt"}>🇵🇹 {this.state.textContent.text24}</option>
+          </select>
 
         </main>
 
